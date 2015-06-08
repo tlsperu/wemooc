@@ -107,9 +107,12 @@ if(learningActivity!=null){  %>
 <script type="text/javascript">
 
 	AUI().ready(function(A) {
-		if(!(A.one('#<portlet:namespace/>sco').get('value').lenght > 0 )) {		
-			A.one("label[for='_lmsactivitieslist_WAR_liferaylmsportlet_sco']").hide();
-			A.one('#<portlet:namespace/>sco').hide();			
+		var inputScormValue = A.one('#<portlet:namespace/>sco').get('value');
+		A.one("label[for='<portlet:namespace/>sco']").hide();
+		A.one('#<portlet:namespace/>sco').hide();
+		if(inputScormValue.length > 0 ) {
+			A.one("label[for='<portlet:namespace/>sco']").show();
+			A.one('#<portlet:namespace/>sco').show();
 		}
 	}); 
 <!--
@@ -166,7 +169,7 @@ function <portlet:namespace />load(source) {
 			else
 			{
 				A.one('#<portlet:namespace/>sco').set('value','');
-				A.one('#<portlet:namespace/>sco').hide();				
+				A.one('#<portlet:namespace/>sco').hide();
 				A.one("label[for='_lmsactivitieslist_WAR_liferaylmsportlet_sco']").hide();
 			}
 			
