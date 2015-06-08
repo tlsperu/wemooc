@@ -56,13 +56,11 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.FriendlyURLNormalizerUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
-import com.liferay.portal.model.ClassName;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.model.LayoutSet;
@@ -111,6 +109,8 @@ import com.liferay.util.LmsLocaleUtil;
  */
 public class CourseLocalServiceImpl extends CourseLocalServiceBaseImpl { 
 	
+	
+	final String DEGREE  = "\\u00B0";
 	private static final int DEFAULT_EVALUATIONS = 3;
 	
 	Log log = LogFactoryUtil.getLog(CourseLocalServiceImpl.class);
@@ -228,6 +228,9 @@ public class CourseLocalServiceImpl extends CourseLocalServiceBaseImpl {
 					}
 				}				
 			}
+			
+			friendlyURL = StringPool.SLASH+friendlyURL.replaceAll("[^a-zA-Z0-9_-]+", "");
+
 			course.setCompanyId(serviceContext.getCompanyId());
 			course.setGroupId(serviceContext.getScopeGroupId());
 			course.setUserId(userId);
