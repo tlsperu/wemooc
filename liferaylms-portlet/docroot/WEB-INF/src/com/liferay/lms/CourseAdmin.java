@@ -1068,38 +1068,42 @@ public class CourseAdmin extends MVCPortlet {
 				long groupId  = ParamUtil.getLong(request, "groupId", 0);
 				if (themeDisplay.getPermissionChecker().hasPermission(groupId, Course.class.getName(), groupId, ActionKeys.UPDATE)) {
 					String fileName  = ParamUtil.getString(request, "exportFileName", "New course exported");
-					
-					ClusterNode nodo = ClusterExecutorUtil.getLocalClusterNode();
-					String clusterNodoId = nodo == null ? StringPool.DASH : nodo.getClusterNodeId();
-					
-					String key = ParamUtil.getString(request, "key", null);
-					String newKey = clusterNodoId + StringPool.UNDERLINE + themeDisplay.getCompanyId() + StringPool.UNDERLINE + groupId;
-					
-					if (!StringPool.DASH.equals(clusterNodoId) && !ClusterExecutorUtil.isClusterNodeAlive(clusterNodoId)) {
-						jsonObject.put("error", "deadnode");
-					} else {
-						if (Validator.isNull(key) && MultiVMPoolUtil.get("exportCourseCache", key) != null) { // Pide exportacion pero ya hay una en curso
-							jsonObject.put("status", "generating");
-							jsonObject.put("key", newKey);
-						} else if (Validator.isNull(key) && MultiVMPoolUtil.get("exportCourseCache", key) == null) { // Pide exportacion y no hay ninguna en curso
-							Message message = new Message();
-							message.put("groupId", groupId);
-							message.put("fileName", fileName);
-							message.put("key", key);
-							message.put("themeDisplay", themeDisplay);
-							message.put("serviceContext", serviceContext);
-							MessageBusUtil.sendMessage("liferay/lms/courseExport", message);
-							jsonObject.put("status", "generating");
-							jsonObject.put("key", newKey);
-						} else if (Validator.isNotNull(key) && MultiVMPoolUtil.get("exportCourseCache", key) == null){ // Ha pedido exportacion y ya ha acabado
-							SessionMessages.add(request, "courseadmin.export.confirmation.success");
-							jsonObject.put("status", "ready");
-							jsonObject.put("key", key);
-						} else { // Ha pedido una exportacion y aun esta trabajando
-							jsonObject.put("status", "generating");
-							jsonObject.put("key", key);
+					if(!(Validator.isNotNull(fileName)) || !(fileName.length()>0) || !(fileName.contains(".lar")) )
+						jsonObject.put("error", LanguageUtil.get(themeDisplay.getLocale(), "course.export.badformat"));
+					else{
+						ClusterNode nodo = ClusterExecutorUtil.getLocalClusterNode();
+						String clusterNodoId = nodo == null ? StringPool.DASH : nodo.getClusterNodeId();
+						
+						String key = ParamUtil.getString(request, "key", null);
+						String newKey = clusterNodoId + StringPool.UNDERLINE + themeDisplay.getCompanyId() + StringPool.UNDERLINE + groupId;
+						
+						if (!StringPool.DASH.equals(clusterNodoId) && !ClusterExecutorUtil.isClusterNodeAlive(clusterNodoId)) {
+							jsonObject.put("error", "deadnode");
+						} else {
+							if (Validator.isNull(key) && MultiVMPoolUtil.get("exportCourseCache", key) != null) { // Pide exportacion pero ya hay una en curso
+								jsonObject.put("status", "generating");
+								jsonObject.put("key", newKey);
+							} else if (Validator.isNull(key) && MultiVMPoolUtil.get("exportCourseCache", key) == null) { // Pide exportacion y no hay ninguna en curso
+								Message message = new Message();
+								message.put("groupId", groupId);
+								message.put("fileName", fileName);
+								message.put("key", key);
+								message.put("themeDisplay", themeDisplay);
+								message.put("serviceContext", serviceContext);
+								MessageBusUtil.sendMessage("liferay/lms/courseExport", message);
+								jsonObject.put("status", "generating");
+								jsonObject.put("key", newKey);
+							} else if (Validator.isNotNull(key) && MultiVMPoolUtil.get("exportCourseCache", key) == null){ // Ha pedido exportacion y ya ha acabado
+								SessionMessages.add(request, "courseadmin.export.confirmation.success");
+								jsonObject.put("status", "ready");
+								jsonObject.put("key", key);
+							} else { // Ha pedido una exportacion y aun esta trabajando
+								jsonObject.put("status", "generating");
+								jsonObject.put("key", key);
+							}
 						}
 					}
+					
 				} else {
 					jsonObject.put("error", "bad-permission");
 				}
