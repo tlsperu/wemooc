@@ -68,8 +68,10 @@ Liferay.provide(
 							var key = data.key;
 							if (error) {
 								// stop and show error
-								
 								alert(error);
+								if(error == '<%=LanguageUtil.get(themeDisplay.getLocale(), "course.export.badformat")%>') {
+									A.one('#<portlet:namespace/>exportButton').attr('disabled', false);
+								}
 							} else {
 								var inputKeyVal = A.one('#<portlet:namespace/>key').val();
 								if (inputKeyVal === '' || inputKeyVal === null) {
