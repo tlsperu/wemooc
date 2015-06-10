@@ -73,10 +73,15 @@
 				<%
 					if(courseCompetences != null && courseCompetences.size()>0) {
 						for(CourseCompetence cc: courseCompetences) {
-							Course course=CourseLocalServiceUtil.getCourse(cc.getCourseId());
-							%>
+							try{
+								Course course=CourseLocalServiceUtil.getCourse(cc.getCourseId());
+								%>
 								<%=course.getTitle(locale) %>
 							<%
+							}catch(Exception e){
+								
+							}
+							
 						}
 					}
 				%>
