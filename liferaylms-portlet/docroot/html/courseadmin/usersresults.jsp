@@ -333,7 +333,7 @@ if(backToEdit) {
 		</liferay-ui:search-container-results>
 		
 		<div class="container-buttons">
-			<aui:input type="checkbox" name="all" label="todos" checked="<%=false %>" onClick="setAllStudents()" style="Cursor:pointer;"/>
+			<aui:input type="checkbox" name="all" label="misc.search.all" checked="<%=false %>" onClick="setAllStudents()" style="Cursor:pointer;"/>
 		</div>
 		
 		<liferay-ui:search-container-row className="com.liferay.portal.model.User"
