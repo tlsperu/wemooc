@@ -52,6 +52,7 @@
 </portlet:actionURL>
 
 <%
+System.out.println("HERE");
 renderResponse.setProperty(
 		"clear-request-parameters", Boolean.TRUE.toString());
 
@@ -125,23 +126,23 @@ if(learnact!=null)
 	actId=learnact.getActId();
 	description=learnact.getDescription(themeDisplay.getLocale());
 	
-	//if(!learnact.isNullStartDate()){
+	if(!learnact.isNullStartDate() && learnact.getTypeId() != 8){
 		Date startDate = learnact.getStartdate();
 		startDay=Integer.parseInt(formatDay.format(startDate));
 		startMonth=Integer.parseInt(formatMonth.format(startDate))-1;
 		startYear=Integer.parseInt(formatYear.format(startDate));
 		startHour=Integer.parseInt(formatHour.format(startDate));
 		startMin=Integer.parseInt(formatMin.format(startDate));
-	//}
+	}
 	
-	//if(!learnact.isNullEndDate()){
+	if(!learnact.isNullEndDate() && learnact.getTypeId() != 8){
 		Date endDate = learnact.getEnddate();
 		endDay=Integer.parseInt(formatDay.format(endDate));
 		endMonth=Integer.parseInt(formatMonth.format(endDate))-1;
 		endYear=Integer.parseInt(formatYear.format(endDate));
 		endHour=Integer.parseInt(formatHour.format(endDate));
 		endMin=Integer.parseInt(formatMin.format(endDate));
-	//}
+	}
 	%>
 	
 	<portlet:actionURL name="deleteMyTries" var="deleteMyTriesURL">
