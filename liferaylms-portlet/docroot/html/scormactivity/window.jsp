@@ -140,7 +140,7 @@ if(typeof scormembededmode == 'undefined')
 			{ 
 				scormembededmode=true;
 				finish_scorm();
-				if(!msiversion())
+				if(!msieversion())
 				{
 					return null;
 				}
