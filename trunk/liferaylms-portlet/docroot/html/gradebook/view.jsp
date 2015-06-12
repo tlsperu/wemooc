@@ -1,3 +1,5 @@
+<%@page import="com.liferay.portal.model.UserGroupRole"%>
+<%@page import="com.liferay.portal.service.UserGroupRoleLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.util.OrderByComparator"%>
 <%@page import="com.liferay.portal.service.TeamLocalServiceUtil"%>
 <%@page import="com.liferay.portal.model.Team"%>
@@ -146,11 +148,12 @@ if(theTeam!=null)
 							
 							for(User usu:usus){
 								boolean shouldPass = true;
-								List<Role> listRolesOfUser =  usu.getRoles();
-								System.out.println("Usuario "+usu.getFullName());
+								List<UserGroupRole> listRolesOfUser = UserGroupRoleLocalServiceUtil.getUserGroupRoles(usu.getUserId(), themeDisplay.getScopeGroupId());
+
+								//System.out.println("Usuario "+usu.getFullName());
 								for(int i=0; i<listRolesOfUser.size();i++){
-									System.out.println("    -->ROL: "+listRolesOfUser.get(i).getName());
-									if(listRolesOfUser.get(i).getName().equals("courseTeacher")){
+									//System.out.println("    -->ROL: "+listRolesOfUser.get(i).getRole().getName());
+									if(listRolesOfUser.get(i).getRole().getName().equals("courseTeacher")){
 										shouldPass=false;
 										break;
 									}
