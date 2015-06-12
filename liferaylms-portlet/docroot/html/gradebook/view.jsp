@@ -147,7 +147,9 @@ if(theTeam!=null)
 							for(User usu:usus){
 								boolean shouldPass = true;
 								List<Role> listRolesOfUser =  usu.getRoles();
+								System.out.println("Usuario "+usu.getFullName());
 								for(int i=0; i<listRolesOfUser.size();i++){
+									System.out.println("    -->ROL: "+listRolesOfUser.get(i).getName());
 									if(listRolesOfUser.get(i).getName().equals("courseTeacher")){
 										shouldPass=false;
 										break;
