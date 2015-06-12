@@ -143,8 +143,19 @@ if(theTeam!=null)
 								OrderByComparator obc = null;
 								usus  = UserLocalServiceUtil.search(themeDisplay.getCompanyId(), "", 0, userParams, searchContainer.getStart(), searchContainer.getEnd(), obc);	
 							}
+							
 							for(User usu:usus){
-								if(!(PermissionCheckerFactoryUtil.create(usu)).hasPermission(themeDisplay.getScopeGroupId(), "com.liferay.lms.model", themeDisplay.getScopeGroupId(), "VIEW_RESULTS")){
+								boolean shouldPass = true;
+								List<Role> listRolesOfUser =  usu.getRoles();
+								for(int i=0; i<listRolesOfUser.size();i++){
+									if(listRolesOfUser.get(i).getName().equals("courseTeacher")){
+										shouldPass=false;
+										break;
+									}
+								}
+								
+								if(!(PermissionCheckerFactoryUtil.create(usu)).hasPermission(themeDisplay.getScopeGroupId(), "com.liferay.lms.model", themeDisplay.getScopeGroupId(), "VIEW_RESULTS") 
+										&& shouldPass){
 									onlyStudents.add(usu);
 								}
 							}
