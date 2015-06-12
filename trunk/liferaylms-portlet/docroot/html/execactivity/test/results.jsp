@@ -26,11 +26,22 @@
 	else{
 		
 		
-		
+		boolean hasFreeQuestion = false;
+
 		LearningActivity learningActivity=(LearningActivity)request.getAttribute("learningActivity");
 		if(learningActivity==null) learningActivity=LearningActivityLocalServiceUtil.getLearningActivity(ParamUtil.getLong(request,"actId" ));	
 		request.setAttribute("actId",learningActivity.getActId());
 		request.setAttribute("learningActivity",learningActivity);
+		
+		List<TestQuestion> questionList = TestQuestionLocalServiceUtil.getQuestions(learningActivity.getActId());
+		Iterator<TestQuestion> questionListIt = questionList.iterator();
+		while(questionListIt.hasNext()){
+			TestQuestion q = questionListIt.next();
+			if(q.getQuestionType() == 2){
+				hasFreeQuestion = true;
+				break;
+			}
+		}
 		
 		boolean isTeacher=permissionChecker.hasPermission(themeDisplay.getScopeGroupId(), "com.liferay.lms.model",themeDisplay.getScopeGroupId(), "VIEW_RESULTS");
 		Course course = CourseLocalServiceUtil.fetchByGroupCreatedId(themeDisplay.getScopeGroupId());
@@ -90,10 +101,19 @@
 		<liferay-util:include page="/html/execactivity/test/timeout.jsp" servletContext="<%=this.getServletContext() %>">
 			<liferay-util:param value="<%=Long.toString(learningActivity.getActId()) %>" name="actId"/>
 		</liferay-util:include> 
-		<p><liferay-ui:message key="your-result" arguments="<%=new Object[]{larntry.getResult()} %>" /></p>
+		
+		<%
+		if(hasFreeQuestion){%>
+			<!-- <p>Respuesta libre</p> -->
+			
+			<% }else{%>
+			<p><liferay-ui:message key="your-result" arguments="<%=new Object[]{larntry.getResult()} %>" /></p>
+			
+			<% }
+		%>
 	
 <% 
-		if(oldResult>0){
+		if(!hasFreeQuestion && oldResult>0){
 			if(oldResult<larntry.getResult()){
 %>
 				<p><liferay-ui:message key="execActivity.improve.result" arguments="<%=new Object[]{oldResult} %>" /></p>
@@ -110,9 +130,11 @@
 			<p class="color_tercero negrita"><liferay-ui:message key="your-result-pass" /></p>
 <%
 		}else{
-%>	
-			<p class="color_tercero negrita"><liferay-ui:message key="your-result-dont-pass"  arguments="<%=new Object[]{learningActivity.getPasspuntuation()} %>" /></p>
-<% 
+			if(!hasFreeQuestion){
+				%>			
+				<p class="color_tercero negrita"><liferay-ui:message key="your-result-dont-pass"  arguments="<%=new Object[]{learningActivity.getPasspuntuation()} %>" /></p>
+	<% 
+			}
 		}
 		
 		if(tries>0 && userTries >= tries ){
@@ -169,7 +191,7 @@
 				if(result.getResult()<100){
 					String improveStr = LearningActivityLocalServiceUtil.getExtraContentValue(ParamUtil.getLong(request,"actId"), "improve");
 					if(improveStr.equals("true")){
-						if(tries>0){	
+						if(tries>0){
 %>
 							<p class="negrita"><liferay-ui:message key="execativity.test.try.count" arguments="<%=new Object[]{userTries,tries} %>" /></p>
 							<p class="color_tercero textcenter negrita"><liferay-ui:message key="execativity.test.try.confirmation.again" /></p>
