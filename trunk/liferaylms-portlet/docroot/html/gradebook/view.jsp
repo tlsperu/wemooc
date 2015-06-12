@@ -133,23 +133,26 @@ if(theTeam!=null)
 						List<User> onlyStudents=new ArrayList<User>();
 						if((PermissionCheckerFactoryUtil.create(themeDisplay.getUser())).hasPermission(themeDisplay.getScopeGroupId(), "com.liferay.lms.model", themeDisplay.getScopeGroupId(), "VIEW_RESULTS")){
 							List<User> usus=null;
-							if(theTeam==null)
-							{
+							if(theTeam==null) {
 								usus = UserLocalServiceUtil.getGroupUsers(themeDisplay.getScopeGroupId());
 							}
-							else
-							{
+							else {
 								LinkedHashMap userParams = new LinkedHashMap();
 								userParams.put("usersGroups", theTeam.getGroupId());
 								userParams.put("usersTeams", theTeam.getTeamId());
 								OrderByComparator obc = null;
 								usus  = UserLocalServiceUtil.search(themeDisplay.getCompanyId(), "", 0, userParams, searchContainer.getStart(), searchContainer.getEnd(), obc);	
 							}
-							for(User usu:usus)
-								if(!(PermissionCheckerFactoryUtil.create(usu)).hasPermission(themeDisplay.getScopeGroupId(), "com.liferay.lms.model", themeDisplay.getScopeGroupId(), "VIEW_RESULTS"))
+							for(User usu:usus){
+								if(!(PermissionCheckerFactoryUtil.create(usu)).hasPermission(themeDisplay.getScopeGroupId(), "com.liferay.lms.model", themeDisplay.getScopeGroupId(), "VIEW_RESULTS")){
 									onlyStudents.add(usu);
-						}else
-							onlyStudents.add(themeDisplay.getUser());
+								}
+							}
+								
+						}else{
+							onlyStudents.add(themeDisplay.getUser());	
+						}
+							
 						
 						List<User> orderedUsers = new ArrayList<User>();
 				        orderedUsers.addAll(onlyStudents);
