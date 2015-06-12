@@ -577,7 +577,7 @@
 				</aui:form>
 			<%	
 			}
-		} 
+		}
 		//Si no ha pasado el test, ni tiene mas intentos.
 		else{
 			if(hasFreeQuestion){
