@@ -20,6 +20,7 @@ import java.util.Map;
 import javax.mail.internet.InternetAddress;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.MimeResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -53,6 +54,7 @@ import com.liferay.portal.DuplicateGroupException;
 import com.liferay.portal.LARFileException;
 import com.liferay.portal.LARTypeException;
 import com.liferay.portal.LayoutImportException;
+import com.liferay.portal.NoSuchGroupException;
 import com.liferay.portal.kernel.cache.MultiVMPoolUtil;
 import com.liferay.portal.kernel.cluster.ClusterExecutorUtil;
 import com.liferay.portal.kernel.cluster.ClusterNode;
@@ -70,6 +72,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.search.Indexer;
@@ -93,6 +96,7 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Company;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
@@ -306,6 +310,15 @@ public class CourseAdmin extends MVCPortlet {
 					new EntryDisplayDateException());
 		} catch (PortalException e1) {
 			e1.printStackTrace();
+		}
+		
+		if (stopDate.before(startDate)) {
+			SessionErrors.add(actionRequest, "courseadmin.new.error.dateinterval");
+			actionResponse.setRenderParameter("courseId", String.valueOf(courseId));
+			actionResponse.setRenderParameter("redirect", redirect);
+			actionResponse.setRenderParameter("jspPage",
+					"/html/courseadmin/editcourse.jsp");
+			return;
 		}
 
 		java.util.Date ahora = new java.util.Date(System.currentTimeMillis());
@@ -1004,16 +1017,38 @@ public class CourseAdmin extends MVCPortlet {
 		//Thread thread = new Thread(cloneThread);
 		//thread.start();
 		
-		Message message=new Message();
-		message.put("groupId",groupId);
-		message.put("newCourseName",newCourseName);
-		message.put("themeDisplay",themeDisplay);
-		message.put("startDate",startDate);
-		message.put("endDate",endDate);
-		message.put("serviceContext",serviceContext);
-		MessageBusUtil.sendMessage("liferay/lms/courseClone", message);
+		// Comprobaciones antes del proceso
+		boolean errors = false;
+		if(endDate.before(startDate)){
+			SessionErrors.add(actionRequest, "courseadmin.clone.error.dateinterval");
+			errors = true;
+		}
 		
-		SessionMessages.add(actionRequest, "courseadmin.clone.confirmation.success");
+		Group group = null;
+		try{
+			group = GroupLocalServiceUtil.getGroup(themeDisplay.getCompanyId(), newCourseName);
+		}catch(NoSuchGroupException e){
+			group = null;
+			if(log.isDebugEnabled())
+				e.printStackTrace();
+		}
+		if(group != null) {
+			SessionErrors.add(actionRequest, "courseadmin.clone.error.duplicateName");
+			errors = true;
+		} else {
+			Message message=new Message();
+			message.put("groupId",groupId);
+			message.put("newCourseName",newCourseName);
+			message.put("themeDisplay",themeDisplay);
+			message.put("startDate",startDate);
+			message.put("endDate",endDate);
+			message.put("serviceContext",serviceContext);
+			MessageBusUtil.sendMessage("liferay/lms/courseClone", message);
+			SessionMessages.add(actionRequest, "courseadmin.clone.confirmation.success");
+		}
+		
+		if(errors)
+			actionResponse.sendRedirect(ParamUtil.getString(actionRequest, "redirect"));
 
 	}
 	

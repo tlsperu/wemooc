@@ -28,16 +28,20 @@ import com.liferay.lms.service.LmsPrefsLocalServiceUtil;
 import com.liferay.lms.service.ModuleLocalServiceUtil;
 import com.liferay.lms.service.TestAnswerLocalServiceUtil;
 import com.liferay.lms.service.TestQuestionLocalServiceUtil;
+import com.liferay.portal.DuplicateGroupException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.messaging.MessageListenerException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.xml.Document;
 import com.liferay.portal.kernel.xml.DocumentException;
@@ -197,14 +201,19 @@ public class CloneCourse implements MessageListener {
 		
 		
 		int typeSite = GroupLocalServiceUtil.getGroup(course.getGroupCreatedId()).getType();
-		//course.getDescription(locale)
-		Course newCourse = CourseLocalServiceUtil.addCourse(newCourseName, course.getDescription(themeDisplay.getLocale()), "", "", themeDisplay.getLocale(), today, startDate, endDate, layoutSetPrototypeId, typeSite, serviceContext, course.getCalificationType(), 0,true);
+		Course newCourse = null;  
+		try{	
+			newCourse = CourseLocalServiceUtil.addCourse(newCourseName, course.getDescription(), "", "", themeDisplay.getLocale(), today, startDate, endDate, layoutSetPrototypeId, typeSite, serviceContext, course.getCalificationType(), 0,true);
+		} catch(DuplicateGroupException e){
+			if(log.isDebugEnabled())e.printStackTrace();
+			throw new DuplicateGroupException();
+		}
+		
 		newCourse.setExpandoBridgeAttributes(serviceContext);
 		
 		newCourse.getExpandoBridge().setAttributes(course.getExpandoBridge().getAttributes());
 		//Course newCourse = CourseLocalServiceUtil.addCourse(newCourseName, course.getDescription(), "", "", themeDisplay.getLocale(), today, today, today, layoutSetPrototypeId, serviceContext);
-		
-		
+	
 		
 		Group newGroup = GroupLocalServiceUtil.getGroup(newCourse.getGroupCreatedId());
 		serviceContext.setScopeGroupId(newCourse.getGroupCreatedId());
@@ -312,6 +321,7 @@ public class CloneCourse implements MessageListener {
 					newLearnActivity.setTries(activity.getTries());
 					newLearnActivity.setPasspuntuation(activity.getPasspuntuation());
 					newLearnActivity.setPriority(newLearnActivity.getActId());
+					
 					boolean actPending = false;
 					if(activity.getPrecedence()>0){
 						if(correlationActivities.get(activity.getPrecedence())==null){
@@ -614,7 +624,7 @@ public class CloneCourse implements MessageListener {
 			}
 			
 			if(!entryIdStr.equals("")){
-			
+				
 				AssetEntry docAsset = AssetEntryLocalServiceUtil.getAssetEntry(Long.valueOf(entryIdStr));
 				long entryId = 0;
 				if(docAsset.getUrl()!=null||docAsset.getUrl().trim().length()>0){
@@ -623,9 +633,6 @@ public class CloneCourse implements MessageListener {
 					entryId = cloneFile(Long.valueOf(entryIdStr), actNew, userId, serviceContext);
 
 				}
-				
-				
-				
 				
 				if(actNew.getTypeId() == 2){
 					LearningActivityLocalServiceUtil.setExtraContentValue(actNew.getActId(), "document", String.valueOf(entryId));

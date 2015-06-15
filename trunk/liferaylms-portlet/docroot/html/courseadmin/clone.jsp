@@ -40,12 +40,15 @@
 	int endHour=Integer.parseInt(formatHour.format(today));
 	int endMin=Integer.parseInt(formatMin.format(today));
 %>
+<liferay-ui:error key="courseadmin.clone.error.duplicateName" message="courseadmin.clone.error.duplicateName" />
+<liferay-ui:error key="courseadmin.clone.error.dateinterval" message="courseadmin.clone.error.dateinterval" />
 
 <liferay-portlet:renderURL var="backURL"></liferay-portlet:renderURL>
 <liferay-ui:header title="<%= course != null ? course.getTitle(themeDisplay.getLocale()) : \"course\" %>" backURL="<%=backURL %>"></liferay-ui:header>
 
 <portlet:actionURL name="cloneCourse" var="cloneCourseURL">
 	<portlet:param name="groupId" value="<%= groupId %>" />
+	<portlet:param name="redirect" value='<%= ParamUtil.getString(request, "redirect", currentURL) %>'/>
 </portlet:actionURL>
 	
 <aui:form name="form" action="<%=cloneCourseURL%>" method="post">
