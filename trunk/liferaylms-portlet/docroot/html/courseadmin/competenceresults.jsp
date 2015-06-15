@@ -39,23 +39,19 @@ if(tabs1.equals("1")){
 }else{
 	tabs1 = LanguageUtil.get(pageContext,"competences.assigned");
 }
-
-
 %>
-
-
 <liferay-portlet:renderURL var="backURL" >
-<portlet:param name="courseId" value="<%=Long.toString(courseId) %>" />
-<portlet:param name="tabs1" value="<%=tabs1 %>" />
-<portlet:param name="jspPage" value="/html/courseadmin/competencetab.jsp" />
+	<portlet:param name="courseId" value="<%=Long.toString(courseId) %>" />
+	<portlet:param name="tabs1" value="<%=tabs1 %>" />
+	<portlet:param name="jspPage" value="/html/courseadmin/competencetab.jsp" />
 </liferay-portlet:renderURL>
 
 <liferay-ui:header title="<%=course.getTitle(themeDisplay.getLocale()) %>" backURL="<%=backURL %>"></liferay-ui:header>
 
 <liferay-portlet:renderURL var="buscarURL">
-<liferay-portlet:param name="jspPage" value="/html/courseadmin/competenceresults.jsp" />
-<portlet:param name="courseId" value="<%=Long.toString(courseId) %>" />
-<portlet:param name="tabs1" value="<%=tabs1 %>" />
+	<liferay-portlet:param name="jspPage" value="/html/courseadmin/competenceresults.jsp" />
+	<portlet:param name="courseId" value="<%=Long.toString(courseId) %>" />
+	<portlet:param name="tabs1" value="<%=tabs1 %>" />
 </liferay-portlet:renderURL>
 
 <div class="npa_search_user"> 
@@ -65,7 +61,7 @@ if(tabs1.equals("1")){
 		<aui:input name="searchForm" type="hidden" value="true" />	
 					
 			<aui:column>	
-				<aui:input label="any-term" name="any-term" size="20" value="" />
+				<aui:input label="freetext" name="any-term" size="20" value="" />
 				<aui:button-row>
 					<aui:button name="searchUsers" value="search" type="submit" />
 				</aui:button-row>
