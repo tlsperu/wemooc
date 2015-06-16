@@ -751,10 +751,21 @@ Player.ContentPlayer.prototype.adjustPlayer = function() {
 	if(window.name=='scormactivity')
 	{
 		//QQQ ajusta el player
-		 var html = document.documentElement;
-         height=html.clientHeight;
- 		var nav1=document.getElementById("placeholder_navigationContainer").clientHeight;
- 		var nav2=document.getElementById("placeholder_navigationContainer2").clientHeight;
+		  height=window.innerHeight
+         || document.documentElement.clientHeight
+         || document.body.clientHeight;
+ 		var nav1=0;
+ 		if(document.getElementById("placeholder_navigationContainer")!= null)
+ 		{
+ 			nav1=document.getElementById("placeholder_navigationContainer").clientHeight;
+ 		
+ 		}
+ 		var nav2=0;
+ 		if(document.getElementById("placeholder_navigationContainer2")!= null)
+ 		{
+ 			nav2=document.getElementById("placeholder_navigationContainer2").clientHeight;
+ 		
+ 		}
  		var iframeHeight=height-nav1-nav2-20;
  		iframeHeight=iframeHeight+"px";
  		document.getElementById("placeholder_contentIFrame").style.height=iframeHeight;
