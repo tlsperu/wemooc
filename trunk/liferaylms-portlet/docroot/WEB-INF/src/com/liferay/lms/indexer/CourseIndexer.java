@@ -25,6 +25,8 @@ import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portlet.asset.model.AssetCategory;
 import com.liferay.portlet.asset.model.AssetEntry;
@@ -142,6 +144,8 @@ public class CourseIndexer extends BaseIndexer {
 		document.addKeyword(Field.PORTLET_ID, PORTLET_ID);
 		document.addKeyword(Field.GROUP_ID, groupId);
 		document.addKeyword(Field.SCOPE_GROUP_ID, scopeGroupId);
+		Group dependentGroup=GroupLocalServiceUtil.getGroup(groupId);
+		document.addText("groupName",dependentGroup.getName());
 		document.addKeyword(Field.USER_ID, userId);
 		document.addText(Field.USER_NAME, userName);
 
