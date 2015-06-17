@@ -27,8 +27,6 @@ import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
-import com.liferay.lms.auditing.AuditConstants;
-import com.liferay.lms.auditing.AuditingLogFactory;
 import com.liferay.lms.learningactivity.questiontype.QuestionType;
 import com.liferay.lms.learningactivity.questiontype.QuestionTypeRegistry;
 import com.liferay.lms.model.LearningActivity;
@@ -55,7 +53,6 @@ import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.xml.Document;
@@ -69,7 +66,6 @@ import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.util.bridges.mvc.MVCPortlet;
-import com.tls.certificaciones.servicios.service.AnswerLocalServiceUtil;
 import com.tls.lms.util.LiferaylmsUtil;
 
 
