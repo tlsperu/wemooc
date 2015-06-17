@@ -69,6 +69,7 @@ import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import com.tls.certificaciones.servicios.service.AnswerLocalServiceUtil;
 import com.tls.lms.util.LiferaylmsUtil;
 
 
@@ -96,11 +97,11 @@ public class SurveyActivity extends MVCPortlet {
 		
 		Enumeration<String> params=actionRequest.getParameterNames();
 		java.util.Hashtable<TestQuestion, TestAnswer> resultados=new java.util.Hashtable<TestQuestion, TestAnswer>();
-		
+		java.util.Hashtable<TestQuestion, String> respuestaLibre = new java.util.Hashtable<TestQuestion, String>();
 		
 		LearningActivityTry larntry=LearningActivityTryLocalServiceUtil.getLearningActivityTry(latId);
 
-		//Comprobar qsi el usuario se dejo alguna encuesta abierta
+		//Comprobar si el usuario se dejo alguna encuesta abierta
 		if (larntry.getEndDate() == null )
 		{
 		    while(params.hasMoreElements())
@@ -113,18 +114,38 @@ public class SurveyActivity extends MVCPortlet {
 					new TestQuestionLocalServiceUtil();
 					TestQuestion question=TestQuestionLocalServiceUtil.getTestQuestion(questionId);
 					
-					long answerId=ParamUtil.getLong(actionRequest, param);
-					TestAnswer testAnswer=TestAnswerLocalServiceUtil.getTestAnswer(answerId);
-					resultados.put(question, testAnswer);
-					
-					//Guardar la encuesta para las estadisticas.
+					// Preparamos para guardar respuesta del usuario
 					SurveyResult surveyResult = SurveyResultLocalServiceUtil.createSurveyResult(CounterLocalServiceUtil.increment(SurveyResult.class.getName()));
-					surveyResult.setActId(actId);
-					surveyResult.setLatId(latId);
-					surveyResult.setQuestionId(questionId);
-					surveyResult.setAnswerId(answerId);
-					surveyResult.setUserId(themeDisplay.getUserId());
-					SurveyResultLocalServiceUtil.addSurveyResult(surveyResult);
+					TestAnswer testAnswer = null;
+					String respuesta = actionRequest.getParameter(param);
+					List<TestAnswer> testAnswerList = TestAnswerLocalServiceUtil.getTestAnswersByQuestionId(questionId); 
+					if(testAnswerList != null && testAnswerList.size() > 0 ){
+						for( TestAnswer t : testAnswerList){
+							if( respuesta.equalsIgnoreCase(String.valueOf(t.getAnswerId()))){
+								String textoRespuesta = t.getAnswer();
+								respuesta = textoRespuesta.substring(textoRespuesta.indexOf(">") + 1, textoRespuesta.indexOf("</"));
+								resultados.put(question, t);						
+								//Guardar la encuesta para las estadisticas.
+								surveyResult.setActId(actId);
+								surveyResult.setLatId(latId);
+								surveyResult.setQuestionId(questionId);
+								surveyResult.setAnswerId(Long.valueOf(t.getAnswerId()));
+								surveyResult.setUserId(themeDisplay.getUserId());
+								surveyResult.setFreeAnswer(respuesta);
+								SurveyResultLocalServiceUtil.updateSurveyResult(surveyResult, true);
+								break;
+								}
+							}
+						} else {
+						surveyResult.setActId(actId);
+						surveyResult.setLatId(latId);
+						surveyResult.setQuestionId(questionId);
+						surveyResult.setAnswerId(0);// PARA TEXTO LIBRE EL answerId = 0
+						surveyResult.setUserId(themeDisplay.getUserId());
+						surveyResult.setFreeAnswer(respuesta);
+						SurveyResultLocalServiceUtil.updateSurveyResult(surveyResult, true);								
+						respuestaLibre.put(question, respuesta);
+					}
 				}
 			}
 			
@@ -134,12 +155,25 @@ public class SurveyActivity extends MVCPortlet {
 			for(TestQuestion question:resultados.keySet())
 			{
 				TestAnswer answer=resultados.get(question);
+				if(answer != null){
+					Element questionXML=SAXReaderUtil.createElement("question");
+					questionXML.addAttribute("id", Long.toString(question.getQuestionId()));
+					Element answerXML=SAXReaderUtil.createElement("answer");
+					answerXML.addAttribute("id", Long.toString(answer.getAnswerId()));
+					questionXML.add(answerXML);
+					resultadosXML.add(questionXML);
+				}
+			}
+
+			for(TestQuestion question:respuestaLibre.keySet())
+			{
+				String respuestaFree = respuestaLibre.get(question);
 				Element questionXML=SAXReaderUtil.createElement("question");
 				questionXML.addAttribute("id", Long.toString(question.getQuestionId()));
 				Element answerXML=SAXReaderUtil.createElement("answer");
-				answerXML.addAttribute("id", Long.toString(answer.getAnswerId()));
+				answerXML.addAttribute("respuestaFree", respuestaFree);
 				questionXML.add(answerXML);
-				resultadosXML.add(questionXML);
+				resultadosXML.add(questionXML);					
 			}
 			//Guardar los resultados
 			//LearningActivityTry larntry=LearningActivityTryLocalServiceUtil.getLearningActivityTry(latId);
