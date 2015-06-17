@@ -33,7 +33,7 @@ public class SurveyResultCacheModel implements CacheModel<SurveyResult>,
 	Serializable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -49,6 +49,8 @@ public class SurveyResultCacheModel implements CacheModel<SurveyResult>,
 		sb.append(answerId);
 		sb.append(", userId=");
 		sb.append(userId);
+		sb.append(", freeAnswer=");
+		sb.append(freeAnswer);
 		sb.append("}");
 
 		return sb.toString();
@@ -71,6 +73,13 @@ public class SurveyResultCacheModel implements CacheModel<SurveyResult>,
 		surveyResultImpl.setAnswerId(answerId);
 		surveyResultImpl.setUserId(userId);
 
+		if (freeAnswer == null) {
+			surveyResultImpl.setFreeAnswer(StringPool.BLANK);
+		}
+		else {
+			surveyResultImpl.setFreeAnswer(freeAnswer);
+		}
+
 		surveyResultImpl.resetOriginalValues();
 
 		return surveyResultImpl;
@@ -83,4 +92,5 @@ public class SurveyResultCacheModel implements CacheModel<SurveyResult>,
 	public long questionId;
 	public long answerId;
 	public long userId;
+	public String freeAnswer;
 }

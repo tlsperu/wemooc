@@ -67,7 +67,6 @@ AUI().ready('node-base' ,'aui-form-validator', 'aui-overlay-context-panel', func
 
 <aui:form name="qfm" action="<%=addquestionURL%>"  method="post">
 	<aui:input name="resId" type="hidden" value="<%= learningActivity.getActId()%>"></aui:input>
-	
 	<script type="text/javascript">
 	<!--
 		Liferay.provide(

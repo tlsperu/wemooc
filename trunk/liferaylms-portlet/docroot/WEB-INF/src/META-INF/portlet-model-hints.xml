@@ -259,6 +259,7 @@
 		<field name="questionId" type="long" />
 		<field name="answerId" type="long" />
 		<field name="userId" type="long" />
+		<field name="freeAnswer" type="String" />
 	</model>
 	<model name="com.liferay.lms.model.TestAnswer">
 		<field name="uuid" type="String" />

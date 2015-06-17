@@ -361,6 +361,7 @@ public class SurveyResultPersistenceImpl extends BasePersistenceImpl<SurveyResul
 		surveyResultImpl.setQuestionId(surveyResult.getQuestionId());
 		surveyResultImpl.setAnswerId(surveyResult.getAnswerId());
 		surveyResultImpl.setUserId(surveyResult.getUserId());
+		surveyResultImpl.setFreeAnswer(surveyResult.getFreeAnswer());
 
 		return surveyResultImpl;
 	}

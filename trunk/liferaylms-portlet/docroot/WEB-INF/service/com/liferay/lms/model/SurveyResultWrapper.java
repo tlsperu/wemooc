@@ -52,6 +52,7 @@ public class SurveyResultWrapper implements SurveyResult,
 		attributes.put("questionId", getQuestionId());
 		attributes.put("answerId", getAnswerId());
 		attributes.put("userId", getUserId());
+		attributes.put("freeAnswer", getFreeAnswer());
 
 		return attributes;
 	}
@@ -97,6 +98,12 @@ public class SurveyResultWrapper implements SurveyResult,
 
 		if (userId != null) {
 			setUserId(userId);
+		}
+
+		String freeAnswer = (String)attributes.get("freeAnswer");
+
+		if (freeAnswer != null) {
+			setFreeAnswer(freeAnswer);
 		}
 	}
 
@@ -262,6 +269,24 @@ public class SurveyResultWrapper implements SurveyResult,
 	*/
 	public void setUserUuid(java.lang.String userUuid) {
 		_surveyResult.setUserUuid(userUuid);
+	}
+
+	/**
+	* Returns the free answer of this survey result.
+	*
+	* @return the free answer of this survey result
+	*/
+	public java.lang.String getFreeAnswer() {
+		return _surveyResult.getFreeAnswer();
+	}
+
+	/**
+	* Sets the free answer of this survey result.
+	*
+	* @param freeAnswer the free answer of this survey result
+	*/
+	public void setFreeAnswer(java.lang.String freeAnswer) {
+		_surveyResult.setFreeAnswer(freeAnswer);
 	}
 
 	public boolean isNew() {

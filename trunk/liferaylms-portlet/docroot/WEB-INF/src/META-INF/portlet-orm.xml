@@ -414,6 +414,7 @@
 			<basic name="questionId" />
 			<basic name="answerId" />
 			<basic name="userId" />
+			<basic name="freeAnswer" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />

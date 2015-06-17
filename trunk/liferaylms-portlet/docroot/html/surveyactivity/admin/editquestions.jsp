@@ -81,7 +81,7 @@ Liferay.provide(
 		for(QuestionType qt:qtypes){
 			if (allowedTypesList.contains(String.valueOf(qt.getTypeId()))) {
 	%>
-		<liferay-ui:icon cssClass="bt_new" message="execativity.editquestions.newquestion" url="#" onClick="<%=renderResponse.getNamespace()+\"newQuestion(\"+qt.getTypeId()+\");\" %>"/>
+		<liferay-ui:icon message="<%=qt.getTitle(themeDisplay.getLocale()) %>" url="#" onClick="<%=renderResponse.getNamespace()+\"newQuestion(\"+qt.getTypeId()+\");\" %>"/>
 	<%	
 			}
 		}

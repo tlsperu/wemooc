@@ -451,6 +451,7 @@
 		<column name="questionId" type="long" />
 		<column name="answerId" type="long" />
 		<column name="userId" type="long" />
+		<column name="freeAnswer" type="String"/>
 	</entity>        
      <entity name="SCORMContent" local-service="true" remote-service="true" uuid="true" json-enabled="false">
 		<!-- Primary key column -->

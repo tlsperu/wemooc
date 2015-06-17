@@ -66,9 +66,10 @@ public class SurveyResultModelImpl extends BaseModelImpl<SurveyResult>
 			{ "latId", Types.BIGINT },
 			{ "questionId", Types.BIGINT },
 			{ "answerId", Types.BIGINT },
-			{ "userId", Types.BIGINT }
+			{ "userId", Types.BIGINT },
+			{ "freeAnswer", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table Lms_SurveyResult (uuid_ VARCHAR(75) null,surveyResultId LONG not null primary key,actId LONG,latId LONG,questionId LONG,answerId LONG,userId LONG)";
+	public static final String TABLE_SQL_CREATE = "create table Lms_SurveyResult (uuid_ VARCHAR(75) null,surveyResultId LONG not null primary key,actId LONG,latId LONG,questionId LONG,answerId LONG,userId LONG,freeAnswer VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table Lms_SurveyResult";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
@@ -124,6 +125,7 @@ public class SurveyResultModelImpl extends BaseModelImpl<SurveyResult>
 		attributes.put("questionId", getQuestionId());
 		attributes.put("answerId", getAnswerId());
 		attributes.put("userId", getUserId());
+		attributes.put("freeAnswer", getFreeAnswer());
 
 		return attributes;
 	}
@@ -170,6 +172,12 @@ public class SurveyResultModelImpl extends BaseModelImpl<SurveyResult>
 
 		if (userId != null) {
 			setUserId(userId);
+		}
+
+		String freeAnswer = (String)attributes.get("freeAnswer");
+
+		if (freeAnswer != null) {
+			setFreeAnswer(freeAnswer);
 		}
 	}
 
@@ -250,6 +258,19 @@ public class SurveyResultModelImpl extends BaseModelImpl<SurveyResult>
 		_userUuid = userUuid;
 	}
 
+	public String getFreeAnswer() {
+		if (_freeAnswer == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _freeAnswer;
+		}
+	}
+
+	public void setFreeAnswer(String freeAnswer) {
+		_freeAnswer = freeAnswer;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -289,6 +310,7 @@ public class SurveyResultModelImpl extends BaseModelImpl<SurveyResult>
 		surveyResultImpl.setQuestionId(getQuestionId());
 		surveyResultImpl.setAnswerId(getAnswerId());
 		surveyResultImpl.setUserId(getUserId());
+		surveyResultImpl.setFreeAnswer(getFreeAnswer());
 
 		surveyResultImpl.resetOriginalValues();
 
@@ -372,12 +394,20 @@ public class SurveyResultModelImpl extends BaseModelImpl<SurveyResult>
 
 		surveyResultCacheModel.userId = getUserId();
 
+		surveyResultCacheModel.freeAnswer = getFreeAnswer();
+
+		String freeAnswer = surveyResultCacheModel.freeAnswer;
+
+		if ((freeAnswer != null) && (freeAnswer.length() == 0)) {
+			surveyResultCacheModel.freeAnswer = null;
+		}
+
 		return surveyResultCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -393,13 +423,15 @@ public class SurveyResultModelImpl extends BaseModelImpl<SurveyResult>
 		sb.append(getAnswerId());
 		sb.append(", userId=");
 		sb.append(getUserId());
+		sb.append(", freeAnswer=");
+		sb.append(getFreeAnswer());
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(28);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.lms.model.SurveyResult");
@@ -433,6 +465,10 @@ public class SurveyResultModelImpl extends BaseModelImpl<SurveyResult>
 			"<column><column-name>userId</column-name><column-value><![CDATA[");
 		sb.append(getUserId());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>freeAnswer</column-name><column-value><![CDATA[");
+		sb.append(getFreeAnswer());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -452,6 +488,7 @@ public class SurveyResultModelImpl extends BaseModelImpl<SurveyResult>
 	private long _answerId;
 	private long _userId;
 	private String _userUuid;
+	private String _freeAnswer;
 	private long _columnBitmask;
 	private SurveyResult _escapedModelProxy;
 }

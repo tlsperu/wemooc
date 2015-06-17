@@ -36,6 +36,7 @@ public class SurveyResultSoap implements Serializable {
 		soapModel.setQuestionId(model.getQuestionId());
 		soapModel.setAnswerId(model.getAnswerId());
 		soapModel.setUserId(model.getUserId());
+		soapModel.setFreeAnswer(model.getFreeAnswer());
 
 		return soapModel;
 	}
@@ -144,6 +145,14 @@ public class SurveyResultSoap implements Serializable {
 		_userId = userId;
 	}
 
+	public String getFreeAnswer() {
+		return _freeAnswer;
+	}
+
+	public void setFreeAnswer(String freeAnswer) {
+		_freeAnswer = freeAnswer;
+	}
+
 	private String _uuid;
 	private long _surveyResultId;
 	private long _actId;
@@ -151,4 +160,5 @@ public class SurveyResultSoap implements Serializable {
 	private long _questionId;
 	private long _answerId;
 	private long _userId;
+	private String _freeAnswer;
 }
