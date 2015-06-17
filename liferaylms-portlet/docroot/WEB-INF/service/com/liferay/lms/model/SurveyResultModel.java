@@ -172,6 +172,21 @@ public interface SurveyResultModel extends BaseModel<SurveyResult> {
 	 */
 	public void setUserUuid(String userUuid);
 
+	/**
+	 * Returns the free answer of this survey result.
+	 *
+	 * @return the free answer of this survey result
+	 */
+	@AutoEscape
+	public String getFreeAnswer();
+
+	/**
+	 * Sets the free answer of this survey result.
+	 *
+	 * @param freeAnswer the free answer of this survey result
+	 */
+	public void setFreeAnswer(String freeAnswer);
+
 	public boolean isNew();
 
 	public void setNew(boolean n);

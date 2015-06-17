@@ -73,6 +73,7 @@ public class SurveyResultClp extends BaseModelImpl<SurveyResult>
 		attributes.put("questionId", getQuestionId());
 		attributes.put("answerId", getAnswerId());
 		attributes.put("userId", getUserId());
+		attributes.put("freeAnswer", getFreeAnswer());
 
 		return attributes;
 	}
@@ -119,6 +120,12 @@ public class SurveyResultClp extends BaseModelImpl<SurveyResult>
 
 		if (userId != null) {
 			setUserId(userId);
+		}
+
+		String freeAnswer = (String)attributes.get("freeAnswer");
+
+		if (freeAnswer != null) {
+			setFreeAnswer(freeAnswer);
 		}
 	}
 
@@ -186,6 +193,14 @@ public class SurveyResultClp extends BaseModelImpl<SurveyResult>
 		_userUuid = userUuid;
 	}
 
+	public String getFreeAnswer() {
+		return _freeAnswer;
+	}
+
+	public void setFreeAnswer(String freeAnswer) {
+		_freeAnswer = freeAnswer;
+	}
+
 	public BaseModel<?> getSurveyResultRemoteModel() {
 		return _surveyResultRemoteModel;
 	}
@@ -220,6 +235,7 @@ public class SurveyResultClp extends BaseModelImpl<SurveyResult>
 		clone.setQuestionId(getQuestionId());
 		clone.setAnswerId(getAnswerId());
 		clone.setUserId(getUserId());
+		clone.setFreeAnswer(getFreeAnswer());
 
 		return clone;
 	}
@@ -270,7 +286,7 @@ public class SurveyResultClp extends BaseModelImpl<SurveyResult>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -286,13 +302,15 @@ public class SurveyResultClp extends BaseModelImpl<SurveyResult>
 		sb.append(getAnswerId());
 		sb.append(", userId=");
 		sb.append(getUserId());
+		sb.append(", freeAnswer=");
+		sb.append(getFreeAnswer());
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(28);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.lms.model.SurveyResult");
@@ -326,6 +344,10 @@ public class SurveyResultClp extends BaseModelImpl<SurveyResult>
 			"<column><column-name>userId</column-name><column-value><![CDATA[");
 		sb.append(getUserId());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>freeAnswer</column-name><column-value><![CDATA[");
+		sb.append(getFreeAnswer());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -340,5 +362,6 @@ public class SurveyResultClp extends BaseModelImpl<SurveyResult>
 	private long _answerId;
 	private long _userId;
 	private String _userUuid;
+	private String _freeAnswer;
 	private BaseModel<?> _surveyResultRemoteModel;
 }

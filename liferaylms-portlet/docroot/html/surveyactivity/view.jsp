@@ -17,6 +17,35 @@
 <%@page import="com.liferay.lms.model.Course"%>
 <%@page import="com.liferay.lms.service.CourseLocalServiceUtil"%>
 <%@ include file="/init.jsp" %>
+
+<style type="text/css">
+.horizontalquestion {
+  overflow: auto;
+  width: 1000px;
+}
+
+.horizontalquestion>div {
+  float: left;
+  width: 99%;
+}
+
+.horizontalquestion>div>div {
+  float: left;
+  width: 98%;
+}
+
+.horizontalquestion>div>div>div {
+  float: left;
+  width: 20%;
+}
+
+.textolibre {
+  overflow: auto;
+  width: 1024px;
+  height: 20px;
+}
+
+</style>
 <div class="container-activity">
 <%
 	long actId = ParamUtil.getLong(request,"actId",0);
@@ -195,21 +224,47 @@
 						<%
 						for(TestQuestion question:questions)
 						{
+							if( question.getQuestionType() != 7 && question.getQuestionType() != 2 ){
 						%>
-							<div class="question questiontype_options">
-							<div class="questiontext"><%=question.getText() %></div>
-							<%
-							List<TestAnswer> testAnswers= TestAnswerLocalServiceUtil.getTestAnswersByQuestionId(question.getQuestionId());
-							for(TestAnswer answer:testAnswers)
-							{
-							%>
-								<div class="answer"><aui:input id='<%="question_"+question.getQuestionId()%>' type="radio" name='<%="question_"+question.getQuestionId()%>' value="<%=answer.getAnswerId() %>" label="<%=answer.getAnswer() %>"/>
+								<div class="question questiontype_options">
+								<div class="questiontext"><%=question.getText() %></div>
+								<%
+								List<TestAnswer> testAnswers= TestAnswerLocalServiceUtil.getTestAnswersByQuestionId(question.getQuestionId());
+								for(TestAnswer answer:testAnswers)
+								{
+								%>
+									<div class="answer"><aui:input id='<%="question_"+question.getQuestionId()%>' type="radio" name='<%="question_"+question.getQuestionId()%>' value="<%=answer.getAnswerId() %>" label="<%=answer.getAnswer() %>"/>
+									</div>
+								<%
+								}
+								%>
 								</div>
-							<%
-							}
-							%>
-							</div>
-							<%
+								<%
+							} else if( question.getQuestionType() == 7) { %>
+								<div class="horizontalquestion">
+									<div class="question questiontype_options">
+										<div class="questiontext"><%=question.getText() %>
+											<%
+											List<TestAnswer> testAnswers= TestAnswerLocalServiceUtil.getTestAnswersByQuestionId(question.getQuestionId());
+											for(TestAnswer answer:testAnswers)
+											{
+											%>
+											<div class="answer"><aui:input id='<%="question_"+question.getQuestionId()%>' type="radio" name='<%="question_"+question.getQuestionId()%>'  value='<%=answer.getAnswerId() %>'  label="<%=answer.getAnswer() %>"/>
+											</div>
+											<%
+											}
+										%>
+										</div>
+									</div>
+								</div>
+							<% } else { // En este caso es texto libre %>
+								<div>
+									<div class="questiontext"><%=question.getText() %></div>
+									<%--<div class="answer"><aui:input type="textarea" name='<%="question_"+question.getQuestionId()%>'></aui:input></div>--%>
+									<div class="answer"><input type="text" name='<%="question_"+question.getQuestionId()%>'></input></div>
+								</div>
+							<% }
+							
 						}
 						
 						if(questions.size() > 0)

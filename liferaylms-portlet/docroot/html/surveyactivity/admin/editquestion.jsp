@@ -116,7 +116,6 @@ AUI().ready('node-base' ,'aui-form-validator', 'aui-overlay-context-panel', func
 <aui:form name="qfm" action="<%=editquestionURL %>" method="post">
 	<aui:input name="resId" type="hidden" value="<%=question.getActId() %>"></aui:input>
 	<aui:input name="questionId" type="hidden" value="<%=question.getQuestionId() %>"></aui:input>
-	
 	<script type="text/javascript">
 	<!--
 		Liferay.provide(

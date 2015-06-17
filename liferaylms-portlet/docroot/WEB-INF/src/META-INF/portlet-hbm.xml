@@ -277,6 +277,7 @@
 		<property name="questionId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="answerId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="freeAnswer" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 	</class>
 	<class name="com.liferay.lms.model.impl.TestAnswerImpl" table="Lms_TestAnswer">
 		<cache usage="read-write" />
