@@ -75,14 +75,17 @@ String[] lspist=LmsPrefsLocalServiceUtil.getLmsPrefsIni(themeDisplay.getCompanyI
 		%>
 		<aui:field-wrapper  label="allowed-site-templates" >
 		<%
-		for(String lspis:lspist){
-			boolean checked=false;
-			if(ArrayUtils.contains(layusprsel, lspis)){
-				checked=true;
+		for(String lspis:lspist)
+		{
+			String checked="";
+			if(ArrayUtils.contains(layusprsel, lspis))
+			{
+				checked="checked=\"true\"";
 			}
 			LayoutSetPrototype layoutsetproto=LayoutSetPrototypeLocalServiceUtil.getLayoutSetPrototype(Long.parseLong(lspis));
 			%>
-				<aui:input type="checkbox" name="<portlet:namespace/>courseTemplates"  checked="<%=checked %>" value="<%=layoutsetproto.getLayoutSetPrototypeId()%>" label="<%=layoutsetproto.getName(themeDisplay.getLocale())%>"/>
+				<input type="checkbox" name="<portlet:namespace/>courseTemplates" 
+	<%=checked %> value="<%=layoutsetproto.getLayoutSetPrototypeId()%>"/> <label><%=layoutsetproto.getName(themeDisplay.getLocale())%></label><br/>
 			
 			<%
 		}
