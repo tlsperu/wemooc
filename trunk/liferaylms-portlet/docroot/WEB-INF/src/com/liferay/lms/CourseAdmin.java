@@ -1103,6 +1103,9 @@ public class CourseAdmin extends MVCPortlet {
 				long groupId  = ParamUtil.getLong(request, "groupId", 0);
 				if (themeDisplay.getPermissionChecker().hasPermission(groupId, Course.class.getName(), groupId, ActionKeys.UPDATE)) {
 					String fileName  = ParamUtil.getString(request, "exportFileName", "New course exported");
+					if(fileName.contains("/")){
+						fileName=fileName.replaceAll("/", "-");
+					}
 					if(!(Validator.isNotNull(fileName)) || !(fileName.length()>0) || !(fileName.contains(".lar")) )
 						jsonObject.put("error", LanguageUtil.get(themeDisplay.getLocale(), "course.export.badformat"));
 					else{
