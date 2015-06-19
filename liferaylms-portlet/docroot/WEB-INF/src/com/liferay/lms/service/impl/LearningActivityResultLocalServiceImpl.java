@@ -577,11 +577,29 @@ public class LearningActivityResultLocalServiceImpl
 				} else { // 1.3
 					//"completed", "incomplete", "not attempted", "unknown"
 					completion_status = cmi.getJSONObject("cmi.completion_status").getString("value");
+					if ("completed".equals(completion_status)) { 
+						if(completedAsPassed)
+						{
+							success_status = "passed"; // or passed
+						}
+						else
+						{
+							success_status = cmi.getJSONObject("cmi.success_status").getString("value");
+						}
+					}
+					else
+					{
+						success_status = cmi.getJSONObject("cmi.success_status").getString("value");
+					}
 					//"passed", "failed", "unknown"
-					success_status = cmi.getJSONObject("cmi.success_status").getString("value");
+					
 					max_score = cmi.getJSONObject("cmi.score.max").getDouble("value", 100);
 					min_score = cmi.getJSONObject("cmi.score.min").getDouble("value", 0);
 					raw_score = cmi.getJSONObject("cmi.score.raw").getDouble("value", "asset".equals(typeCmi) ? 100 : 0);
+					if(success_status == "passed" && raw_score==0)
+					{
+						raw_score=(double) passPuntuation;
+					}
 					scaled_score = new Double(Math.round((raw_score * 100) / (max_score - min_score)));
 					scaled_score = cmi.getJSONObject("cmi.score.scaled").getDouble("value", -1) != -1 ? (cmi.getJSONObject("cmi.score.scaled").getDouble("value") * (max_score - min_score) + min_score) : scaled_score;
 					scaled_score_long = Math.round(scaled_score);
