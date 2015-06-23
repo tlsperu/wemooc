@@ -1,3 +1,4 @@
+<%@page import="java.net.URLEncoder"%>
 <%@page import="com.liferay.portlet.PortletPreferencesFactoryUtil"%>
 <%@page import="javax.portlet.PortletPreferences"%>
 
@@ -162,11 +163,23 @@ for(Group groupCourse:groups)
 		%>
 		<div class="course option-more">
 		<%
+		String url = themeDisplay.getPortalURL() +"/"+ loc.getLanguage() +"/web/"+ groupsel.getFriendlyURL();
+		String usuarioSuplantado = themeDisplay.getDoAsUserId(); //Si estamos suplantando a un usuario
+	    	String doAsUserId = "";
+	     
+	     if(usuarioSuplantado.length() > 0){
+	    	 doAsUserId = "?doAsUserId=".concat(URLEncoder.encode(usuarioSuplantado,"UTF-8"));
+	     }
+	     
+	  
+	     url+=doAsUserId;  
+		
+		
 		if (Validator.isNotNull(course.getIcon())) {
 			long logoId = course.getIcon();
 			FileEntry fileEntry = DLAppLocalServiceUtil.getFileEntry(logoId);
 			%>
-			<a href='<%=themeDisplay.getPortalURL() +"/"+ loc.getLanguage() +"/web/"+ groupsel.getFriendlyURL()%>' class="course-title">
+			<a href='<%=url%>' class="course-title">
 				<img src="<%= DLUtil.getPreviewURL(fileEntry, fileEntry.getFileVersion(), themeDisplay, StringPool.BLANK) %>">
 				<%=course.getTitle(themeDisplay.getLocale()) %>
 			</a>
@@ -176,14 +189,14 @@ for(Group groupCourse:groups)
 			long logoId = groupCourse.getPublicLayoutSet().getLogoId();
 			%>
 			
-			<a href='<%=themeDisplay.getPortalURL() +"/"+ loc.getLanguage() +"/web/"+ groupsel.getFriendlyURL()%>' class="course-title">
+			<a href='<%=url%>' class="course-title">
 				<img src="/image/layout_set_logo?img_id=<%=logoId%>">
 				<%=course.getTitle(themeDisplay.getLocale()) %>
 			</a>
 			<%
 		} else {
 			%>
-			<a class="course-no-image" href='<%=themeDisplay.getPortalURL() +"/"+ loc.getLanguage() +"/web/"+ groupsel.getFriendlyURL()%>'><%=course.getTitle(themeDisplay.getLocale()) %></a>
+			<a class="course-no-image" href='<%=url%>'><%=course.getTitle(themeDisplay.getLocale()) %></a>
 		<% }
 				
 		%>
