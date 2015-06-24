@@ -208,10 +208,10 @@ else
 		</liferay-ui:search-container-results>
 		
 		<liferay-ui:search-container-row className="com.liferay.portal.model.User" keyProperty="userId" modelVar="user">
-		<liferay-ui:search-container-column-text>
+		<liferay-ui:search-container-column-text name="name" >
 			<liferay-ui:user-display userId="<%=user.getUserId() %>"></liferay-ui:user-display>
 		</liferay-ui:search-container-column-text>
-		<liferay-ui:search-container-column-text>
+		<liferay-ui:search-container-column-text name="result">
 			<%			
 			CourseResult courseResult=CourseResultLocalServiceUtil.getCourseResultByCourseAndUser(courseId, user.getUserId());
 			String result="-";
@@ -237,7 +237,7 @@ else
 						 		<liferay-ui:icon image="unchecked" alt="unchecked"></liferay-ui:icon>
 						 	<%}%>
 		</liferay-ui:search-container-column-text>
-		<liferay-ui:search-container-column-text>
+		<liferay-ui:search-container-column-text name="actions" >
 			<liferay-portlet:renderURL var="viewGradeURL">
 			<liferay-portlet:param name="jspPage" value="/html/gradebook/userdetails.jsp"></liferay-portlet:param>
 			<liferay-portlet:param name="userId" value="<%=Long.toString(user.getUserId()) %>"></liferay-portlet:param>
