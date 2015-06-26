@@ -61,5 +61,7 @@
 		<portlet id="activityViewer"></portlet>
 		<portlet id="moduleselector"></portlet>
 		<portlet id="ponderatedevalconf"></portlet>
+		<portlet id="finalcourseresult"></portlet>
+		
 	</category>
 </display>

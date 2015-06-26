@@ -234,6 +234,8 @@ public class AuditEntryLocalServiceClpInvoker {
 		if (_methodName135.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes135, parameterTypes)) {
 			AuditEntryLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
+
+			return null;
 		}
 
 		if (_methodName140.equals(name) &&
@@ -245,6 +247,8 @@ public class AuditEntryLocalServiceClpInvoker {
 				((Long)arguments[4]).longValue(),
 				((Long)arguments[5]).longValue(),
 				(java.lang.String)arguments[6], (java.lang.String)arguments[7]);
+
+			return null;
 		}
 
 		if (_methodName141.equals(name) &&
@@ -255,6 +259,8 @@ public class AuditEntryLocalServiceClpInvoker {
 				((Long)arguments[3]).longValue(),
 				((Long)arguments[4]).longValue(),
 				(java.lang.String)arguments[5], (java.lang.String)arguments[6]);
+
+			return null;
 		}
 
 		if (_methodName142.equals(name) &&
