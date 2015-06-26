@@ -9,7 +9,7 @@
 <%@ include file="/init.jsp" %>
 
 <% SCORMContent scorm=(SCORMContent)request.getAttribute("scorm");
-
+System.out.println("HERE");
 if (request.getAttribute("learningTry") == null) { %>
 <script type="text/javascript">
 	localStorage.removeItem('scormpool');
@@ -25,8 +25,8 @@ if (Validator.isNotNull(scorm.getDescription()) && request.getAttribute("learnin
 
 <%
 } 
-if(request.getAttribute("learningTry") != null)
-{
+
+
 String scoshow= ParamUtil.getString(request, "scoshow","");
 
 String urlIndex=themeDisplay.getPortalURL()+this.getServletContext().getContextPath()+
@@ -128,6 +128,4 @@ try {
 	</div>
 </div>
 	<div id="placeholder_navigationContainer2"></div>
-<%
-}
-%>
+
