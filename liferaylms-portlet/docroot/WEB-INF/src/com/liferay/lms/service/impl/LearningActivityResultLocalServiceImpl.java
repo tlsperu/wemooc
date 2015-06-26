@@ -161,6 +161,7 @@ public class LearningActivityResultLocalServiceImpl
 		return update(learningActivityTry);
 	}
 	public LearningActivityResult update(long latId, String tryResultData, long userId) throws SystemException, PortalException {
+		System.out.println("update");
 		LearningActivityTry learningActivityTry = learningActivityTryLocalService.getLearningActivityTry(latId);
 		if (userId != learningActivityTry.getUserId()) {
 			throw new PortalException();
