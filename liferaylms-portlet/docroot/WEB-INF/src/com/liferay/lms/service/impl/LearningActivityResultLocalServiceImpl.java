@@ -569,7 +569,7 @@ public class LearningActivityResultLocalServiceImpl
 					max_score = cmi.getJSONObject("cmi.core.score.max").getDouble("value", 100);
 					min_score = cmi.getJSONObject("cmi.core.score.min").getDouble("value", 0);
 					raw_score = cmi.getJSONObject("cmi.core.score.raw").getDouble("value", "asset".equals(typeCmi) ? max_score : 0);
-					if(success_status == "passed" && raw_score==0)
+					if("passed".equals(success_status) && raw_score==0 && completedAsPassed)
 					{
 						raw_score=(double) passPuntuation;
 					}
@@ -597,7 +597,7 @@ public class LearningActivityResultLocalServiceImpl
 					max_score = cmi.getJSONObject("cmi.score.max").getDouble("value", 100);
 					min_score = cmi.getJSONObject("cmi.score.min").getDouble("value", 0);
 					raw_score = cmi.getJSONObject("cmi.score.raw").getDouble("value", "asset".equals(typeCmi) ? 100 : 0);
-					if(success_status == "passed" && raw_score==0)
+					if("passed".equals(success_status) && raw_score==0 && completedAsPassed)
 					{
 						raw_score=(double) passPuntuation;
 					}
