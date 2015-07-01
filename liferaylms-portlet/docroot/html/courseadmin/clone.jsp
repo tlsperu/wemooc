@@ -10,7 +10,7 @@
 <%@page import="com.liferay.portal.kernel.util.UnicodeFormatter"%>
 
 <%@ include file="/init.jsp" %>	
-
+ 
 <%
 	String groupId = request.getParameter("groupId");
 	Group groupObj = GroupLocalServiceUtil.getGroup(Long.valueOf(groupId));
@@ -56,7 +56,8 @@
 	<aui:input type="text" name="newCourseName" value="<%=groupObj.getName()+\"_\"+Time.getShortTimestamp() %>" label="courseadmin.clone.newcoursename" size="50" helpMessage="courseadmin.clone.newcoursename.help">
 		<aui:validator name="required" errorMessage="field.required"></aui:validator>
 	</aui:input>
-				
+
+<div id="datesbox" style="visibility: visible">				
 	<aui:field-wrapper label="start-course-date">
 		<liferay-ui:input-date yearRangeEnd="<%=LiferaylmsUtil.defaultEndYear %>" yearRangeStart="<%=LiferaylmsUtil.defaultStartYear %>"  dayParam="startDay" monthParam="startMon"
 				 yearParam="startYear"  yearNullable="false" dayNullable="false" monthNullable="false" yearValue="<%=startYear %>" monthValue="<%=startMonth %>" dayValue="<%=startDay %>"></liferay-ui:input-date>
@@ -67,7 +68,7 @@
 				 yearParam="stopYear"  yearNullable="false" dayNullable="false" monthNullable="false"  yearValue="<%=endYear %>" monthValue="<%=endMonth %>" dayValue="<%=endDay %>"></liferay-ui:input-date>
 		 <liferay-ui:input-time minuteParam="stopMin" amPmParam="stopAMPM" hourParam="stopHour"  hourValue="<%=endHour %>" minuteValue="<%=endMin %>"></liferay-ui:input-time></br>
 	</aui:field-wrapper>
-	
+</div>	
 	
 	
 	<%
@@ -77,7 +78,7 @@
 				layusprsel=renderRequest.getPreferences().getValue("courseTemplates", "").split(",");
 		}
 		String[] lspist=LmsPrefsLocalServiceUtil.getLmsPrefsIni(themeDisplay.getCompanyId()).getLmsTemplates().split(",");
-		if(layusprsel!=null &&layusprsel.length>0)
+		if(layusprsel!=null && layusprsel.length>0)
 		{
 			lspist=layusprsel;
 
@@ -91,11 +92,11 @@
 				LayoutSetPrototype lsp=LayoutSetPrototypeLocalServiceUtil.getLayoutSetPrototype(Long.parseLong(lspis));
 				if(GroupLocalServiceUtil.getGroup(Long.parseLong(groupId)).getPublicLayoutSet().getLayoutSetPrototypeId() == lsp.getLayoutSetPrototypeId()){
 					%>
-					<aui:option selected="true" value="<%=lsp.getLayoutSetPrototypeId() %>"><%=lsp.getName(themeDisplay.getLocale()) %> </aui:option>
+					<aui:option selected="true" value="<%=lsp.getName(themeDisplay.getLocale()) + \"&\" + lsp.getLayoutSetPrototypeId() %>"><%=lsp.getName(themeDisplay.getLocale()) %> </aui:option>
 					<%
 				}else{
 					%>
-					<aui:option value="<%=lsp.getLayoutSetPrototypeId() %>" ><%=lsp.getName(themeDisplay.getLocale()) %></aui:option>
+					<aui:option value="<%=lsp.getName(themeDisplay.getLocale()) + \"&\" + lsp.getLayoutSetPrototypeId() %>" ><%=lsp.getName(themeDisplay.getLocale()) %></aui:option>
 					<%
 				}
 			}
@@ -113,10 +114,17 @@
 <script type="text/javascript">
 	function showAlert(ele){
 		console.log(ele);
+		document.getElementById("datesbox").style.visibility = "visible";			
 		if(<%=GroupLocalServiceUtil.getGroup(Long.parseLong(groupId)).getPublicLayoutSet().getLayoutSetPrototypeId()%> != ele.options[ele.selectedIndex].value){
 			alert("<%=UnicodeFormatter.toString(LanguageUtil.get(pageContext, "template-not-equals")) %>");
 		}
-		
+		var course = ele.value.split("&");
+
+		if( course[0].indexOf("course") == -1 ){
+			document.getElementById("datesbox").style.visibility = "hidden";			
+		} else {
+			document.getElementById("datesbox").style.visibility = "visible";						
+		}
 	}
 </script>
 	
