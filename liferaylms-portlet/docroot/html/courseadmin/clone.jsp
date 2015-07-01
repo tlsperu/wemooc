@@ -120,7 +120,7 @@
 		}
 		var course = ele.value.split("&");
 
-		if( course[0].indexOf("course") == -1 ){
+		if( course[0].indexOf("Curso Simple") == 0 ){
 			document.getElementById("datesbox").style.visibility = "hidden";			
 		} else {
 			document.getElementById("datesbox").style.visibility = "visible";						
