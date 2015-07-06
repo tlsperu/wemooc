@@ -46,11 +46,12 @@
 <%@page import="com.liferay.lms.service.LearningActivityServiceUtil"%>
 <%@page import="com.liferay.lms.model.LearningActivity"%>
 <%@ include file="/init.jsp" %>
- <liferay-ui:success key="activity-saved-successfully" message="activity-saved-successfully" />
+<liferay-ui:success key="activity-saved-successfully" message="activity-saved-successfully" />
+<liferay-ui:error key="learningactivity.connect.error.timepassg" message="learningactivity.connect.error.timepassg"></liferay-ui:error>
+<liferay-ui:error key="learningactivity.connect.error.timepass.nan" message="learningactivity.connect.error.timepass.nan"></liferay-ui:error>
 <portlet:actionURL var="saveactivityURL" name="saveActivity" >
 	<portlet:param name="editing" value="<%=StringPool.TRUE %>"/>
 </portlet:actionURL>
-
 <%
 System.out.println("HERE");
 renderResponse.setProperty(
