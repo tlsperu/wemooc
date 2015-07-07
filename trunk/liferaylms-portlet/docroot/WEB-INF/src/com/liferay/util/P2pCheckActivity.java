@@ -18,6 +18,7 @@ import com.liferay.lms.service.CourseLocalServiceUtil;
 import com.liferay.lms.service.LearningActivityLocalServiceUtil;
 import com.liferay.lms.service.P2pActivityLocalServiceUtil;
 import com.liferay.lms.service.ModuleLocalServiceUtil;
+import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
@@ -25,6 +26,7 @@ import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
@@ -171,14 +173,20 @@ public class P2pCheckActivity implements MessageListener
 			String fromAddress=PrefsPropsUtil.getString(user.getCompanyId(),PropsKeys.ADMIN_EMAIL_FROM_ADDRESS,"");
 			InternetAddress from = new InternetAddress(fromAddress, fromName);
 			InternetAddress to = new InternetAddress(user.getEmailAddress(), user.getFullName());
-			MailEngine.send(from, new InternetAddress[]{to}, new InternetAddress[]{}, subject, body, true);
+			
+			MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
+			
+			MailServiceUtil.sendEmail(mailMessage);		
+			
+			
+			//MailEngine.send(from, new InternetAddress[]{to}, new InternetAddress[]{}, subject, body, true);
 			/*String from=PrefsPropsUtil.getString(user.getCompanyId(),PropsKeys.ADMIN_EMAIL_FROM_ADDRESS);
-			MailEngine.send( from,user.getEmailAddress(),subject,body);*/
+			//MailEngine.send( from,user.getEmailAddress(),subject,body);*/
 			if(log.isDebugEnabled()){log.debug("P2pCheckActivity::sendMail::Enviado email a :"+user.getEmailAddress());}
 		}
-		catch(MailEngineException ex) {
+		/*catch(MailEngineException ex) {
 			if(log.isDebugEnabled()){log.debug("P2pCheckActivity::sendMail::MailEngineException:"+ex);}
-		} catch (Exception e) {
+		}*/ catch (Exception e) {
 			if(log.isDebugEnabled()){log.debug("P2pCheckActivity::sendMail::Exception:"+e);}
 		}
 	}

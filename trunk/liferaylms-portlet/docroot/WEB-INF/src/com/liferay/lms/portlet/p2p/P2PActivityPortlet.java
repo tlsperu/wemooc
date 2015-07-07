@@ -40,12 +40,14 @@ import com.liferay.lms.service.ModuleLocalServiceUtil;
 import com.liferay.lms.service.ModuleResultLocalServiceUtil;
 import com.liferay.lms.service.P2pActivityCorrectionsLocalServiceUtil;
 import com.liferay.lms.service.P2pActivityLocalServiceUtil;
+import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.kernel.exception.NestableException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.mail.MailMessage;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
 import com.liferay.portal.kernel.servlet.SessionErrors;
@@ -83,6 +85,7 @@ import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import com.liferay.util.mail.MailEngine;
 import com.liferay.util.mail.MailEngineException;
+import com.liferay.util.mail.MailServerException;
 
 
 
@@ -815,13 +818,16 @@ public class P2PActivityPortlet extends MVCPortlet {
 			InternetAddress from = new InternetAddress(fromAddress, fromName);
 			InternetAddress to = new InternetAddress(user.getEmailAddress(), user.getFullName());
 			
-			MailEngine.send(from, new InternetAddress[]{to}, new InternetAddress[]{}, subject, body, true);
+			MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
+			
+			MailServiceUtil.sendEmail(mailMessage);			
+			//MailEngine.send(from, new InternetAddress[]{to}, new InternetAddress[]{}, subject, body, true);
 			if(_log.isDebugEnabled()){_log.debug("P2PActivityPortlet::sendMailCorrection::Mail Enviado");}
 		}
-		catch(MailEngineException ex) {
+		/*catch(MailServerException ex) {
 			if(_log.isErrorEnabled()){_log.error(ex);}
 
-		} catch (Exception e) {
+		}*/ catch (Exception e) {
 			if(_log.isErrorEnabled()){_log.error(e);}
 		}
 	}
@@ -876,14 +882,16 @@ public class P2PActivityPortlet extends MVCPortlet {
 			String fromAddress=PrefsPropsUtil.getString(user.getCompanyId(),PropsKeys.ADMIN_EMAIL_FROM_ADDRESS,"");
 			InternetAddress from = new InternetAddress(fromAddress, fromName);
 			InternetAddress to = new InternetAddress(user.getEmailAddress(), user.getFullName());
+			MailMessage mailMessage = new MailMessage(from, to, subject, body, true);
 			
-			MailEngine.send(from, new InternetAddress[]{to}, new InternetAddress[]{}, subject, body, true);
+			MailServiceUtil.sendEmail(mailMessage);		
+			//MailEngine.send(from, new InternetAddress[]{to}, new InternetAddress[]{}, subject, body, true);
 			if(_log.isDebugEnabled()){_log.debug("P2PActivityPortlet::sendMailNoCorrection::Mail Enviado");}
 		}
-		catch(MailEngineException ex) {
+		/*catch(MailEngineException ex) {
 			if(_log.isErrorEnabled()){_log.error(ex);}
 
-		} catch (Exception e) {
+		}*/ catch (Exception e) {
 			if(_log.isErrorEnabled()){_log.error(e);}
 		}
 	}
