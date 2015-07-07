@@ -72,6 +72,7 @@ else
 <div class="container-toolbar" >
 	<%@ include file="inc/toolbar.jspf" %>
 </div>
+
 <script>
 function changedates(theURI)
 {
@@ -80,7 +81,7 @@ AUI().use(function(A)
 		Liferay.Util.openWindow( 
 				{ 
 					id: '_courseadmin_WAR_liferaylmsportlet_showPopupInsctiptionDates', 
-					title: 'Edit',
+					title: '<%=LanguageUtil.get(pageContext, "calendar")%>',
 					dialog: 
 					{
 					   width: 550,
