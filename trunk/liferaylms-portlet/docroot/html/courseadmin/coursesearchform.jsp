@@ -291,7 +291,9 @@ if(!"".equals(preferences.getValue("showSearchCategoriesGeneralStats", ""))){
 		<aui:form action="${searchURL}" method="post" name="search">
 			<aui:fieldset cssClass="checkBoxes">
 				<aui:input name="search" type="hidden" value="search" />
-				<aui:input inlineField="true" name="freetext" type="text" value="<%=freetext %>" />
+				<aui:input inlineField="true" name="freetext" type="text" value="<%=freetext %>">
+					<aui:validator name="maxLength">75</aui:validator>
+				</aui:input>
 				<aui:select inlineField="true" name="state">
 					<aui:option label="active" selected="<%= (state == WorkflowConstants.STATUS_APPROVED) %>" value="<%= WorkflowConstants.STATUS_APPROVED %>" />
 					<aui:option label="inactive" selected="<%= (state == WorkflowConstants.STATUS_INACTIVE) %>" value="<%= WorkflowConstants.STATUS_INACTIVE %>" />
