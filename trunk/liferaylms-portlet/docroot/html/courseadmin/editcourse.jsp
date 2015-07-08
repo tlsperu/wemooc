@@ -48,6 +48,7 @@
 <liferay-ui:error key="max-users-violated" message="max-users-violated" />
 <liferay-ui:error key="duplicate-course" message="duplicate-course" />
 <liferay-ui:error key="courseadmin.new.error.dateinterval" message="courseadmin.new.error.dateinterval" />
+<liferay-ui:error key="courseadmin.error.welcmessage.maxlenght" message="courseadmin.error.welcmessage.maxlenght" />
 	<%
 	
 	String maxLengthTitle = GetterUtil.getString(
@@ -635,7 +636,9 @@ else
 				
 				<div id="containerWelcomeMsg" style='display:<%=active?"block":"none"%>'>
 				
-					<aui:input name="welcomeSubject" size="100"  type="text" label="welcome-subject" value="<%=welcomeSubject%>"/>
+					<aui:input name="welcomeSubject" size="100"  type="text" label="welcome-subject" value="<%=welcomeSubject%>">
+						<aui:validator name="maxLength">75</aui:validator>
+					</aui:input>
 				
 					<aui:field-wrapper label="welcome-msg" name="welcome-msg">
 					
