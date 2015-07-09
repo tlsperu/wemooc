@@ -856,6 +856,8 @@ public class CourseAdmin extends MVCPortlet {
 	
 										users.add(userId);
 										/**MIGUEL**/
+										
+										UserGroupRoleLocalServiceUtil.addUserGroupRoles(new long[] { userId }, course.getGroupCreatedId(), roleId);
 										String allowStartDateStr = currLine[2];
 										String allowEndDateStr = currLine[3];
 										//System.out.println(allowStartDateStr);
