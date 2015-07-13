@@ -70,8 +70,16 @@ if( permissionChecker.hasPermission(themeDisplay.getScopeGroupId(),  Course.clas
 if( permissionChecker.hasPermission(themeDisplay.getScopeGroupId(),  Course.class.getName(),primKey,ActionKeys.UPDATE)&& ! myCourse.isClosed() && showClose)
 {
 %>
-	<%-- <liferay-ui:icon image="close" message="close" url="<%=closeURL.toString() %>"  /> --%> 
-	<liferay-ui:icon image="close" message="close" url="javascript:confirmClose()" />
+	<liferay-ui:icon image="close" message="close" url="<%= 
+			\"javascript:AUI().use(function(A){ \"+
+			\"   msg = '\" + LanguageUtil.get(pageContext, \"courseadmin.confirm.close\") + \"';\" +
+			\"   if(confirm(msg)) { \" +
+			\"   alert('\" + closeURL.toString() + \"'); \" +
+			\"       window.location.href = '\" + closeURL.toString() + \"';\" +
+			\"   } else { \" +
+			\"       return false; \" +
+			\"   } \" +
+			\"}) && undefined\"%>" />
 <%
 }else if(permissionChecker.hasPermission(themeDisplay.getScopeGroupId(),  Course.class.getName(),primKey,ActionKeys.UPDATE)&& myCourse.isClosed()){
 %>
@@ -150,17 +158,4 @@ if(permissionChecker.hasPermission(themeDisplay.getScopeGroupId(),  Course.class
 	</portlet:renderURL>
 	<liferay-ui:icon image="tag" message="competence.label" url="<%=competenceURL %>" />
 </c:if>
-
-
 </liferay-ui:icon-menu>
-
-<script type="text/javascript">
-	function confirmClose() {
-		msg = '<%=LanguageUtil.get(themeDisplay.getLocale(), "courseadmin.confirm.close") %>'
-		if(confirm(msg)) {
-			window.location.href = '<%=closeURL.toString()%>'
-		} else {
-			return false;
-		}
-	}
-</script>
