@@ -249,8 +249,14 @@ function <portlet:namespace />back() {
 </aui:field-wrapper>
 <aui:field-wrapper name="activity.edit.openwindow.options">
 	<aui:input type="checkbox" name="openWindow" label="activity.edit.openwindow" value="<%= String.valueOf(openWindow) %>" />
-	<aui:input name="windowWith" label="width" value="<%= windowWith %>" />
-	<aui:input  name="height" label="height" value="<%= height %>" />
+	<aui:input name="windowWith" label="width" value="<%= windowWith %>" >
+		<aui:validator name="number"></aui:validator>
+		<aui:validator name="max">1024</aui:validator>
+	</aui:input>
+	<aui:input name="height" label="height" value="<%= height %>">
+		<aui:validator name="number"></aui:validator>
+		<aui:validator name="max">768</aui:validator>
+	</aui:input>
 </aui:field-wrapper>
 <aui:input type="checkbox" name="improve" label="scormactivity.edit.improve" checked="<%=improve %>" disabled="<%=!edit %>" 
 		ignoreRequestValue="true" helpMessage="scormactivity.edit.improve.helpMessage"></aui:input>
