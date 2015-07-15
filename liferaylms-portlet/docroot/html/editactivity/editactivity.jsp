@@ -53,7 +53,6 @@
 	<portlet:param name="editing" value="<%=StringPool.TRUE %>"/>
 </portlet:actionURL>
 <%
-System.out.println("HERE");
 renderResponse.setProperty(
 		"clear-request-parameters", Boolean.TRUE.toString());
 
@@ -265,7 +264,8 @@ AUI().ready('node-base' ,'aui-form-validator', 'aui-overlay-context-panel', 'wid
 
 	var rules = {			
 			<portlet:namespace />title_<%=renderRequest.getLocale().toString()%>: {
-				required: true
+				required: true,
+				maxLength: 75
 			},
         	<portlet:namespace />description: {
         		required: false
@@ -559,9 +559,9 @@ Liferay.provide(
 	<% 
 	}
 	%>
-
-		<aui:input name="title" label="title" defaultLanguageId="<%=renderRequest.getLocale().toString() %>" id="title">
+		<aui:input name="title" label="title" defaultLanguageId="<%=renderRequest.getLocale().toString()%>" id="title">
 		</aui:input>
+		
 		<div id="<portlet:namespace />title_<%=renderRequest.getLocale().toString()%>Error" class="<%=(SessionErrors.contains(renderRequest, "activity-title-required"))?
 	    														"portlet-msg-error":StringPool.BLANK %>">
 	    	<%=(SessionErrors.contains(renderRequest, "activity-title-required"))?
