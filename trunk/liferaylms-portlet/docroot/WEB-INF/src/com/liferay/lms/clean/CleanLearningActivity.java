@@ -6,7 +6,9 @@ import com.liferay.lms.model.LearningActivityTry;
 import com.liferay.lms.model.ModuleResult;
 import com.liferay.lms.service.LearningActivityLocalServiceUtil;
 import com.liferay.lms.service.LearningActivityResultLocalServiceUtil;
+import com.liferay.lms.service.LearningActivityTryLocalServiceUtil;
 import com.liferay.lms.service.ModuleResultLocalServiceUtil;
+import com.liferay.lms.service.impl.LearningActivityTryLocalServiceImpl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
@@ -71,6 +73,17 @@ public class CleanLearningActivity {
 			if(log.isInfoEnabled())log.info(e.getMessage());
 			if(log.isDebugEnabled())e.printStackTrace();
 		}
+		
+		try {
+			LearningActivityTryLocalServiceUtil.deleteUserTries(lat.getActId(), lat.getUserId());
+		} catch (PortalException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SystemException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		
 		if(res!=null){
 			res.setResult(0);
