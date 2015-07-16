@@ -74,7 +74,6 @@ if( permissionChecker.hasPermission(themeDisplay.getScopeGroupId(),  Course.clas
 			\"javascript:AUI().use(function(A){ \"+
 			\"   msg = '\" + LanguageUtil.get(pageContext, \"courseadmin.confirm.close\") + \"';\" +
 			\"   if(confirm(msg)) { \" +
-			\"   alert('\" + closeURL.toString() + \"'); \" +
 			\"       window.location.href = '\" + closeURL.toString() + \"';\" +
 			\"   } else { \" +
 			\"       return false; \" +
