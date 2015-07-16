@@ -105,8 +105,9 @@ window.<portlet:namespace />validate_execactivity={
 		rules:
 		{
 			<portlet:namespace />random: {
-				required: true,
-				randomRule: true
+				range: [0,100],
+				randomRule: true,
+				required: true
 			},
 			<portlet:namespace />questionsPerPage: {
 				qppRule: true,
@@ -118,7 +119,8 @@ window.<portlet:namespace />validate_execactivity={
 		fieldStrings:
 		{
 			<portlet:namespace />random: {
-				randomRule: '<liferay-ui:message key="execActivity.options.error.random" />'
+				randomRule: '<liferay-ui:message key="execActivity.options.error.random" />',
+				range: '<liferay-ui:message key="editActivity.tries.range" />'
             },
             <portlet:namespace />questionsPerPage: {
             	qppRule: '<liferay-ui:message key="execActivity.options.error.questionsPerPage" />'
