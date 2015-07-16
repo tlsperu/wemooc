@@ -109,7 +109,10 @@ window.<portlet:namespace />validate_execactivity={
 				randomRule: true
 			},
 			<portlet:namespace />questionsPerPage: {
-				qppRule: true
+				qppRule: true,
+				digits:true,
+				maxLength:3,
+				max: 100 
 			}
 		},
 		fieldStrings:
