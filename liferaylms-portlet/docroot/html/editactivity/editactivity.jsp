@@ -272,9 +272,9 @@ AUI().ready('node-base' ,'aui-form-validator', 'aui-overlay-context-panel', 'wid
             }
 			<% if(larntype.isTriesConfigurable()) { %>
 			,<portlet:namespace />tries: {
-				required: true,
 				number: true,
-				range: [0,100]
+				range: [0,100],
+				required: true
 			}
 			<% } if(larntype.isScoreConfigurable()) { %>
 			,<portlet:namespace />passpuntuation: {
