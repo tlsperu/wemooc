@@ -1868,6 +1868,7 @@
 			<mime-type>text/html</mime-type>
 			<portlet-mode>view</portlet-mode>
 		</supports>
+		<resource-bundle>content/competencesadmin/Language</resource-bundle>
 		<portlet-info>
 			<title>Competences Admin</title>
 			<short-title>Competences Admin</short-title>
