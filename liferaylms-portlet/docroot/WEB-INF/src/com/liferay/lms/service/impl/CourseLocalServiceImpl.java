@@ -33,6 +33,7 @@ import com.liferay.lms.model.LmsPrefs;
 import com.liferay.lms.model.Module;
 import com.liferay.lms.service.ClpSerializer;
 import com.liferay.lms.service.CourseLocalServiceUtil;
+import com.liferay.lms.service.LmsPrefsLocalServiceUtil;
 import com.liferay.lms.service.ModuleLocalServiceUtil;
 import com.liferay.lms.service.base.CourseLocalServiceBaseImpl;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
@@ -69,12 +70,14 @@ import com.liferay.portal.model.ModelHintsConstants;
 import com.liferay.portal.model.ModelHintsUtil;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.security.auth.PrincipalThreadLocal;
 import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetPrototypeLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.UserGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portlet.asset.model.AssetEntry;
 import com.liferay.portlet.asset.model.AssetLinkConstants;
@@ -758,5 +761,47 @@ public class CourseLocalServiceImpl extends CourseLocalServiceBaseImpl {
 	
 	public List<Course> findByCompanyId(Long companyId) throws SystemException{
 		return coursePersistence.findByCompanyId(companyId);
+	}
+	
+	
+	public List<User> getStudentsFromCourse(Course course) {		
+		return getStudentsFromCourse(course.getCompanyId(), course.getGroupCreatedId());
+	}
+	
+	public List<User> getStudentsFromCourse(long companyId, long courseGropupCreatedId) {
+		List<User> students = new ArrayList<User>();
+		List<User> usersExcluded = new ArrayList<User>();
+		
+		LmsPrefs prefs;
+		try {
+			prefs = LmsPrefsLocalServiceUtil.getLmsPrefs(companyId);
+			
+			long teacherRoleId=RoleLocalServiceUtil.getRole(prefs.getTeacherRole()).getRoleId();
+			long editorRoleId=RoleLocalServiceUtil.getRole(prefs.getEditorRole()).getRoleId();
+			
+			List<User> users = UserLocalServiceUtil.getGroupUsers(courseGropupCreatedId);
+			
+			List<UserGroupRole> teachers=UserGroupRoleLocalServiceUtil.getUserGroupRolesByGroupAndRole(courseGropupCreatedId, teacherRoleId);
+			for(UserGroupRole teacher: teachers) {
+				usersExcluded.add(teacher.getUser());
+			}
+			List<UserGroupRole> editors=UserGroupRoleLocalServiceUtil.getUserGroupRolesByGroupAndRole(courseGropupCreatedId, editorRoleId);
+			for(UserGroupRole editor: editors) {
+				usersExcluded.add(editor.getUser());
+			}
+			if(Validator.isNotNull(usersExcluded)) {
+				for(User user: users) {
+					if( !(usersExcluded.contains(user)) && !(students.contains(user)))
+						students.add(user);
+				}
+			}
+			
+		} catch (PortalException e) {
+			e.printStackTrace();
+		} catch (SystemException e) {
+			e.printStackTrace();
+		}
+		
+		return students;
 	}
 }

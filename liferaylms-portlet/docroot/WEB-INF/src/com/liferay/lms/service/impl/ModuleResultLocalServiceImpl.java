@@ -38,8 +38,10 @@ import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextThreadLocal;
@@ -106,11 +108,81 @@ public class ModuleResultLocalServiceImpl extends ModuleResultLocalServiceBaseIm
 		return moduleResultPersistence.countBym(moduleId);
 	}
 
+	public long countByModuleOnlyStudents(long companyId, long courseGropupCreatedId, long moduleId)
+			throws SystemException {
+		
+		long res = 0;
+		List<User> students = CourseLocalServiceUtil.getStudentsFromCourse(companyId, courseGropupCreatedId);
+		
+		ClassLoader classLoader = (ClassLoader) PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(), "portletClassLoader");
+		DynamicQuery consulta = DynamicQueryFactoryUtil.forClass(ModuleResult.class, classLoader)
+				.add(PropertyFactoryUtil.forName("moduleId").eq(moduleId));
+		
+		if(Validator.isNotNull(students) && students.size() > 0) {
+			Criterion criterion = null;
+			for (int i = 0; i < students.size(); i++) {
+				if(i==0) {
+					criterion = RestrictionsFactoryUtil.like("userId", students.get(i).getUserId());
+				} else {
+					criterion = RestrictionsFactoryUtil.or(criterion, RestrictionsFactoryUtil.like("userId", students.get(i).getUserId()));
+				}
+			}
+			if(Validator.isNotNull(criterion)) {
+				consulta.add(criterion);
+				
+				List<ModuleResult> results = moduleResultPersistence.findWithDynamicQuery(consulta);
+				if(results!=null && !results.isEmpty()) {
+					res = results.size();
+				}
+			}
+		}
+		
+		return res;
+	}
+
+	
 	public long countByModulePassed(long moduleId, boolean passed)
 		throws SystemException {
 
 		return moduleResultPersistence.countBymp(moduleId, passed);
 	}
+	
+	
+	public long countByModulePassedOnlyStudents(long companyId, long courseGropupCreatedId, long moduleId, boolean passed)
+			throws SystemException {
+
+		long res = 0;
+		List<User> students = CourseLocalServiceUtil.getStudentsFromCourse(companyId, courseGropupCreatedId);
+		
+		ClassLoader classLoader = (ClassLoader) PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(), "portletClassLoader");
+		DynamicQuery consulta = DynamicQueryFactoryUtil.forClass(ModuleResult.class, classLoader)
+				.add(PropertyFactoryUtil.forName("moduleId").eq(moduleId));
+		
+		if(Validator.isNotNull(students) && students.size() > 0) {
+			Criterion criterion = null;
+			for (int i = 0; i < students.size(); i++) {
+				if(i==0) {
+					criterion = RestrictionsFactoryUtil.like("userId", students.get(i).getUserId());
+				} else {
+					criterion = RestrictionsFactoryUtil.or(criterion, RestrictionsFactoryUtil.like("userId", students.get(i).getUserId()));
+				}
+			}
+			if(Validator.isNotNull(criterion)) {
+				criterion=RestrictionsFactoryUtil.and(criterion,
+						RestrictionsFactoryUtil.eq("passed",new Boolean (true)));
+				
+				consulta.add(criterion);
+				
+				List<ModuleResult> results = moduleResultPersistence.findWithDynamicQuery(consulta);
+				if(results!=null && !results.isEmpty()) {
+					res = results.size();
+				}
+			}
+		}
+		
+		return res;
+	}
+
 
 	public void update(LearningActivityResult lactr)
 		throws PortalException, SystemException {
@@ -354,5 +426,7 @@ public class ModuleResultLocalServiceImpl extends ModuleResultLocalServiceBaseIm
 
 			
 	}
+	
+	
 	
 }
