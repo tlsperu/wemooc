@@ -1,3 +1,8 @@
+<%@page import="com.liferay.portal.service.UserGroupRoleLocalServiceUtil"%>
+<%@page import="com.liferay.portal.service.UserGroupRoleService"%>
+<%@page import="com.liferay.portal.service.UserGroupRoleServiceUtil"%>
+<%@page import="com.liferay.lms.service.LmsPrefsLocalServiceUtil"%>
+<%@page import="com.liferay.lms.model.LmsPrefs"%>
 <%@page import="com.liferay.portal.security.permission.PermissionCheckerFactoryUtil"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.LinkedList"%>
@@ -51,6 +56,7 @@
 	
 	
 	PortletPreferences preferences = null;
+	
 	String portletResource = ParamUtil.getString(request, "portletResource");
 	if (Validator.isNotNull(portletResource)) {
 		preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
@@ -59,6 +65,14 @@
 	}
 	boolean showActionSocial = GetterUtil.getBoolean(preferences.getValue("showActionSocial", StringPool.FALSE),true);
 	boolean showActionAudit = GetterUtil.getBoolean(preferences.getValue("showActionAudit", StringPool.FALSE),true);
+	
+	
+	LmsPrefs prefs=LmsPrefsLocalServiceUtil.getLmsPrefs(themeDisplay.getCompanyId());
+
+	long teacherRoleId=RoleLocalServiceUtil.getRole(prefs.getTeacherRole()).getRoleId();
+	long editorRoleId=RoleLocalServiceUtil.getRole(prefs.getEditorRole()).getRoleId();
+	
+	
 %>
 
 <liferay-portlet:renderURL var="returnurl">
@@ -153,9 +167,12 @@ else
 				LinkedHashMap<String,Object> params = new LinkedHashMap<String,Object>();
 				params.put("usersGroups", new Long(themeDisplay.getScopeGroupId()));
 				
-				OrderByComparator obc = null;
+				//OrderByComparator obc = null;
 				
-				List<User> userListPage = UserLocalServiceUtil.search(themeDisplay.getCompanyId(), criteria, 0, params, searchContainer.getStart(), searchContainer.getEnd(), obc);
+				
+				List<User> userListPage = UserLocalServiceUtil.getGroupUsers(themeDisplay.getScopeGroupId());
+				
+				//List<User> userListPage = UserLocalServiceUtil.search(themeDisplay.getCompanyId(), criteria, 0, params, searchContainer.getStart(), searchContainer.getEnd(), obc);
 				
 				List<User> finalUserList = new LinkedList<User>();
 				
@@ -164,8 +181,13 @@ else
 				while(ituserlistpage.hasNext()){
 					User u = ituserlistpage.next();
 					
-					boolean isStudent = !(PermissionCheckerFactoryUtil.create(u).hasPermission(themeDisplay.getScopeGroupId(), "com.liferay.lms.model", themeDisplay.getScopeGroupId(), "VIEW_RESULTS"));
-					//System.out.println("User "+u.getFullName()+" isStudent "+ isStudent);
+					boolean isStudent = (!(PermissionCheckerFactoryUtil.create(u).hasPermission(themeDisplay.getScopeGroupId(), "com.liferay.lms.model", themeDisplay.getScopeGroupId(), "VIEW_RESULTS"))
+								&&
+								!UserGroupRoleLocalServiceUtil.hasUserGroupRole(u.getUserId(), themeDisplay.getScopeGroupId(), teacherRoleId)
+								&&
+								!UserGroupRoleLocalServiceUtil.hasUserGroupRole(u.getUserId(), themeDisplay.getScopeGroupId(), editorRoleId));
+							//System.out.println("User "+u.getFullName()+" isStudent "+ isStudent);
+					
 					if(isStudent)finalUserList.add(u);
 				}
 				
@@ -191,7 +213,11 @@ else
 				while(ituserlistpage.hasNext()){
 					User u = ituserlistpage.next();
 					
-					boolean isStudent = !(PermissionCheckerFactoryUtil.create(u).hasPermission(themeDisplay.getScopeGroupId(), "com.liferay.lms.model", themeDisplay.getScopeGroupId(), "VIEW_RESULTS"));
+					boolean isStudent = (!(PermissionCheckerFactoryUtil.create(u).hasPermission(themeDisplay.getScopeGroupId(), "com.liferay.lms.model", themeDisplay.getScopeGroupId(), "VIEW_RESULTS"))
+							&&
+							!UserGroupRoleLocalServiceUtil.hasUserGroupRole(u.getUserId(), themeDisplay.getScopeGroupId(), teacherRoleId)
+							&&
+							!UserGroupRoleLocalServiceUtil.hasUserGroupRole(u.getUserId(), themeDisplay.getScopeGroupId(), editorRoleId));
 					//System.out.println("User "+u.getFullName()+" isStudent "+ isStudent);
 					if(isStudent)finalUserList.add(u);
 				}
