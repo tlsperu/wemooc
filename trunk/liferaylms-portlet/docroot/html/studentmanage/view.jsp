@@ -166,17 +166,14 @@ else
 
 			if(theTeam==null){
 				if(criteria.trim().length()==0){
-					System.out.println("Criterio: "+criteria);
 					userParams.put("usersGroups", new Long(themeDisplay.getScopeGroupId()));
 					userListPage = UserLocalServiceUtil.getGroupUsers(themeDisplay.getScopeGroupId());
 				}else{
-					System.out.println("Criterio: "+criteria);
 					userParams.put("usersGroups", new Long(themeDisplay.getScopeGroupId()));
 					OrderByComparator obc = null;
 					userListPage  = UserLocalServiceUtil.search(themeDisplay.getCompanyId(), criteria, 0, userParams, searchContainer.getStart(), searchContainer.getEnd(), obc);
 				}
 			}else{
-				System.out.println("Criterio: "+criteria);
 				userParams.put("usersGroups", theTeam.getGroupId());
 				userParams.put("usersTeams", theTeam.getTeamId());
 				OrderByComparator obc = null;
