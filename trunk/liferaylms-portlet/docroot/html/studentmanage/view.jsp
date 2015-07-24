@@ -160,20 +160,29 @@ else
 
 	   	<liferay-ui:search-container-results>
 			<%
-			if(theTeam==null)
-			{
-				String middleName = null;
-		
-				LinkedHashMap<String,Object> params = new LinkedHashMap<String,Object>();
-				params.put("usersGroups", new Long(themeDisplay.getScopeGroupId()));
-				
-				//OrderByComparator obc = null;
-				
-				
-				List<User> userListPage = UserLocalServiceUtil.getGroupUsers(themeDisplay.getScopeGroupId());
-				
-				//List<User> userListPage = UserLocalServiceUtil.search(themeDisplay.getCompanyId(), criteria, 0, params, searchContainer.getStart(), searchContainer.getEnd(), obc);
-				
+			List<User> userListPage  = null;
+			String middleName = null;
+			LinkedHashMap userParams = new LinkedHashMap();
+
+			if(theTeam==null){
+				if(criteria.trim().length()==0){
+					System.out.println("Criterio: "+criteria);
+					userParams.put("usersGroups", new Long(themeDisplay.getScopeGroupId()));
+					userListPage = UserLocalServiceUtil.getGroupUsers(themeDisplay.getScopeGroupId());
+				}else{
+					System.out.println("Criterio: "+criteria);
+					userParams.put("usersGroups", new Long(themeDisplay.getScopeGroupId()));
+					OrderByComparator obc = null;
+					userListPage  = UserLocalServiceUtil.search(themeDisplay.getCompanyId(), criteria, 0, userParams, searchContainer.getStart(), searchContainer.getEnd(), obc);
+				}
+			}else{
+				System.out.println("Criterio: "+criteria);
+				userParams.put("usersGroups", theTeam.getGroupId());
+				userParams.put("usersTeams", theTeam.getTeamId());
+				OrderByComparator obc = null;
+				userListPage  = UserLocalServiceUtil.search(themeDisplay.getCompanyId(), criteria, 0, userParams, searchContainer.getStart(), searchContainer.getEnd(), obc);
+			}
+			
 				List<User> finalUserList = new LinkedList<User>();
 				
 				Iterator<User> ituserlistpage = userListPage.iterator();
@@ -197,40 +206,8 @@ else
 				//pageContext.setAttribute("results", userListPage);
 				pageContext.setAttribute("results", finalUserList);
 			    	pageContext.setAttribute("total", userCount);
-			}
-			else
-			{
-				LinkedHashMap userParams = new LinkedHashMap();
-				userParams.put("usersGroups", theTeam.getGroupId());
-				userParams.put("usersTeams", theTeam.getTeamId());
-				OrderByComparator obc = null;
-				//total=UserLocalServiceUtil.searchCount(themeDisplay.getCompanyId(), criteria, 0, userParams);
-				//List<User> userListPage  = UserLocalServiceUtil.search(themeDisplay.getCompanyId(), criteria, 0, userParams, searchContainer.getStart(), searchContainer.getEnd(), obc);
-				List<User> userListPage = UserLocalServiceUtil.getGroupUsers(themeDisplay.getScopeGroupId());
-
-				List<User> finalUserList = new LinkedList<User>();
-				
-				Iterator<User> ituserlistpage = userListPage.iterator();
-				
-				while(ituserlistpage.hasNext()){
-					User u = ituserlistpage.next();
-					
-					boolean isStudent = (!(PermissionCheckerFactoryUtil.create(u).hasPermission(themeDisplay.getScopeGroupId(), "com.liferay.lms.model", themeDisplay.getScopeGroupId(), "VIEW_RESULTS"))
-							&&
-							!UserGroupRoleLocalServiceUtil.hasUserGroupRole(u.getUserId(), themeDisplay.getScopeGroupId(), teacherRoleId)
-							&&
-							!UserGroupRoleLocalServiceUtil.hasUserGroupRole(u.getUserId(), themeDisplay.getScopeGroupId(), editorRoleId));
-					//System.out.println("User "+u.getFullName()+" isStudent "+ isStudent);
-					if(isStudent)finalUserList.add(u);
-				}
-				
-				//int userCount = UserLocalServiceUtil.searchCount(themeDisplay.getCompanyId(), criteria, 0, params);
-				int userCount = finalUserList.size();
-						
-				//pageContext.setAttribute("results", userListPage);
-				pageContext.setAttribute("results", finalUserList);
-			    	pageContext.setAttribute("total", userCount);
-			}
+			
+			
 			    	
 			%>
 		</liferay-ui:search-container-results>
