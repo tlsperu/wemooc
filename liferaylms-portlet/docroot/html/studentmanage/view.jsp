@@ -205,7 +205,9 @@ else
 				userParams.put("usersTeams", theTeam.getTeamId());
 				OrderByComparator obc = null;
 				//total=UserLocalServiceUtil.searchCount(themeDisplay.getCompanyId(), criteria, 0, userParams);
-				List<User> userListPage  = UserLocalServiceUtil.search(themeDisplay.getCompanyId(), criteria, 0, userParams, searchContainer.getStart(), searchContainer.getEnd(), obc);
+				//List<User> userListPage  = UserLocalServiceUtil.search(themeDisplay.getCompanyId(), criteria, 0, userParams, searchContainer.getStart(), searchContainer.getEnd(), obc);
+				List<User> userListPage = UserLocalServiceUtil.getGroupUsers(themeDisplay.getScopeGroupId());
+
 				List<User> finalUserList = new LinkedList<User>();
 				
 				Iterator<User> ituserlistpage = userListPage.iterator();
