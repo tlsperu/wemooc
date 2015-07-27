@@ -111,6 +111,7 @@ public class TestLearningActivityType extends BaseLearningActivityType
 		
 		if((Validator.isNotNull(uploadRequest.getParameter("random")))&&
 		   ((!Validator.isNumber(uploadRequest.getParameter("random")))||
+		    (Long.parseLong(uploadRequest.getParameter("random"))>100)||
 		    (Long.parseLong(uploadRequest.getParameter("random"))<0)))
 		{
 			SessionErrors.add(actionRequest, "execactivity.editActivity.random.number");
@@ -118,6 +119,7 @@ public class TestLearningActivityType extends BaseLearningActivityType
 		}
 		if((Validator.isNotNull(uploadRequest.getParameter("questionsPerPage")))&&
 		   ((!Validator.isNumber(uploadRequest.getParameter("questionsPerPage")))||
+			(Long.parseLong(uploadRequest.getParameter("questionsPerPage"))>100)||
 		    (Long.parseLong(uploadRequest.getParameter("questionsPerPage"))<0)))
 		{
 			SessionErrors.add(actionRequest, "execactivity.editActivity.questionsPerPage.number");
