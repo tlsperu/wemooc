@@ -98,7 +98,6 @@ AUI().use('aui-form-validator', function(A) {
 		},
 		true
 	);
-	
 });
 
 window.<portlet:namespace />validate_execactivity={
@@ -112,7 +111,6 @@ window.<portlet:namespace />validate_execactivity={
 			<portlet:namespace />questionsPerPage: {
 				qppRule: true,
 				digits:true,
-				maxLength:3,
 				max: 100 
 			}
 		},
@@ -120,10 +118,11 @@ window.<portlet:namespace />validate_execactivity={
 		{
 			<portlet:namespace />random: {
 				randomRule: '<liferay-ui:message key="execActivity.options.error.random" />',
-				range: '<liferay-ui:message key="editActivity.tries.range" />'
+				range: '<liferay-ui:message key="execActivity.options.error.randomquestion.number" />'
             },
             <portlet:namespace />questionsPerPage: {
-            	qppRule: '<liferay-ui:message key="execActivity.options.error.questionsPerPage" />'
+            	qppRule: '<liferay-ui:message key="execActivity.options.error.questionsPerPage" />',
+            	max: '<liferay-ui:message key="execActivity.options.error.questionsPerPage.max" />'
 			}
 		}	
 };
@@ -201,8 +200,8 @@ window.<portlet:namespace />validate_execactivity={
 
 	<aui:input type="text" size="3" name="random" label="execActivity.options.random" value="<%=(random>0)?Long.toString(random):StringPool.BLANK %>" disabled="<%=!edit %>" 
 		ignoreRequestValue="true" helpMessage="execActivity.options.random.helpMessage"></aui:input>
-	<div id="<portlet:namespace />randomError" class="<%=(SessionErrors.contains(renderRequest, "execActivity.options.error.random"))?"portlet-msg-error":StringPool.BLANK %>">
-	 	<%=(SessionErrors.contains(renderRequest, "execActivity.options.error.random"))?
+	<div id="<portlet:namespace />randomError" class="<%=(SessionErrors.contains(renderRequest, "execactivity.editActivity.random.number"))?"portlet-msg-error":StringPool.BLANK %>">
+	 	<%=(SessionErrors.contains(renderRequest, "execactivity.editActivity.random.number"))?
 				LanguageUtil.get(pageContext,"execActivity.options.error.random"):StringPool.BLANK %>
 	</div>
 	
