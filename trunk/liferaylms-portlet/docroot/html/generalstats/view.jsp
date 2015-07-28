@@ -69,6 +69,7 @@ String scourseIds=ListUtil.toString(courses,"courseId");
 <%
 }
 %>
+
 <liferay-ui:search-container  deltaConfigurable="true" emptyResultsMessage="there-are-no-courses" delta="10">
 	<liferay-ui:search-container-results>
 	<%
@@ -92,56 +93,13 @@ String scourseIds=ListUtil.toString(courses,"courseId");
 
 	<liferay-ui:search-container-row className="com.liferay.lms.model.Course" keyProperty="courseId" modelVar="course">
 	<%
-		
-	
-		LmsPrefs prefs=LmsPrefsLocalServiceUtil.getLmsPrefs(themeDisplay.getCompanyId());
-		java.util.List<User> users=new java.util.ArrayList<User>();
-
-		java.util.List<User> userst = UserLocalServiceUtil.getGroupUsers(course.getGroupCreatedId());
-		int numTeachers = 0;
-		int teachersFinished=0;
-		for (User usert : userst) {
-			List<UserGroupRole> userGroupRoles = UserGroupRoleLocalServiceUtil.getUserGroupRoles(
-					usert.getUserId(), course.getGroupCreatedId());
-			boolean remove = false;
-			
-			for (UserGroupRole ugr : userGroupRoles) {
-				if (ugr.getRoleId() == prefs.getEditorRole() || ugr.getRoleId() == prefs.getTeacherRole()) {
-					remove = true;
-					CourseResult teacherResult = CourseResultLocalServiceUtil.getCourseResultByCourseAndUser(course.getCourseId(), usert.getUserId());
-					if(teacherResult!=null){
-						numTeachers++;
-						if(teacherResult.getPassedDate()!=null)
-						{
-							teachersFinished++;
-						}
-						//System.out.println(teacherResult.getResult());
-						//System.out.println(teacherResult.getCourseId());
-
-					}
-					break;
-				}
-			}
-			if (!remove) {
-				users.add(usert);
-			}
-		}
-		//System.out.println("NumTeachers: "+numTeachers);
 		Group groupsel= GroupLocalServiceUtil.getGroup(course.getGroupCreatedId());
-		long registered=users.size();
-		
-		//CourseResultLocalServiceUtil.c
-		long todosLosFinalizados=CourseResultLocalServiceUtil.countByCourseId(course.getCourseId(), true);
-		long finalizados = CourseResultLocalServiceUtil.countByCourseId(course.getCourseId(), true)-teachersFinished;
-		long iniciados = (CourseResultLocalServiceUtil.countByCourseId(course.getCourseId(), false) + todosLosFinalizados)-numTeachers;
-		
-		//long finalizados = CourseResultLocalServiceUtil.countByCourseId(course.getCourseId(), true);
-		//long iniciados = (CourseResultLocalServiceUtil.countByCourseId(course.getCourseId(), false) + finalizados);
-		
+		long registered=CourseLocalServiceUtil.getStudentsFromCourse(course.getCompanyId(), course.getGroupCreatedId()).size();
+		long iniciados =  CourseResultLocalServiceUtil.countStudentsByCourseId(course);
+		long finalizados = CourseResultLocalServiceUtil.countStudentsByCourseId(course, true);
 		double avgResult=0;
-		if(finalizados>0)
-		{
-			avgResult=CourseResultLocalServiceUtil.avgResult(course.getCourseId());
+		if(finalizados>0){
+			avgResult=CourseResultLocalServiceUtil.avgStudentsResult(course, true);
 		}
 		long activitiesCount=LearningActivityLocalServiceUtil.countLearningActivitiesOfGroup(course.getGroupCreatedId());
 		long modulesCount=ModuleLocalServiceUtil.countByGroupId(course.getGroupCreatedId());
@@ -184,4 +142,5 @@ String scourseIds=ListUtil.toString(courses,"courseId");
 	<liferay-ui:search-iterator  />
 
 </liferay-ui:search-container>
+
 </div>
