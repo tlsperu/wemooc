@@ -31,6 +31,7 @@ import com.liferay.lms.model.Module;
 import com.liferay.lms.model.ModuleResult;
 import com.liferay.lms.model.UserCompetence;
 import com.liferay.lms.service.ClpSerializer;
+import com.liferay.lms.service.CourseLocalServiceUtil;
 import com.liferay.lms.service.base.CourseResultLocalServiceBaseImpl;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
 import com.liferay.portal.kernel.dao.orm.Criterion;
@@ -38,8 +39,11 @@ import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.User;
 
 /**
  * The implementation of the course result local service.
@@ -62,14 +66,84 @@ import com.liferay.portal.kernel.exception.SystemException;
  */
 public class CourseResultLocalServiceImpl
 	extends CourseResultLocalServiceBaseImpl {
+	
 	public CourseResult getByUserAndCourse(long courseId,long userId) throws SystemException
 	{
 		return courseResultPersistence.fetchByuc(userId, courseId);
 	}
+	
 	public long countByCourseId(long courseId, boolean passed) throws SystemException
 	{
 		return courseResultPersistence.countByc(courseId, passed);
 	}
+	
+	public long countStudentsByCourseId(Course course, boolean passed) throws SystemException
+	{
+		
+		long res = 0;
+		List<User> students = CourseLocalServiceUtil.getStudentsFromCourse(course.getCompanyId(), course.getGroupCreatedId());
+		
+		ClassLoader classLoader = (ClassLoader) PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(), "portletClassLoader");
+		DynamicQuery consulta = DynamicQueryFactoryUtil.forClass(CourseResult.class, classLoader)
+				.add(PropertyFactoryUtil.forName("courseId").eq(course.getCourseId()));
+		
+		if(Validator.isNotNull(students) && students.size() > 0) {
+			Criterion criterion = null;
+			for (int i = 0; i < students.size(); i++) {
+				if(i==0) {
+					criterion = RestrictionsFactoryUtil.like("userId", students.get(i).getUserId());
+				} else {
+					criterion = RestrictionsFactoryUtil.or(criterion, RestrictionsFactoryUtil.like("userId", students.get(i).getUserId()));
+				}
+			}
+			if(Validator.isNotNull(criterion)) {
+				criterion=RestrictionsFactoryUtil.and(criterion,
+						RestrictionsFactoryUtil.eq("passed",passed));
+				
+				consulta.add(criterion);
+				
+				List<CourseResult> results = (List<CourseResult>)courseResultPersistence.findWithDynamicQuery(consulta);
+				if(results!=null && !results.isEmpty()) {
+					res = results.size();
+				}
+			}
+		}
+		
+		return res;
+	}
+	
+	public long countStudentsByCourseId(Course course) throws SystemException
+	{
+		
+		long res = 0;
+		List<User> students = CourseLocalServiceUtil.getStudentsFromCourse(course.getCompanyId(), course.getGroupCreatedId());
+		
+		ClassLoader classLoader = (ClassLoader) PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(), "portletClassLoader");
+		DynamicQuery consulta = DynamicQueryFactoryUtil.forClass(CourseResult.class, classLoader)
+				.add(PropertyFactoryUtil.forName("courseId").eq(course.getCourseId()));
+		
+		if(Validator.isNotNull(students) && students.size() > 0) {
+			Criterion criterion = null;
+			for (int i = 0; i < students.size(); i++) {
+				if(i==0) {
+					criterion = RestrictionsFactoryUtil.like("userId", students.get(i).getUserId());
+				} else {
+					criterion = RestrictionsFactoryUtil.or(criterion, RestrictionsFactoryUtil.like("userId", students.get(i).getUserId()));
+				}
+			}
+			if(Validator.isNotNull(criterion)) {
+				consulta.add(criterion);
+				List<CourseResult> results = (List<CourseResult>)courseResultPersistence.findWithDynamicQuery(consulta);
+				if(results!=null && !results.isEmpty()) {
+					res = results.size();
+				}
+			}
+		}
+		
+		return res;
+	}
+	
+	
 	public Double avgResult(long courseId, boolean passed) throws SystemException
 	{
 		ClassLoader classLoader = (ClassLoader) PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(), "portletClassLoader"); 
@@ -81,6 +155,7 @@ public class CourseResultLocalServiceImpl
 		dq.setProjection(ProjectionFactoryUtil.avg("result"));
 		return (Double)(learningActivityResultPersistence.findWithDynamicQuery(dq).get(0));
 	}
+	
 	public Double avgResult(long courseId) throws SystemException
 	{
 		ClassLoader classLoader = (ClassLoader) PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(), "portletClassLoader"); 
@@ -90,6 +165,34 @@ public class CourseResultLocalServiceImpl
 		dq.setProjection(ProjectionFactoryUtil.avg("result"));
 		return (Double)(learningActivityResultPersistence.findWithDynamicQuery(dq).get(0));
 	}
+	
+	public Double avgStudentsResult(Course course, boolean passed) throws SystemException
+	{
+		List<User> students = CourseLocalServiceUtil.getStudentsFromCourse(course.getCompanyId(), course.getGroupCreatedId());
+		
+		ClassLoader classLoader = (ClassLoader) PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(), "portletClassLoader"); 
+		DynamicQuery consulta=DynamicQueryFactoryUtil.forClass(CourseResult.class, classLoader)
+				.add(PropertyFactoryUtil.forName("courseId").eq(course.getCourseId()));
+		
+		if(Validator.isNotNull(students) && students.size() > 0) {
+			Criterion criterion = null;
+			for (int i = 0; i < students.size(); i++) {
+				if(i==0) {
+					criterion = RestrictionsFactoryUtil.like("userId", students.get(i).getUserId());
+				} else {
+					criterion = RestrictionsFactoryUtil.or(criterion, RestrictionsFactoryUtil.like("userId", students.get(i).getUserId()));
+				}
+			}
+			if(Validator.isNotNull(criterion)) {
+				criterion=RestrictionsFactoryUtil.and(criterion,
+						RestrictionsFactoryUtil.eq("passed",passed));
+				consulta.add(criterion);
+			}
+		}
+		consulta.setProjection(ProjectionFactoryUtil.avg("result"));
+		return (Double)(learningActivityResultPersistence.findWithDynamicQuery(consulta).get(0));
+	}
+	
 	public CourseResult create(long courseId, long userId) throws SystemException
 	{
 
