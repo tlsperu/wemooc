@@ -227,7 +227,7 @@ if(backToEdit) {
 
 <div id="<portlet:namespace />student_search">
 
-	<liferay-ui:search-container iteratorURL="<%=portletURL%>" emptyResultsMessage="there-are-no-results" delta="10" deltaConfigurable="true" >
+	<liferay-ui:search-container iteratorURL="<%=portletURL%>" emptyResultsMessage="there-are-no-results" delta="10" deltaConfigurable="true"  >
 	
 	   	<liferay-ui:search-container-results>
 	   	
@@ -322,11 +322,18 @@ if(backToEdit) {
 
 		}
 		
-		for(User us:userListPage){
-			
-			%> <input type="hidden" name="studentIdNameHidden" value='<%= us.getUserId() + "," + us.getFullName() %>' /> <%
+		if (userListPage.size() > 1000){
+			pageContext.setAttribute("results", null);
+		    pageContext.setAttribute("total", 0);
+		   	searchContainer.setEmptyResultsMessage(LanguageUtil.get(pageContext,"there-are-many-results"));
+		}
+		else{
+			for(User us:userListPage){
 				
-		} 
+				%> <input type="hidden" name="studentIdNameHidden" value='<%= us.getUserId() + "," + us.getFullName() %>' /> <%
+					
+			} 
+		}
 	
 	%>
 		<input type="hidden" id="allSelected" value="false" />
