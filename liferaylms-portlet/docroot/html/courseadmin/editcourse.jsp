@@ -602,7 +602,9 @@ else
 			</c:choose>
 			
 		<c:if test="<%=showMaxUsers %>">
-			<aui:input name="maxUsers" label="num-of-users" type="text" value="<%=maxUsers %>" helpMessage="<%=LanguageUtil.get(pageContext,\"max-users-method-help\")%>" />
+			<aui:input name="maxUsers" label="num-of-users" type="text" value="<%=maxUsers %>" helpMessage="<%=LanguageUtil.get(pageContext,\"max-users-method-help\")%>">
+				<aui:validator name="number"></aui:validator>
+			</aui:input>
 		</c:if>
 	</liferay-ui:panel>
 	<liferay-ui:panel title="categorization" collapsible="true" defaultState="closed">
