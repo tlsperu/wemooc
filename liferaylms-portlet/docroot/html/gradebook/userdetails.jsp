@@ -59,10 +59,10 @@
 			<liferay-ui:search-container-column-text cssClass="number-column" name = "activity">
 				<%=learningActivity.getTitle(themeDisplay.getLocale()) %>
 			</liferay-ui:search-container-column-text>
-			<liferay-ui:search-container-column-text cssClass="number-column" name = "result">
-				<%=score %>
+			<liferay-ui:search-container-column-text cssClass="number-column" name = "result" align="center">
+				<%=(score.trim().equalsIgnoreCase("-")) ? score:  score + "/100"%>
 			</liferay-ui:search-container-column-text>
-			<liferay-ui:search-container-column-text cssClass="number-column" name = "status">
+			<liferay-ui:search-container-column-text cssClass="number-column" name = "status" align="center">
 	
 				<%if(status.equals("passed")){%>
 					<liferay-ui:icon image="checked" message="passed"></liferay-ui:icon>

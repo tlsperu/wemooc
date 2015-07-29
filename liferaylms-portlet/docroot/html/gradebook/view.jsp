@@ -316,8 +316,8 @@ if(theTeam!=null)
 					        });
 					    }
 						</script>
-						<liferay-ui:search-container-column-text cssClass="number-column" name = "<%=learningActivity.getTitle(themeDisplay.getLocale()) %>">
-							<%=result %>
+						<liferay-ui:search-container-column-text cssClass="number-column" name = "<%=learningActivity.getTitle(themeDisplay.getLocale()) %>" align="center">
+							<%=(result.trim().equalsIgnoreCase("-")) ? result:  result + "/100" %>
 							<% if(status.equals("passed")){%>
 							 	<liferay-ui:icon image="checked" message="passed"></liferay-ui:icon>
 							<%} else if(status.equals("not-passed")){%>
