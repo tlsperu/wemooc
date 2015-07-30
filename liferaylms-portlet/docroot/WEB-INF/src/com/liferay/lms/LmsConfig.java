@@ -16,8 +16,12 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * Portlet implementation class LmsConfig
  */
 public class LmsConfig extends MVCPortlet {
+	
+	private final long DEFAULT_USERS_RESULTS = 1000;
+	
 	public void changeSettings(ActionRequest request , ActionResponse response) throws Exception
 	{
+		
 		String redirect = ParamUtil.get(request, "redirect", "");
 		
 		String sitetemplates=StringUtil.merge(request.getParameterMap().get( "lmsTemplatesCheckbox"));
@@ -25,12 +29,14 @@ public class LmsConfig extends MVCPortlet {
 		String calificationTypes=StringUtil.merge(request.getParameterMap().get( "calificationTypesCheckbox"));
 		String courseEvalsTypes=StringUtil.merge(request.getParameterMap().get( "courseEvalsCheckbox"));
 		ThemeDisplay themeDisplay  =(ThemeDisplay)request.getAttribute(WebKeys.THEME_DISPLAY);
+		Long usersResults = (ParamUtil.getLong(request, "usersResults", DEFAULT_USERS_RESULTS));
 		
 		LmsPrefs prefs=LmsPrefsLocalServiceUtil.getLmsPrefsIni(themeDisplay.getCompanyId());
 		prefs.setLmsTemplates(sitetemplates);
 		prefs.setActivities(activitytypes);
 		prefs.setCourseevals(courseEvalsTypes);
 		prefs.setScoretranslators(calificationTypes);
+		prefs.setUsersResults(usersResults > 0 ? usersResults : DEFAULT_USERS_RESULTS);
 		LmsPrefsLocalServiceUtil.updateLmsPrefs(prefs);
 		
 		if (Validator.isNotNull(redirect)) {
