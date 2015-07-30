@@ -64,9 +64,10 @@ public class LmsPrefsModelImpl extends BaseModelImpl<LmsPrefs>
 			{ "lmsTemplates", Types.VARCHAR },
 			{ "activities", Types.VARCHAR },
 			{ "courseevals", Types.VARCHAR },
-			{ "scoretranslators", Types.VARCHAR }
+			{ "scoretranslators", Types.VARCHAR },
+			{ "usersResults", Types.BIGINT }
 		};
-	public static final String TABLE_SQL_CREATE = "create table Lms_LmsPrefs (companyId LONG not null primary key,teacherRole LONG,editorRole LONG,lmsTemplates VARCHAR(75) null,activities VARCHAR(75) null,courseevals VARCHAR(75) null,scoretranslators VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table Lms_LmsPrefs (companyId LONG not null primary key,teacherRole LONG,editorRole LONG,lmsTemplates VARCHAR(75) null,activities VARCHAR(75) null,courseevals VARCHAR(75) null,scoretranslators VARCHAR(75) null,usersResults LONG)";
 	public static final String TABLE_SQL_DROP = "drop table Lms_LmsPrefs";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
@@ -119,6 +120,7 @@ public class LmsPrefsModelImpl extends BaseModelImpl<LmsPrefs>
 		attributes.put("activities", getActivities());
 		attributes.put("courseevals", getCourseevals());
 		attributes.put("scoretranslators", getScoretranslators());
+		attributes.put("usersResults", getUsersResults());
 
 		return attributes;
 	}
@@ -165,6 +167,12 @@ public class LmsPrefsModelImpl extends BaseModelImpl<LmsPrefs>
 
 		if (scoretranslators != null) {
 			setScoretranslators(scoretranslators);
+		}
+
+		Long usersResults = (Long)attributes.get("usersResults");
+
+		if (usersResults != null) {
+			setUsersResults(usersResults);
 		}
 	}
 
@@ -244,6 +252,14 @@ public class LmsPrefsModelImpl extends BaseModelImpl<LmsPrefs>
 		_scoretranslators = scoretranslators;
 	}
 
+	public long getUsersResults() {
+		return _usersResults;
+	}
+
+	public void setUsersResults(long usersResults) {
+		_usersResults = usersResults;
+	}
+
 	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
@@ -279,6 +295,7 @@ public class LmsPrefsModelImpl extends BaseModelImpl<LmsPrefs>
 		lmsPrefsImpl.setActivities(getActivities());
 		lmsPrefsImpl.setCourseevals(getCourseevals());
 		lmsPrefsImpl.setScoretranslators(getScoretranslators());
+		lmsPrefsImpl.setUsersResults(getUsersResults());
 
 		lmsPrefsImpl.resetOriginalValues();
 
@@ -375,12 +392,14 @@ public class LmsPrefsModelImpl extends BaseModelImpl<LmsPrefs>
 			lmsPrefsCacheModel.scoretranslators = null;
 		}
 
+		lmsPrefsCacheModel.usersResults = getUsersResults();
+
 		return lmsPrefsCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{companyId=");
 		sb.append(getCompanyId());
@@ -396,13 +415,15 @@ public class LmsPrefsModelImpl extends BaseModelImpl<LmsPrefs>
 		sb.append(getCourseevals());
 		sb.append(", scoretranslators=");
 		sb.append(getScoretranslators());
+		sb.append(", usersResults=");
+		sb.append(getUsersResults());
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(28);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.lms.model.LmsPrefs");
@@ -436,6 +457,10 @@ public class LmsPrefsModelImpl extends BaseModelImpl<LmsPrefs>
 			"<column><column-name>scoretranslators</column-name><column-value><![CDATA[");
 		sb.append(getScoretranslators());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>usersResults</column-name><column-value><![CDATA[");
+		sb.append(getUsersResults());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -453,5 +478,6 @@ public class LmsPrefsModelImpl extends BaseModelImpl<LmsPrefs>
 	private String _activities;
 	private String _courseevals;
 	private String _scoretranslators;
+	private long _usersResults;
 	private LmsPrefs _escapedModelProxy;
 }
