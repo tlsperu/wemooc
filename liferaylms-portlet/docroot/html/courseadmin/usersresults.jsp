@@ -281,6 +281,7 @@ if(backToEdit) {
 		*/
 		boolean showOnlyOrganizationUsers = preferences.getValue("showOnlyOrganizationUsers", "false").equals("true");
 		List <User> userListPage = new LinkedList<User>();
+		long usersLimit = LmsPrefsLocalServiceUtil.getLmsPrefs(themeDisplay.getCompanyId()).getUsersResults();
 		
 		if (showOnlyOrganizationUsers) {
 			
@@ -322,10 +323,10 @@ if(backToEdit) {
 
 		}
 		
-		if (userListPage.size() > 1000){
+		if (userListPage.size() > usersLimit){
 			pageContext.setAttribute("results", null);
 		    pageContext.setAttribute("total", 0);
-		   	searchContainer.setEmptyResultsMessage(LanguageUtil.get(pageContext,"there-are-many-results"));
+		   	searchContainer.setEmptyResultsMessage(LanguageUtil.format(pageContext,"there-are-many-results", new Object[]{usersLimit}));
 		}
 		else{
 			for(User us:userListPage){
