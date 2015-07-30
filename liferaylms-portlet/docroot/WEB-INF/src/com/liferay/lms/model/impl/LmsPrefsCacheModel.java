@@ -32,7 +32,7 @@ import java.io.Serializable;
 public class LmsPrefsCacheModel implements CacheModel<LmsPrefs>, Serializable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{companyId=");
 		sb.append(companyId);
@@ -48,6 +48,8 @@ public class LmsPrefsCacheModel implements CacheModel<LmsPrefs>, Serializable {
 		sb.append(courseevals);
 		sb.append(", scoretranslators=");
 		sb.append(scoretranslators);
+		sb.append(", usersResults=");
+		sb.append(usersResults);
 		sb.append("}");
 
 		return sb.toString();
@@ -88,6 +90,8 @@ public class LmsPrefsCacheModel implements CacheModel<LmsPrefs>, Serializable {
 			lmsPrefsImpl.setScoretranslators(scoretranslators);
 		}
 
+		lmsPrefsImpl.setUsersResults(usersResults);
+
 		lmsPrefsImpl.resetOriginalValues();
 
 		return lmsPrefsImpl;
@@ -100,4 +104,5 @@ public class LmsPrefsCacheModel implements CacheModel<LmsPrefs>, Serializable {
 	public String activities;
 	public String courseevals;
 	public String scoretranslators;
+	public long usersResults;
 }
