@@ -33,6 +33,8 @@ if(prefs!=null)
 	List<Long> activityids = ListUtil.toList(StringUtil.split(prefs.getActivities(), ",", 0L));
 	List<Long> courseEvalIds = ListUtil.toList(StringUtil.split(prefs.getCourseevals(),",",0L));
 	List <Long> calificationTypeIds = ListUtil.toList(StringUtil.split(prefs.getScoretranslators(),",",0L));	
+	
+	long usersResults = GetterUtil.getLong(prefs.getUsersResults(), 1000); //prefs.getUsersResults() == 0 ? 1000 : prefs.getUsersResults();
 %>
 
 <liferay-ui:success message="your-request-completed-successfully" key="ok" />
@@ -150,6 +152,12 @@ for(CalificationType calificationType :calificationTypeRegistry.getCalificationT
 }
 %>
 </aui:field-wrapper>
+
+<liferay-ui:header title="searchUsers" />
+<aui:field-wrapper>
+	<aui:input type="number" name="usersResults" label="max-users-search" value="<%=usersResults%>" />
+</aui:field-wrapper>
+
 <aui:field-wrapper>
 	<aui:button type="submit" value="save" />
 	<button name="check" value="check" onclick="javascrip:checkGroups();" type="button">
