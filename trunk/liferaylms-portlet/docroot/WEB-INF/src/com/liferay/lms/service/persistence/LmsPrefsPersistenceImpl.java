@@ -306,6 +306,7 @@ public class LmsPrefsPersistenceImpl extends BasePersistenceImpl<LmsPrefs>
 		lmsPrefsImpl.setActivities(lmsPrefs.getActivities());
 		lmsPrefsImpl.setCourseevals(lmsPrefs.getCourseevals());
 		lmsPrefsImpl.setScoretranslators(lmsPrefs.getScoretranslators());
+		lmsPrefsImpl.setUsersResults(lmsPrefs.getUsersResults());
 
 		return lmsPrefsImpl;
 	}

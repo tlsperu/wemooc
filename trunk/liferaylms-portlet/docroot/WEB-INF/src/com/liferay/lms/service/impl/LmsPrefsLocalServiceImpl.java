@@ -69,6 +69,7 @@ public class LmsPrefsLocalServiceImpl extends LmsPrefsLocalServiceBaseImpl
 				lmsPrefs.setTeacherRole(stAction.courseTeacher.getRoleId());
 				lmsPrefs.setEditorRole(stAction.courseEditor.getRoleId());
 				lmsPrefs.setLmsTemplates(Long.toString(stAction.layoutSetPrototype.getLayoutSetPrototypeId()));
+				lmsPrefs.setUsersResults(1000);
 				lmsPrefsPersistence.update(lmsPrefs, true);
 				setActivities(lmsPrefs);
 				setScoreTranslators(lmsPrefs);
