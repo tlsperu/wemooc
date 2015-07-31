@@ -1,3 +1,8 @@
+<%@page import="com.liferay.lms.model.impl.LearningActivityModelImpl"%>
+<%@page import="com.liferay.lms.model.LearningActivityModel"%>
+<%@page import="com.liferay.lms.learningactivity.LearningActivityTypeRegistry"%>
+<%@page import="com.liferay.lms.learningactivity.LearningActivityType"%>
+<%@page import="com.liferay.lms.SurveyActivity"%>
 <%@page import="com.liferay.lms.learningactivity.questiontype.QuestionTypeRegistry"%>
 <%@page import="com.liferay.lms.learningactivity.questiontype.QuestionType"%>
 <%@page import="com.liferay.lms.service.TestAnswerLocalServiceUtil"%>
@@ -25,13 +30,25 @@
 		question = TestQuestionLocalServiceUtil.getTestQuestion(ParamUtil.getLong(request,"questionId"));
 	}
 	int totalAnswer=(question!=null)?(int)TestAnswerLocalServiceUtil.dynamicQueryCount( DynamicQueryFactoryUtil.forClass(TestAnswer.class).
-															add(PropertyFactoryUtil.forName("questionId").eq(question.getQuestionId()))):0;
-%>
+													add(PropertyFactoryUtil.forName("questionId").eq(question.getQuestionId()))):0;
+	long resId = ParamUtil.getLong(request,"resId", 0);
+	LearningActivity la = LearningActivityLocalServiceUtil.getLearningActivity(resId);
+	
+	if(la.getTypeId()==4){
+		totalAnswer = 0;%> 
+		<span class="question" style="display:none">
+			<aui:input type="radio" id="includeSolution" name="includeSolution" label="includeSolution.yes" value="y" onClick='<%= renderResponse.getNamespace() + "showHideSolution();" %>' checked='<%= totalAnswer > 0 %>'/>
+			<aui:input type="radio" id="notIncludeSolution" name="includeSolution" label="includeSolution.no" value="n" onClick='<%= renderResponse.getNamespace() + "showHideSolution();" %>' checked='<%= totalAnswer == 0 %>'/>
+		</span>
+	 <%}else{%>
+	<span class="question">
+		<aui:input type="radio" id="includeSolution" name="includeSolution" label="includeSolution.yes" value="y" onClick='<%= renderResponse.getNamespace() + "showHideSolution();" %>' checked='<%= totalAnswer > 0 %>'/>
+		<aui:input type="radio" id="notIncludeSolution" name="includeSolution" label="includeSolution.no" value="n" onClick='<%= renderResponse.getNamespace() + "showHideSolution();" %>' checked='<%= totalAnswer == 0 %>'/>
+	</span> 
+		 
+	 <%} %> 
+	
 
-<span class="question">
-	<aui:input type="radio" id="includeSolution" name="includeSolution" label="includeSolution.yes" value="y" onClick='<%= renderResponse.getNamespace() + "showHideSolution();" %>' checked='<%= totalAnswer > 0 %>'/>
-	<aui:input type="radio" id="notIncludeSolution" name="includeSolution" label="includeSolution.no" value="n" onClick='<%= renderResponse.getNamespace() + "showHideSolution();" %>' checked='<%= totalAnswer == 0 %>'/>
-</span>
 
 <script type="text/javascript">
 function <portlet:namespace />showHideSolution(){
