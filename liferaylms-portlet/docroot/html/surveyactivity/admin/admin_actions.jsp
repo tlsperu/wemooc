@@ -16,8 +16,8 @@ String actId = String.valueOf(question.getActId());
 QuestionType qt =new QuestionTypeRegistry().getQuestionType(question.getQuestionType());
 %>
 
-<liferay-portlet:renderURL var="editURL" portletName="execactivity_WAR_liferaylmsportlet">
-	<liferay-portlet:param name="jspPage" value="/html/execactivity/test/admin/editQuestion.jsp"/>
+<liferay-portlet:renderURL var="editURL" portletName="surveyactivity_WAR_liferaylmsportlet">
+	<liferay-portlet:param name="jspPage" value="/html/surveyactivity/admin/editquestion.jsp"/>
 	<liferay-portlet:param name="questionId" value="<%=primKey %>" />
 	<liferay-portlet:param name="resId" value="<%= actId %>" />
 	<liferay-portlet:param name="actionEditingDetails" value="<%= StringPool.TRUE %>" />
@@ -26,7 +26,7 @@ QuestionType qt =new QuestionTypeRegistry().getQuestionType(question.getQuestion
 	<liferay-portlet:param name="backUrl" value="<%= currentURL %>"/>
 </liferay-portlet:renderURL>
 <liferay-ui:icon image="edit" message="edit" url="<%=editURL.toString() %>" />
-<liferay-portlet:actionURL name="deletequestion" var="deleteURL" portletName="execactivity_WAR_liferaylmsportlet">
+<liferay-portlet:actionURL name="deletequestion" var="deleteURL" portletName="surveyactivity_WAR_liferaylmsportlet">
 	<liferay-portlet:param name="questionId" value="<%= primKey %>" />
 	<liferay-portlet:param name="resId" value="<%= actId %>" />
 	<liferay-portlet:param name="backUrl" value="<%= currentURL %>"/>

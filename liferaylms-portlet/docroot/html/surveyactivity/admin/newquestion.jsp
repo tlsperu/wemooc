@@ -67,6 +67,8 @@ AUI().ready('node-base' ,'aui-form-validator', 'aui-overlay-context-panel', func
 
 <aui:form name="qfm" action="<%=addquestionURL%>"  method="post">
 	<aui:input name="resId" type="hidden" value="<%= learningActivity.getActId()%>"></aui:input>
+	
+	
 	<script type="text/javascript">
 	<!--
 		Liferay.provide(
@@ -86,10 +88,17 @@ AUI().ready('node-base' ,'aui-form-validator', 'aui-overlay-context-panel', func
 	</script>
     
 	<aui:field-wrapper label="surveyactivity.editquestions.editquestion.enunciation">
+	
+	
+	
+		<aui:input name="isFree" label="texto_libre" type="checkbox" value="true"></aui:input>
+	
+	
 		<liferay-ui:input-editor name="text" width="80%" onChangeMethod="onChangeText" />
 		<script type="text/javascript">
 	        function <portlet:namespace />initEditor() 
 	        { 
+	        	
 	            return ""; 
 	        }
 	    </script>
