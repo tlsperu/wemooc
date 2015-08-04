@@ -1,3 +1,4 @@
+<%@page import="com.liferay.lms.service.SurveyResultLocalServiceUtil"%>
 <%@page import="com.liferay.portal.kernel.util.UnicodeFormatter"%>
 <%@page import="com.liferay.lms.learningactivity.questiontype.QuestionTypeRegistry"%>
 <%@page import="com.liferay.lms.learningactivity.questiontype.QuestionType"%>
@@ -24,6 +25,7 @@
 <% 
 	long questionId = ParamUtil.getLong(request,"questionId", 0);
 	TestQuestion question = null;
+	System.out.println("DENTRO DE EDITANSWEROPTIONS: "+questionId);
 	if(questionId != 0){
 		question = TestQuestionLocalServiceUtil.getTestQuestion(ParamUtil.getLong(request,"questionId"));
 	}
@@ -32,8 +34,10 @@
 		if(question!=null){
 			res = TestAnswerLocalServiceUtil.getTestAnswersByQuestionId(question.getQuestionId());
 		}
+		System.out.println("Tamaño de respuestas: "+res.size());
 		for(TestAnswer testanswer:res){
 			String titleAnswer = HtmlUtil.extractText(testanswer.getAnswer());
+			System.out.println(titleAnswer);
 			titleAnswer = titleAnswer.replaceAll("&lt;.+?&gt;|<.+?>","");
 			titleAnswer = titleAnswer.replaceAll("&nbsp;"," ");
 			if(titleAnswer.length() > 50) titleAnswer = titleAnswer.substring(0, 50) + " ...";

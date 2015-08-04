@@ -1,3 +1,6 @@
+<%@page import="com.liferay.lms.learningactivity.questiontype.QuestionTypeRegistry"%>
+<%@page import="com.liferay.lms.learningactivity.questiontype.QuestionType"%>
+<%@page import="com.liferay.lms.SurveyActivity"%>
 <%@page import="com.liferay.lms.service.TestAnswerLocalServiceUtil"%>
 <%@page import="com.liferay.lms.model.TestAnswer"%>
 <%@page import="com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil"%>
@@ -15,11 +18,25 @@
 
 <%@ include file="/init.jsp" %>
 <%
-	TestQuestion question = TestQuestionLocalServiceUtil.getTestQuestion(ParamUtil.getLong(request,"questionId"));
-	LearningActivity learningActivity = LearningActivityLocalServiceUtil.getLearningActivity(question.getActId());
+
+	long questionId = ParamUtil.getLong(request,"questionId",0);
+	long typeId = ParamUtil.getLong(request,"typeId", -1);
+	TestQuestion question = null;
+	LearningActivity learningActivity = null;
+	boolean isNewQuestion = false;
+	if (questionId != 0){
+		question = TestQuestionLocalServiceUtil.getTestQuestion(ParamUtil.getLong(request,"questionId"));
+		learningActivity = LearningActivityLocalServiceUtil.getLearningActivity(question.getActId());
+		
+	}else{
+		isNewQuestion = true;
+		learningActivity = LearningActivityLocalServiceUtil.getLearningActivity(ParamUtil.getLong(request,"resId"));
+
+	}
 	request.setAttribute("activity", learningActivity);
 	PortletURL backUrl = renderResponse.createRenderURL();
 	backUrl.setParameter("resId", String.valueOf(learningActivity.getActId()));
+	backUrl.setParameter("qtype", String.valueOf(typeId));
 	backUrl.setParameter("jspPage", "/html/surveyactivity/admin/editquestions.jsp");
 	backUrl.setParameter("actionEditingDetails",StringPool.TRUE);
 	request.setAttribute("backUrl", backUrl.toString());
@@ -114,8 +131,20 @@ AUI().ready('node-base' ,'aui-form-validator', 'aui-overlay-context-panel', func
 
 <portlet:actionURL var="editquestionURL" name="editquestion" />
 <aui:form name="qfm" action="<%=editquestionURL %>" method="post">
-	<aui:input name="resId" type="hidden" value="<%=question.getActId() %>"></aui:input>
-	<aui:input name="questionId" type="hidden" value="<%=question.getQuestionId() %>"></aui:input>
+	<aui:input name="resId" type="hidden" value="<%=learningActivity.getActId() %>"></aui:input>
+			<aui:input name="isHorizontal" label="respuestas en horizontal" type="checkbox" value="false" checked="false"></aui:input>
+	<aui:input name="qtype" type="hidden" value="<%=typeId %>"></aui:input>
+	
+	<%
+	
+	QuestionType qt = 	new QuestionTypeRegistry().getQuestionType(typeId);
+	String questionTypeName = (qt!=null)?qt.getTitle(themeDisplay.getLocale()):"";
+	int maxAnswersNo = (qt!=null)?qt.getMaxAnswers():0;
+	int defaultAnswersNo = (qt!=null)?qt.getDefaultAnswersNo():0;
+	if(!isNewQuestion){%>
+		<aui:input name="questionId" type="hidden" value="<%=question.getQuestionId() %>"></aui:input>
+
+	<%} %>
 	<script type="text/javascript">
 	<!--
 		Liferay.provide(
@@ -136,144 +165,249 @@ AUI().ready('node-base' ,'aui-form-validator', 'aui-overlay-context-panel', func
     
 	<aui:field-wrapper label="surveyactivity.editquestions.editquestion.enunciation">
 		<liferay-ui:input-editor name="text" width="80%" onChangeMethod="onChangeText" />
-		<script type="text/javascript">
+		
+	<%String qText = "";
+	if(question != null) qText = question.getText();%>
+	<script type="text/javascript">
 	        function <portlet:namespace />initEditor() 
 	        { 
-	            return "<%=JavaScriptUtil.markupToStringLiteral(question.getText())%>";
+	            return "<%=JavaScriptUtil.markupToStringLiteral(qText)%>";
 	        }
-	    </script>
+	</script>
+		
+
 	</aui:field-wrapper>
 	
-	<div id="<portlet:namespace />textError" class="<%=(SessionErrors.contains(renderRequest, "surveyactivity.editquestions.editquestion.error.test.required"))?
-   														"portlet-msg-error":StringPool.BLANK %>">
-   	<%=(SessionErrors.contains(renderRequest, "surveyactivity.editquestions.editquestion.error.test.required"))?
-   			LanguageUtil.get(pageContext,"surveyactivity.editquestions.editquestion.error.test.required"):StringPool.BLANK %>
-	</div>
+	<portlet:renderURL var="viewAnswerURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">   
+		<portlet:param name="<%=WebKeys.PORTLET_CONFIGURATOR_VISIBILITY %>" value="<%=StringPool.TRUE %>"/>     
+	   <%System.out.println(qt.getURLNew()); %>
+	    <portlet:param name="jspPage" value="<%=qt.getURLNew() %>" />    
+	    <portlet:param name="actionEditingDetails" value="true"/>
+	    <portlet:param name="resId" value="<%=ParamUtil.getString(request,\"resId\", \"0\") %>"/>
+	    <portlet:param name="qtype" value="<%=ParamUtil.getString(request,\"typeId\", \"0\") %>"/>
+	</portlet:renderURL>
+	
+	<script type="text/javascript">
+		function <portlet:namespace />addNode(){
+	 		AUI().use('aui-node', 'aui-io',
+	 			function(A) {
+	 				var parent = A.one('.solution');
+	 				var list = A.all('.solution > div'),lastNode=null;
+	 				var iter = 1;
+	 				
+	 				if (list.size()) {
+						lastNode = list.item(list.size() - 1);
+						iter = A.all('#'+lastNode.get('id') +' input[name="<portlet:namespace />iterator"]').val();
+						iter = parseInt(iter) +1;
+					}
+	
+	 				if(parent!=null) parent.append(A.Node.create('<div id="testAnswer_new'+iter+'"></div>').plug(A.Plugin.IO,{
+	 					uri:'<%=viewAnswerURL%>',
+	 					parseContent:true,
+	 					data:{iterator:iter}
+	 				}));
+	  			}
+	 		);
+		}
+		
+		function <portlet:namespace />addNodes(itemList, iter){
+	 		AUI().use('aui-node', 'aui-io',
+	 			function(A) {
+	 				var parent = A.one('.solution');
+	
+	 				if(itemList.length>0){
+	 					if(parent!=null) parent.append(A.Node.create(itemList[0]).plug(A.Plugin.IO,{
+		 					uri:'<%=viewAnswerURL%>',
+		 					parseContent:true,
+		 					data:{iterator:iter},
+		 					on: {
+		 						success: function() {
+		 							<portlet:namespace />addNodes(itemList, iter+1);
+		 						}
+		 					}
+	 					}));
+	 					itemList.shift();
+	 				}
+	  			}
+	 		);
+		}
+		
+		function <portlet:namespace />deleteNode(id){
+	 		AUI().use('aui-node', 
+	 			function(A) {
+	 				var validate = false;
+	 				var elemId = id.replace('testAnswer_', '');
+	 				var answer = A.one('textarea[name=<portlet:namespace />answer_'+elemId+']');
+	 				feedbackCorrect = A.one('input[name=<portlet:namespace />feedbackCorrect_'+elemId+']');
+	    			feedbackNoCorrect = A.one('input[name=<portlet:namespace />feedbackNoCorrect_'+elemId+']');
+	    			correct = A.one('input[name=<portlet:namespace />correct_'+elemId+'Checkbox]');
+	    			var somefieldWithValue = (answer != null && answer.val() !="") ||
+	    										(feedbackCorrect != null && feedbackCorrect.val() !="") || 
+												(feedbackNoCorrect != null && feedbackNoCorrect.val() != "") || 
+												(correct != null && correct._node.checked);
+	    			if(somefieldWithValue){
+	    				if(confirm(Liferay.Language.get('deleteContentConfirmation'))) validate = true;
+	    			}else validate = true;
+	    			
+	    			if(validate){
+	 				 	A.one('#'+id).remove();
+	 					<portlet:namespace />checkMinAnswersNo();
+	 				}
+	  			}
+	 		);
+		}
+		
+		function <portlet:namespace />checkAddAnswerButtonVisibility(){
+	 		AUI().use('aui-node', 
+	 			function(A) {
+	 				var list = A.all('.solution > div');
+	 				var numNodes = list.size();
+	 				var maxNodes = parseInt(<%=maxAnswersNo%>);
+	 				if(numNodes >= maxNodes) A.all('#addAnswerButton').addClass("aui-helper-hidden");
+	 				else  A.all('#addAnswerButton').removeClass("aui-helper-hidden");
+	  			}
+	 		);
+		}
+		
+		function <portlet:namespace />checkMinAnswersNo(){
+	 		AUI().use('aui-node', 
+	 			function(A) {
+	 				var list = A.all('.solution > div');
+	 				var numNodes = list.size();
+	 				var defaultNodesNo = parseInt(<%=defaultAnswersNo%>);
+	 				if(numNodes < defaultNodesNo){
+	 					
+		 				var list = A.all('.solution > div'),lastNode=null;
+		 				var iter = 1;
+		 				
+		 				if (list.size()) {
+							lastNode = list.item(list.size() - 1);
+							iter = A.all('#'+lastNode.get('id') +' input[name="<portlet:namespace />iterator"]').val();
+							iter = parseInt(iter) +1;
+						}
+		 				
+		 				var itemList = [];
+		 				var iterAux = iter;
+		 				while(numNodes < defaultNodesNo){
+		 					itemList.push('<div id="testAnswer_new'+iterAux+'"></div>');
+		 					numNodes = numNodes + 1;
+		 					iterAux = iterAux + 1;
+		 				}
+		 				
+	 					<portlet:namespace />addNodes(itemList, iter);
+	 					
+	 				}
+	 				<portlet:namespace />checkAddAnswerButtonVisibility();
+	 			}
+	 		);
+		}
+		
+		 function validateFields(e){
+		    	AUI().use('node',
+		    		function(A) {	
+			    		var valid = true;
+			    		//todas las respuestas plegadas
+			    		var panels = A.all('[id^=panel_]');
+			    		panels.each(function() {
+			    			this.addClass('lfr-collapsed');
+			    		});
+			    		
+			    		//Pregunta no vacía
+			    		var question = A.one('#<portlet:namespace />text');
+			    		if(question.val()==""){
+			    			A.one('#<portlet:namespace />questionError').removeClass('aui-helper-hidden');
+			    			valid=false;
+			    		}else{
+			    			A.one('#<portlet:namespace />questionError').addClass('aui-helper-hidden');
+			    		}			    		
+			    		//Ninguna respuesta vacía
+			    		var list = A.all('.solution > div');
+			    		list.each(function() {
+			    			var id = this.get('id');
+			    			alert("--> "+id);
+			    			id=id.replace('testAnswer_','');
+			    			
+			    			feedbackCorrect = A.one('input[name=<portlet:namespace />feedbackCorrect_'+id+']');
+			    			feedbackNoCorrect = A.one('input[name=<portlet:namespace />feedbackNoCorrect_'+id+']');
+			    			correct = A.one('input[name=<portlet:namespace />correct_'+id+'Checkbox]');
+			    			correctVal = (correct != null && correct._node.checked);
+			    			if (correct == null) {
+			    				correct = A.one('input[name=<portlet:namespace />correct_'+id+']');
+			    				correctVal = (correct != null && correct.val() === 'true');
+			    			}
 
-	<aui:button-row>
-		<aui:button type="submit" />
-		<liferay-util:include page="/html/surveyactivity/admin/editFooter.jsp" servletContext="<%=this.getServletContext() %>" />
-	</aui:button-row>
-</aui:form>
+			    			var otherFieldsWithValue = (feedbackCorrect != null && feedbackCorrect.val() !="") || 
+			    										(feedbackNoCorrect != null && feedbackNoCorrect.val() != "") || 
+			    										(correctVal);
+			    			if(otherFieldsWithValue){
+			    				answer = A.one('textarea[name=<portlet:namespace />answer_'+id+']');
+				    			if (answer != null && answer.val() == "") {
+									A.one('#<portlet:namespace />answerError_'+id).removeClass('aui-helper-hidden');
+				    				valid=false;
+				    				A.one('#panel_'+id).removeClass('lfr-collapsed');
+								}else{
+									A.one('#<portlet:namespace />answerError_'+id).addClass('aui-helper-hidden');
+								}
+			    			}
+			    		});
+			    		
+			    		//Ningun feedback > 300 caracteres
+			    		if(valid){
+				    		list.each(function() {
+				    			var id = this.get('id');
+				    			id=id.replace('testAnswer_','');
+				    			
+				    			feedbackCorrect = A.one('input[name=<portlet:namespace />feedbackCorrect_'+id+']');
+				    			feedbackNoCorrect = A.one('input[name=<portlet:namespace />feedbackNoCorrect_'+id+']');
+								
+				    			if((feedbackCorrect != null && feedbackCorrect.val().length > 600) || 
+										(feedbackNoCorrect != null && feedbackNoCorrect.val().length > 600)){
 
-<h2><liferay-ui:message key="answers"></liferay-ui:message></h2>
-<portlet:actionURL var="addanswerURL" name="addanswer" />
-<h3><liferay-ui:message key="add-answer"></liferay-ui:message></h3>
-<aui:form name="afm" action="<%=addanswerURL%>" method="post">
-	<aui:input type="textarea" rows="4" name="answer" label="answer"></aui:input>
-	<div id="<portlet:namespace />answerError" class="<%=(SessionErrors.contains(renderRequest, "answer-test-required"))?
-	   														"portlet-msg-error":StringPool.BLANK %>">
-	   	<%=(SessionErrors.contains(renderRequest, "answer-test-required"))?
-	   			LanguageUtil.get(pageContext,"answer-test-required"):StringPool.BLANK %>
-	</div>
-	<aui:input type="hidden" name="questionId" value="<%=question.getQuestionId() %>"></aui:input>
-	<aui:column>
-		<aui:button type="submit" value="add"></aui:button>
-	</aui:column>
-</aui:form>
-<br />
+										A.one('#<portlet:namespace />feedBackError_'+id).removeClass('aui-helper-hidden');
+					    				valid=false;
+					    				A.one('#panel_'+id).removeClass('lfr-collapsed');
+				    			}else{
+									A.one('#<portlet:namespace />feedBackError_'+id).addClass('aui-helper-hidden');
+								}
+				    		});
+			    		}
+			    		
+			    		if (!valid && e.preventDefault) {
+							e.preventDefault();
+						}
+				    	return valid;
+		    		}
+		    	);
+		    }
+		
+		AUI().ready('aui-base',
+		   	function() {
+		    	<portlet:namespace />checkAddAnswerButtonVisibility();
+		    	<portlet:namespace />checkMinAnswersNo();
+		   	}
+		);
+	</script>
 
-<%
-int totalAnswer=(int)TestAnswerLocalServiceUtil.dynamicQueryCount( DynamicQueryFactoryUtil.forClass(TestAnswer.class).
-														add(PropertyFactoryUtil.forName("questionId").eq(question.getQuestionId())));
-
-
-	if(totalAnswer>0)
-	{
-	%>
-<liferay-ui:search-container emptyResultsMessage="" delta="10" >
-	<liferay-ui:search-container-results>
 	<%
-		pageContext.setAttribute("results", 
-				TestAnswerLocalServiceUtil.dynamicQuery(DynamicQueryFactoryUtil.forClass(TestAnswer.class).
-							add(PropertyFactoryUtil.forName("questionId").eq(question.getQuestionId())),
-						searchContainer.getStart(),
-						searchContainer.getEnd()));
-		pageContext.setAttribute("total", totalAnswer);
-		
-	%>
-	</liferay-ui:search-container-results>
-	<liferay-ui:search-container-row
-		className="com.liferay.lms.model.TestAnswer"
-		keyProperty="answerId"
-		modelVar="testanswer">
+	if(learningActivity.getTypeId()!=4){ %>
+		<aui:field-wrapper label="answers" helpMessage="<%=qt.getDescription(themeDisplay.getLocale()) %>" /><%
 
-		<liferay-ui:search-container-column-text>
-		<script type="text/javascript">
-		<!--
-		
-		AUI().ready('node-base' ,'aui-form-validator', 'aui-overlay-context-panel', function(A) {
-		
-			window.<portlet:namespace />validateAnswer<%=testanswer.getAnswerId() %> = new A.FormValidator({
-				boundingBox: '#<portlet:namespace />afm_<%=testanswer.getAnswerId() %>',
-				validateOnBlur: true,
-				validateOnInput: true,
-				selectText: true,
-				showMessages: false,
-				containerErrorClass: '',
-				errorClass: '',
-				rules: {
-		            <portlet:namespace />answer: {
-			    		required: true
-			        }
-				},
-		        fieldStrings: {
-		            <portlet:namespace />answer: {
-			    		required: '<liferay-ui:message key="answer-test-required" />'
-			        }
-			    },
-				on: {		
-		            errorField: function(event) {
-		            	var instance = this;
-						var field = event.validator.field;
-						var divError = A.one('#'+field.get('name')+'Error_<%=Long.toString(testanswer.getAnswerId()) %>');
-						if(divError) {
-							divError.addClass('portlet-msg-error');
-							divError.setContent(instance.getFieldErrorMessage(field,event.validator.errors[0]));
-						}
-		            },		
-		            validField: function(event) {
-						var divError = A.one('#'+event.validator.field.get('name')+'Error_<%=Long.toString(testanswer.getAnswerId()) %>');
-						if(divError) {
-							divError.removeClass('portlet-msg-error');
-							divError.setContent('');
-						}
-		            }
-				}
-			});
+	 } %>
+	<liferay-ui:error key="answer-test-required" message="answer-test-required"/>
+	<jsp:include page="<%=(qt!=null)?qt.getURLEdit():\"\" %>"/>
+    <aui:button-row>
 
-		});
-		
-		//-->
-		</script>
-			<portlet:actionURL var="editanswerURL" name="editanswer" />
-			<aui:form name="<%=\"afm_\"+testanswer.getAnswerId() %>" action="<%=editanswerURL %>" method="post">
-			
-				<aui:input  type="hidden" name="answerId" value="<%=testanswer.getAnswerId() %>"></aui:input>
-			
-				<aui:input type="textarea" rows="4" name="answer" value="<%=testanswer.getAnswer() %>"></aui:input>
-				<div id="<portlet:namespace />answerError_<%=Long.toString(testanswer.getAnswerId()) %>" class="<%=(SessionErrors.contains(renderRequest, "answer-test-required_"+testanswer.getAnswerId()))?
-				   														"portlet-msg-error":StringPool.BLANK %>">
-				   	<%=(SessionErrors.contains(renderRequest, "answer-test-required_"+testanswer.getAnswerId()))?
-				   			LanguageUtil.get(pageContext,"answer-test-required"):StringPool.BLANK %>
-				</div>
-				<aui:column>
-					<aui:button-row>
-						<aui:button type="submit" value="modify"></aui:button>
-					</aui:button-row>
-				</aui:column>
-			</aui:form>
-		</liferay-ui:search-container-column-text>
-
-		<liferay-ui:search-container-column-jsp
-			path="/html/surveyactivity/admin/admin_answer_actions.jsp"
-			align="right"
-			/>
-
-	</liferay-ui:search-container-row>
-	<liferay-ui:search-iterator />
-
-</liferay-ui:search-container>
-<%
-}
-%>
+    	<div id="addAnswerButton">
+    		<span class="newitem2">
+				<a href="#" class="newitem2" onclick="<portlet:namespace />addNode();"><liferay-ui:message key="add-answer"/></a>
+		</span>
+	</div>
+	<div class="buttons_content">
+		<aui:button type="submit" onClick='<%= "return validateFields(event);" %>'/>
+		<liferay-util:include page="/html/surveyactivity/admin/editFooter.jsp" servletContext="<%=this.getServletContext() %>" />
+	</div>
+	</aui:button-row>
+	
+	
+	
+</aui:form>

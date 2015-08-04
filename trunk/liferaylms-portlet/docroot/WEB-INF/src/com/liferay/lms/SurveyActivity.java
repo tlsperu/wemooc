@@ -29,6 +29,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.lms.learningactivity.questiontype.QuestionType;
 import com.liferay.lms.learningactivity.questiontype.QuestionTypeRegistry;
+import com.liferay.lms.learningactivity.questiontype.SurveyHorizontalOptionsQuestionType;
 import com.liferay.lms.model.LearningActivity;
 import com.liferay.lms.model.LearningActivityTry;
 import com.liferay.lms.model.SurveyResult;
@@ -41,6 +42,7 @@ import com.liferay.lms.service.TestAnswerLocalServiceUtil;
 import com.liferay.lms.service.TestQuestionLocalServiceUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
@@ -197,7 +199,7 @@ public class SurveyActivity extends MVCPortlet {
 	
 	public void addquestion(ActionRequest actionRequest, ActionResponse actionResponse)
 			throws Exception {
-		
+		System.out.println("addquestion");
 		long actid = ParamUtil.getLong(actionRequest, "resId");
 	
 		String text = ParamUtil.getString(actionRequest, "text");
@@ -218,23 +220,97 @@ public class SurveyActivity extends MVCPortlet {
 	}
 	
 	public void editquestion(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-		
+		ThemeDisplay themeDisplay = (ThemeDisplay) actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+		boolean isHorizontal=ParamUtil.getBoolean(actionRequest,"isHorizontal",false );
+		long actId = ParamUtil.getLong(actionRequest, "resId",0);
+
 		String text = ParamUtil.getString(actionRequest, "text","");
 		long questionType = ParamUtil.getLong(actionRequest, "qtype",0);
 		long questionId = ParamUtil.getLong(actionRequest, "questionId",0);
-	
-		TestQuestion question = TestQuestionLocalServiceUtil.getTestQuestion(questionId);
+		
+
+		if(isHorizontal){
+			SurveyHorizontalOptionsQuestionType horizontalType = new SurveyHorizontalOptionsQuestionType();
+			questionType = horizontalType.getTypeId();
+		}  
+		
+		TestQuestion question;
+		if(questionId == 0){//Nueva pregunta
+			question = TestQuestionLocalServiceUtil.addQuestion(actId, text, questionType);
+			questionId = question.getQuestionId();
+		}else{
+			question= TestQuestionLocalServiceUtil.getTestQuestion(questionId);
+		}
 		
 		question.setQuestionType(questionType);
 		question.setText(text);
 		
-		TestQuestionLocalServiceUtil.updateTestQuestion(question);
+		
+		if(question!=null){
+			questionId = question.getQuestionId();
+			//Obtengo un array con los ids de las respuestas que ya contenia la pregunta
+			List<TestAnswer> existingAnswers = TestAnswerLocalServiceUtil.getTestAnswersByQuestionId(questionId);
+			List<Long> existingAnswersIds = new ArrayList<Long>();
+			for(TestAnswer answer:existingAnswers){
+				existingAnswersIds.add(answer.getAnswerId());
+			}
+			//Recorro todas las respuestas y las actualizo o las creo en funcion de si son nuevas o modificaciones y si son modificaciones guardo sus ids en un array para despues borrar las que no existan.
+			String[] newAnswersIds = ParamUtil.getParameterValues(actionRequest, "answerId", null);
+			List<Long> editingAnswersIds = new ArrayList<Long>();
+			if(newAnswersIds != null){
+				for(String newAnswerId:newAnswersIds){
+					String answer = ParamUtil.get(actionRequest, "answer_"+newAnswerId, "");
+					if(Validator.isNotNull(answer)){
+						boolean correct = ParamUtil.getBoolean(actionRequest, "correct_"+newAnswerId);
+						String feedbackCorrect = ParamUtil.getString(actionRequest, "feedbackCorrect_"+newAnswerId, "");
+						if(feedbackCorrect.length()>600) feedbackCorrect = feedbackCorrect.substring(0, 600);
+						String feedbackNoCorrect = ParamUtil.getString(actionRequest, "feedbackNoCorrect_"+newAnswerId, "");
+						if(feedbackNoCorrect.length()>600) feedbackNoCorrect = feedbackNoCorrect.substring(0, 600);
+						if("".equals(feedbackNoCorrect)) feedbackNoCorrect = feedbackCorrect;
+						if(newAnswerId.startsWith("new")){
+							//creo respuesta
+							TestAnswerLocalServiceUtil.addTestAnswer(questionId, answer, feedbackCorrect, feedbackNoCorrect, correct);
+						}else {
+							editingAnswersIds.add(Long.parseLong(newAnswerId));//almaceno en array para posterior borrado de las que no esten
+							//actualizo respuesta
+							TestAnswer testanswer = TestAnswerLocalServiceUtil.getTestAnswer(Long.parseLong(newAnswerId));
+							testanswer.setAnswer(answer);
+							testanswer.setIsCorrect(correct);
+							testanswer.setFeedbackCorrect(feedbackCorrect);
+							testanswer.setFeedbacknocorrect(feedbackNoCorrect);
+							TestAnswerLocalServiceUtil.updateTestAnswer(testanswer);
+						}
+					}else if(Validator.isNotNull(ParamUtil.getString(actionRequest, "feedbackCorrect_"+newAnswerId, "")) ||
+							Validator.isNotNull(ParamUtil.getString(actionRequest, "feedbackNoCorrect_"+newAnswerId, "")) ||
+							ParamUtil.getBoolean(actionRequest, "correct_"+newAnswerId)==true)
+						SessionErrors.add(actionRequest, "answer-test-required");
+				}
+			}
+
+			//Recorro los ids de respuestas que ya contenia y compruebo si siguen estando, si no, elimino dichas respuestas.
+			for(Long existingAnswerId:existingAnswersIds){
+				if(editingAnswersIds != null && editingAnswersIds.size()>0){
+					if(!editingAnswersIds.contains(existingAnswerId)){
+						TestAnswerLocalServiceUtil.deleteTestAnswer(existingAnswerId);
+					}
+				}else TestAnswerLocalServiceUtil.deleteTestAnswer(existingAnswerId);
+			}
+			
+			actionResponse.setRenderParameter("message", LanguageUtil.get(themeDisplay.getLocale(), "execativity.editquestions.editquestion"));
+		}
+
+		
+		question = TestQuestionLocalServiceUtil.updateTestQuestion(question);
 		SessionMessages.add(actionRequest, "question-modified-successfully");
 		
+
 		actionResponse.setRenderParameter("questionId", Long.toString(questionId));
 		actionResponse.setRenderParameter("actionEditingDetails", StringPool.TRUE);
 		actionResponse.setRenderParameter("resId", Long.toString(question.getActId()));
-	
+		actionResponse.setRenderParameter("typeId", Long.toString(questionType));
+
+		
 		actionResponse.setRenderParameter("jspPage", "/html/surveyactivity/admin/editquestion.jsp");
 	}
 	
@@ -253,7 +329,8 @@ public class SurveyActivity extends MVCPortlet {
 
 	public void addanswer(ActionRequest actionRequest, ActionResponse actionResponse)
 			throws Exception {
-		
+		System.out.println("addanswer");
+
 		long questionId = ParamUtil.getLong(actionRequest, "questionId");
 		String answers = ParamUtil.getString(actionRequest, "answer");
 		boolean correct = ParamUtil.getBoolean(actionRequest, "correct");
@@ -408,7 +485,7 @@ public class SurveyActivity extends MVCPortlet {
 		
 	public void editanswer(ActionRequest actionRequest, ActionResponse actionResponse)
 			throws Exception {
-		
+		System.out.println("editanswer");
 		long answerId = ParamUtil.getLong(actionRequest, "answerId");
 		String answer = ParamUtil.getString(actionRequest, "answer");
 		boolean correct = ParamUtil.getBoolean(actionRequest, "correct");

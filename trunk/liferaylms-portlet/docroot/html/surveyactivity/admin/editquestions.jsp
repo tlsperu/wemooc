@@ -21,6 +21,7 @@
 <%@page import="com.liferay.portal.kernel.util.ListUtil"%>
 <%@ include file="/init.jsp" %>
 <%
+
 	LearningActivity learningActivity = LearningActivityLocalServiceUtil.getLearningActivity(ParamUtil.getLong(request,"resId"));
 	request.setAttribute("activity", learningActivity);
 
@@ -39,7 +40,7 @@
 		orderByType="asc";
 	}
 %>
-<liferay-util:include page="/html/execactivity/test/admin/editHeader.jsp" servletContext="<%=this.getServletContext() %>" />
+<liferay-util:include page="/html/surveyactivity/admin/editHeader.jsp" servletContext="<%=this.getServletContext() %>" />
 
 <script type="text/javascript">
 <!--
@@ -55,10 +56,10 @@ Liferay.provide(
         function(typeId) {
 			var renderUrl = Liferay.PortletURL.createRenderURL();							
 			renderUrl.setWindowState('<%= LiferayWindowState.POP_UP.toString() %>');
-			renderUrl.setPortletId('execactivity_WAR_liferaylmsportlet');
-			renderUrl.setParameter('jspPage','/html/execactivity/test/admin/editQuestion.jsp');
+			renderUrl.setPortletId('surveyactivity_WAR_liferaylmsportlet');
+			renderUrl.setParameter('jspPage','/html/surveyactivity/admin/editquestion.jsp');
 			renderUrl.setParameter('typeId', typeId);
-			renderUrl.setParameter('message', Liferay.Language.get('execactivity.editquestions.newquestion'));
+			renderUrl.setParameter('message', Liferay.Language.get('surveyactivity.editquestions.newquestion'));
 			renderUrl.setParameter('actionEditingDetails', true);
 			renderUrl.setParameter('resId', "<%=String.valueOf(learningActivity.getActId()) %>");
 			renderUrl.setParameter('backUrl', '<%= currentURL %>');
@@ -80,6 +81,7 @@ Liferay.provide(
 		}
 		for(QuestionType qt:qtypes){
 			if (allowedTypesList.contains(String.valueOf(qt.getTypeId()))) {
+				System.out.println(qt.getTitle(themeDisplay.getLocale())+" "+qt.getTypeId());
 	%>
 		<liferay-ui:icon message="<%=qt.getTitle(themeDisplay.getLocale()) %>" url="#" onClick="<%=renderResponse.getNamespace()+\"newQuestion(\"+qt.getTypeId()+\");\" %>"/>
 	<%	
@@ -116,7 +118,7 @@ Liferay.provide(
 </div>
 <%
 	PortletURL editQuestionsURL = renderResponse.createRenderURL();
-	editQuestionsURL.setParameter("jspPage","/html/execactivity/test/admin/editquestions.jsp");
+	editQuestionsURL.setParameter("jspPage","/html/surveyactivity/admin/editquestions.jsp");
 	editQuestionsURL.setParameter("resId",Long.toString(learningActivity.getActId()));
 	editQuestionsURL.setParameter("actionEditingDetails",StringPool.TRUE);
 %>
@@ -147,7 +149,7 @@ Liferay.provide(
 			if(titleQuestion.length() > 80) titleQuestion = titleQuestion.substring(0, 80) + " ...";%>
 			<%=titleQuestion %>
 		</liferay-ui:search-container-column-text>
-		<liferay-ui:search-container-column-jsp path="/html/execactivity/test/admin/admin_actions.jsp" align="right"/>
+		<liferay-ui:search-container-column-jsp path="/html/surveyactivity/admin/admin_actions.jsp" align="right"/>
 	</liferay-ui:search-container-row>
 	<liferay-ui:search-iterator />
 </liferay-ui:search-container>
@@ -156,13 +158,13 @@ Liferay.provide(
 <%
 List<TestQuestion> lista = TestQuestionLocalServiceUtil.getQuestions(learningActivity.getActId());
 if(lista.size()>=2){ %>	
-<liferay-portlet:renderURL var="orderURL" portletName="execactivity_WAR_liferaylmsportlet">
-		<liferay-portlet:param name="mvcPath" value="/html/execactivity/test/admin/orderQuestions.jsp" />
+<liferay-portlet:renderURL var="orderURL" portletName="surveyactivity_WAR_liferaylmsportlet">
+		<liferay-portlet:param name="mvcPath" value="/html/surveyactivity/admin/orderQuestions.jsp" />
 		<liferay-portlet:param name="resId" value="<%=String.valueOf(learningActivity.getActId()) %>" />
 		<liferay-portlet:param name="actionEditingDetails" value="<%=StringPool.TRUE %>" />
 		<liferay-portlet:param name="backUrl" value="<%= currentURL %>"/>
 	</liferay-portlet:renderURL>
 	<aui:button name="order" href="<%=orderURL%>" value="execativity.editquestions.orderquestions"></aui:button>
 	<% } %>
-	<liferay-util:include page="/html/execactivity/test/admin/editFooter.jsp" servletContext="<%=this.getServletContext() %>" />
+	<liferay-util:include page="/html/surveyactivity/admin/editFooter.jsp" servletContext="<%=this.getServletContext() %>" />
 </aui:button-row>
