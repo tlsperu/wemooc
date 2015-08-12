@@ -114,6 +114,7 @@
 		<property name="comments" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="passed" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
+		<property name="startDate" type="org.hibernate.type.TimestampType" />
 		<property name="passedDate" type="org.hibernate.type.TimestampType" />
 		<property name="allowStartDate" type="org.hibernate.type.TimestampType" />
 		<property name="allowFinishDate" type="org.hibernate.type.TimestampType" />
@@ -188,6 +189,7 @@
 		<property name="activities" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="courseevals" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="scoretranslators" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="usersResults" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 	</class>
 	<class name="com.liferay.lms.model.impl.ModuleImpl" table="Lms_Module">
 		<cache usage="read-write" />
@@ -217,6 +219,7 @@
 		<property name="result" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="comments" type="com.liferay.portal.dao.orm.hibernate.StringType" />
 		<property name="userId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
+		<property name="startDate" type="org.hibernate.type.TimestampType" />
 		<property name="passed" type="com.liferay.portal.dao.orm.hibernate.BooleanType" />
 		<property name="passedDate" type="org.hibernate.type.TimestampType" />
 	</class>

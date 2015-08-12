@@ -119,59 +119,65 @@ public class TestQuestionLocalServiceClp implements TestQuestionLocalService {
 				"long", "com.liferay.portal.kernel.xml.Document"
 			};
 
-		_methodName20 = "addQuestion";
+		_methodName20 = "importXMLQuestion";
 
 		_methodParameterTypes20 = new String[] {
+				"long", "com.liferay.portal.kernel.xml.Element"
+			};
+
+		_methodName21 = "addQuestion";
+
+		_methodParameterTypes21 = new String[] {
 				"long", "java.lang.String", "long"
 			};
 
-		_methodName21 = "getQuestions";
-
-		_methodParameterTypes21 = new String[] { "long" };
-
-		_methodName22 = "initializeQuestionType";
+		_methodName22 = "getQuestions";
 
 		_methodParameterTypes22 = new String[] { "long" };
 
-		_methodName23 = "updateQuestionWithoutWeight";
+		_methodName23 = "initializeQuestionType";
 
 		_methodParameterTypes23 = new String[] { "long" };
 
-		_methodName24 = "getPreviusTestQuestion";
+		_methodName24 = "updateQuestionWithoutWeight";
 
 		_methodParameterTypes24 = new String[] { "long" };
 
 		_methodName25 = "getPreviusTestQuestion";
 
-		_methodParameterTypes25 = new String[] {
+		_methodParameterTypes25 = new String[] { "long" };
+
+		_methodName26 = "getPreviusTestQuestion";
+
+		_methodParameterTypes26 = new String[] {
 				"com.liferay.lms.model.TestQuestion"
 			};
-
-		_methodName26 = "getNextTestQuestion";
-
-		_methodParameterTypes26 = new String[] { "long" };
 
 		_methodName27 = "getNextTestQuestion";
 
-		_methodParameterTypes27 = new String[] {
+		_methodParameterTypes27 = new String[] { "long" };
+
+		_methodName28 = "getNextTestQuestion";
+
+		_methodParameterTypes28 = new String[] {
 				"com.liferay.lms.model.TestQuestion"
 			};
 
-		_methodName28 = "goUpTestQuestion";
-
-		_methodParameterTypes28 = new String[] { "long" };
-
-		_methodName29 = "goDownTestQuestion";
+		_methodName29 = "goUpTestQuestion";
 
 		_methodParameterTypes29 = new String[] { "long" };
 
-		_methodName30 = "moveQuestion";
+		_methodName30 = "goDownTestQuestion";
 
-		_methodParameterTypes30 = new String[] { "long", "long", "long" };
+		_methodParameterTypes30 = new String[] { "long" };
 
-		_methodName31 = "checkWeights";
+		_methodName31 = "moveQuestion";
 
-		_methodParameterTypes31 = new String[] { "long" };
+		_methodParameterTypes31 = new String[] { "long", "long", "long" };
+
+		_methodName32 = "checkWeights";
+
+		_methodParameterTypes32 = new String[] { "long" };
 	}
 
 	public com.liferay.lms.model.TestQuestion addTestQuestion(
@@ -737,14 +743,44 @@ public class TestQuestionLocalServiceClp implements TestQuestionLocalService {
 		}
 	}
 
+	public void importXMLQuestion(long actId,
+		com.liferay.portal.kernel.xml.Element question)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName20,
+				_methodParameterTypes20,
+				new Object[] { actId, ClpSerializer.translateInput(question) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
 	public com.liferay.lms.model.TestQuestion addQuestion(long actId,
 		java.lang.String text, long questionType)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName20,
-					_methodParameterTypes20,
+			returnObj = _invokableLocalService.invokeMethod(_methodName21,
+					_methodParameterTypes21,
 					new Object[] {
 						actId,
 						
@@ -777,8 +813,8 @@ public class TestQuestionLocalServiceClp implements TestQuestionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName21,
-					_methodParameterTypes21, new Object[] { actid });
+			returnObj = _invokableLocalService.invokeMethod(_methodName22,
+					_methodParameterTypes22, new Object[] { actid });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -804,8 +840,8 @@ public class TestQuestionLocalServiceClp implements TestQuestionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName22,
-					_methodParameterTypes22, new Object[] { questionType });
+			returnObj = _invokableLocalService.invokeMethod(_methodName23,
+					_methodParameterTypes23, new Object[] { questionType });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -823,34 +859,6 @@ public class TestQuestionLocalServiceClp implements TestQuestionLocalService {
 	}
 
 	public com.liferay.lms.model.TestQuestion updateQuestionWithoutWeight(
-		long questionId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName23,
-					_methodParameterTypes23, new Object[] { questionId });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (com.liferay.lms.model.TestQuestion)ClpSerializer.translateOutput(returnObj);
-	}
-
-	public com.liferay.lms.model.TestQuestion getPreviusTestQuestion(
 		long questionId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -879,13 +887,41 @@ public class TestQuestionLocalServiceClp implements TestQuestionLocalService {
 	}
 
 	public com.liferay.lms.model.TestQuestion getPreviusTestQuestion(
-		com.liferay.lms.model.TestQuestion theQuestion)
+		long questionId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName25,
-					_methodParameterTypes25,
+					_methodParameterTypes25, new Object[] { questionId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.lms.model.TestQuestion)ClpSerializer.translateOutput(returnObj);
+	}
+
+	public com.liferay.lms.model.TestQuestion getPreviusTestQuestion(
+		com.liferay.lms.model.TestQuestion theQuestion)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName26,
+					_methodParameterTypes26,
 					new Object[] { ClpSerializer.translateInput(theQuestion) });
 		}
 		catch (Throwable t) {
@@ -913,8 +949,8 @@ public class TestQuestionLocalServiceClp implements TestQuestionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName26,
-					_methodParameterTypes26, new Object[] { testQuestionId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName27,
+					_methodParameterTypes27, new Object[] { testQuestionId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -941,8 +977,8 @@ public class TestQuestionLocalServiceClp implements TestQuestionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName27,
-					_methodParameterTypes27,
+			returnObj = _invokableLocalService.invokeMethod(_methodName28,
+					_methodParameterTypes28,
 					new Object[] { ClpSerializer.translateInput(theTestQuestion) });
 		}
 		catch (Throwable t) {
@@ -967,8 +1003,8 @@ public class TestQuestionLocalServiceClp implements TestQuestionLocalService {
 	public void goUpTestQuestion(long testQuestionId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName28,
-				_methodParameterTypes28, new Object[] { testQuestionId });
+			_invokableLocalService.invokeMethod(_methodName29,
+				_methodParameterTypes29, new Object[] { testQuestionId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -990,8 +1026,8 @@ public class TestQuestionLocalServiceClp implements TestQuestionLocalService {
 	public void goDownTestQuestion(long testQuestionId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName29,
-				_methodParameterTypes29, new Object[] { testQuestionId });
+			_invokableLocalService.invokeMethod(_methodName30,
+				_methodParameterTypes30, new Object[] { testQuestionId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1014,8 +1050,8 @@ public class TestQuestionLocalServiceClp implements TestQuestionLocalService {
 		long nextQuestion)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName30,
-				_methodParameterTypes30,
+			_invokableLocalService.invokeMethod(_methodName31,
+				_methodParameterTypes31,
 				new Object[] { questionId, previusQuestion, nextQuestion });
 		}
 		catch (Throwable t) {
@@ -1039,8 +1075,8 @@ public class TestQuestionLocalServiceClp implements TestQuestionLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName31,
-				_methodParameterTypes31, new Object[] { actId });
+			_invokableLocalService.invokeMethod(_methodName32,
+				_methodParameterTypes32, new Object[] { actId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -1126,4 +1162,6 @@ public class TestQuestionLocalServiceClp implements TestQuestionLocalService {
 	private String[] _methodParameterTypes30;
 	private String _methodName31;
 	private String[] _methodParameterTypes31;
+	private String _methodName32;
+	private String[] _methodParameterTypes32;
 }

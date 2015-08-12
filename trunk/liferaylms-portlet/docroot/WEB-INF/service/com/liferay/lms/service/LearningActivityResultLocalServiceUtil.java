@@ -318,9 +318,25 @@ public class LearningActivityResultLocalServiceUtil {
 		return getService().countPassed(actId);
 	}
 
+	public static long countPassedOnlyStudents(long actId, long companyId,
+		long courseGropupCreatedId, boolean passed)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .countPassedOnlyStudents(actId, companyId,
+			courseGropupCreatedId, passed);
+	}
+
 	public static long countNotPassed(long actId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().countNotPassed(actId);
+	}
+
+	public static long countNotPassedOnlyStudents(long actId, long companyId,
+		long courseGropupCreatedId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .countNotPassedOnlyStudents(actId, companyId,
+			courseGropupCreatedId);
 	}
 
 	public static java.lang.Double avgResult(long actId)
@@ -328,14 +344,38 @@ public class LearningActivityResultLocalServiceUtil {
 		return getService().avgResult(actId);
 	}
 
+	public static java.lang.Double avgResultOnlyStudents(long actId,
+		long companyId, long courseGropupCreatedId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .avgResultOnlyStudents(actId, companyId,
+			courseGropupCreatedId);
+	}
+
 	public static long countStarted(long actId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().countStarted(actId);
 	}
 
+	public static long countStartedOnlyStudents(long actId, long companyId,
+		long courseGropupCreatedId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .countStartedOnlyStudents(actId, companyId,
+			courseGropupCreatedId);
+	}
+
 	public static double triesPerUser(long actId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().triesPerUser(actId);
+	}
+
+	public static double triesPerUserOnlyStudents(long actId, long companyId,
+		long courseGropupCreatedId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .triesPerUserOnlyStudents(actId, companyId,
+			courseGropupCreatedId);
 	}
 
 	public static com.liferay.lms.model.LearningActivityResult getByActIdAndUserId(

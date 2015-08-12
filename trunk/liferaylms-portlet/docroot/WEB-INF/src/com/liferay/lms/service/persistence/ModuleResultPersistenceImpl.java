@@ -443,6 +443,7 @@ public class ModuleResultPersistenceImpl extends BasePersistenceImpl<ModuleResul
 		moduleResultImpl.setResult(moduleResult.getResult());
 		moduleResultImpl.setComments(moduleResult.getComments());
 		moduleResultImpl.setUserId(moduleResult.getUserId());
+		moduleResultImpl.setStartDate(moduleResult.getStartDate());
 		moduleResultImpl.setPassed(moduleResult.isPassed());
 		moduleResultImpl.setMrId(moduleResult.getMrId());
 		moduleResultImpl.setPassedDate(moduleResult.getPassedDate());

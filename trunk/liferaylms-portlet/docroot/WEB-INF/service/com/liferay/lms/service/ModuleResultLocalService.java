@@ -265,7 +265,15 @@ public interface ModuleResultLocalService extends BaseLocalService,
 	public long countByModule(long moduleId)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	public long countByModuleOnlyStudents(long companyId,
+		long courseGropupCreatedId, long moduleId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public long countByModulePassed(long moduleId, boolean passed)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public long countByModulePassedOnlyStudents(long companyId,
+		long courseGropupCreatedId, long moduleId, boolean passed)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public void update(com.liferay.lms.model.LearningActivityResult lactr)

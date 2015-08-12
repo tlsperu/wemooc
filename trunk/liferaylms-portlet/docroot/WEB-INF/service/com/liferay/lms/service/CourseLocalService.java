@@ -369,4 +369,12 @@ public interface CourseLocalService extends BaseLocalService,
 	public java.util.List<com.liferay.lms.model.Course> findByCompanyId(
 		java.lang.Long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portal.model.User> getStudentsFromCourse(
+		com.liferay.lms.model.Course course);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.portal.model.User> getStudentsFromCourse(
+		long companyId, long courseGropupCreatedId);
 }

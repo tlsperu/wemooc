@@ -447,6 +447,17 @@ public class CourseLocalServiceUtil {
 		return getService().findByCompanyId(companyId);
 	}
 
+	public static java.util.List<com.liferay.portal.model.User> getStudentsFromCourse(
+		com.liferay.lms.model.Course course) {
+		return getService().getStudentsFromCourse(course);
+	}
+
+	public static java.util.List<com.liferay.portal.model.User> getStudentsFromCourse(
+		long companyId, long courseGropupCreatedId) {
+		return getService()
+				   .getStudentsFromCourse(companyId, courseGropupCreatedId);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

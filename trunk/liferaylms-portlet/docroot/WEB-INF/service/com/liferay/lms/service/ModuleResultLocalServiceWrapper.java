@@ -291,9 +291,23 @@ public class ModuleResultLocalServiceWrapper implements ModuleResultLocalService
 		return _moduleResultLocalService.countByModule(moduleId);
 	}
 
+	public long countByModuleOnlyStudents(long companyId,
+		long courseGropupCreatedId, long moduleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _moduleResultLocalService.countByModuleOnlyStudents(companyId,
+			courseGropupCreatedId, moduleId);
+	}
+
 	public long countByModulePassed(long moduleId, boolean passed)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _moduleResultLocalService.countByModulePassed(moduleId, passed);
+	}
+
+	public long countByModulePassedOnlyStudents(long companyId,
+		long courseGropupCreatedId, long moduleId, boolean passed)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _moduleResultLocalService.countByModulePassedOnlyStudents(companyId,
+			courseGropupCreatedId, moduleId, passed);
 	}
 
 	public void update(com.liferay.lms.model.LearningActivityResult lactr)

@@ -71,6 +71,7 @@ public class LmsPrefsClp extends BaseModelImpl<LmsPrefs> implements LmsPrefs {
 		attributes.put("activities", getActivities());
 		attributes.put("courseevals", getCourseevals());
 		attributes.put("scoretranslators", getScoretranslators());
+		attributes.put("usersResults", getUsersResults());
 
 		return attributes;
 	}
@@ -117,6 +118,12 @@ public class LmsPrefsClp extends BaseModelImpl<LmsPrefs> implements LmsPrefs {
 
 		if (scoretranslators != null) {
 			setScoretranslators(scoretranslators);
+		}
+
+		Long usersResults = (Long)attributes.get("usersResults");
+
+		if (usersResults != null) {
+			setUsersResults(usersResults);
 		}
 	}
 
@@ -176,6 +183,14 @@ public class LmsPrefsClp extends BaseModelImpl<LmsPrefs> implements LmsPrefs {
 		_scoretranslators = scoretranslators;
 	}
 
+	public long getUsersResults() {
+		return _usersResults;
+	}
+
+	public void setUsersResults(long usersResults) {
+		_usersResults = usersResults;
+	}
+
 	public BaseModel<?> getLmsPrefsRemoteModel() {
 		return _lmsPrefsRemoteModel;
 	}
@@ -210,6 +225,7 @@ public class LmsPrefsClp extends BaseModelImpl<LmsPrefs> implements LmsPrefs {
 		clone.setActivities(getActivities());
 		clone.setCourseevals(getCourseevals());
 		clone.setScoretranslators(getScoretranslators());
+		clone.setUsersResults(getUsersResults());
 
 		return clone;
 	}
@@ -260,7 +276,7 @@ public class LmsPrefsClp extends BaseModelImpl<LmsPrefs> implements LmsPrefs {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{companyId=");
 		sb.append(getCompanyId());
@@ -276,13 +292,15 @@ public class LmsPrefsClp extends BaseModelImpl<LmsPrefs> implements LmsPrefs {
 		sb.append(getCourseevals());
 		sb.append(", scoretranslators=");
 		sb.append(getScoretranslators());
+		sb.append(", usersResults=");
+		sb.append(getUsersResults());
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(28);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.lms.model.LmsPrefs");
@@ -316,6 +334,10 @@ public class LmsPrefsClp extends BaseModelImpl<LmsPrefs> implements LmsPrefs {
 			"<column><column-name>scoretranslators</column-name><column-value><![CDATA[");
 		sb.append(getScoretranslators());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>usersResults</column-name><column-value><![CDATA[");
+		sb.append(getUsersResults());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -329,5 +351,6 @@ public class LmsPrefsClp extends BaseModelImpl<LmsPrefs> implements LmsPrefs {
 	private String _activities;
 	private String _courseevals;
 	private String _scoretranslators;
+	private long _usersResults;
 	private BaseModel<?> _lmsPrefsRemoteModel;
 }

@@ -133,6 +133,20 @@ public interface ModuleResultModel extends BaseModel<ModuleResult> {
 	public void setUserUuid(String userUuid);
 
 	/**
+	 * Returns the start date of this module result.
+	 *
+	 * @return the start date of this module result
+	 */
+	public Date getStartDate();
+
+	/**
+	 * Sets the start date of this module result.
+	 *
+	 * @param startDate the start date of this module result
+	 */
+	public void setStartDate(Date startDate);
+
+	/**
 	 * Returns the passed of this module result.
 	 *
 	 * @return the passed of this module result

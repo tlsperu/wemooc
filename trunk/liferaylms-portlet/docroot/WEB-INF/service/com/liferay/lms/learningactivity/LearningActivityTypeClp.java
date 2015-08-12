@@ -630,4 +630,9 @@ public class LearningActivityTypeClp implements LearningActivityType {
 
 	}
 
+	@Override
+	public boolean allowsBank() {
+		return false;
+	}
+
 }

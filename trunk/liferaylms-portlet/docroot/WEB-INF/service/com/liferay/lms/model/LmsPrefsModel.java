@@ -159,6 +159,20 @@ public interface LmsPrefsModel extends BaseModel<LmsPrefs> {
 	 */
 	public void setScoretranslators(String scoretranslators);
 
+	/**
+	 * Returns the users results of this lms prefs.
+	 *
+	 * @return the users results of this lms prefs
+	 */
+	public long getUsersResults();
+
+	/**
+	 * Sets the users results of this lms prefs.
+	 *
+	 * @param usersResults the users results of this lms prefs
+	 */
+	public void setUsersResults(long usersResults);
+
 	public boolean isNew();
 
 	public void setNew(boolean n);

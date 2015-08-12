@@ -51,6 +51,7 @@ public class LmsPrefsWrapper implements LmsPrefs, ModelWrapper<LmsPrefs> {
 		attributes.put("activities", getActivities());
 		attributes.put("courseevals", getCourseevals());
 		attributes.put("scoretranslators", getScoretranslators());
+		attributes.put("usersResults", getUsersResults());
 
 		return attributes;
 	}
@@ -96,6 +97,12 @@ public class LmsPrefsWrapper implements LmsPrefs, ModelWrapper<LmsPrefs> {
 
 		if (scoretranslators != null) {
 			setScoretranslators(scoretranslators);
+		}
+
+		Long usersResults = (Long)attributes.get("usersResults");
+
+		if (usersResults != null) {
+			setUsersResults(usersResults);
 		}
 	}
 
@@ -241,6 +248,24 @@ public class LmsPrefsWrapper implements LmsPrefs, ModelWrapper<LmsPrefs> {
 	*/
 	public void setScoretranslators(java.lang.String scoretranslators) {
 		_lmsPrefs.setScoretranslators(scoretranslators);
+	}
+
+	/**
+	* Returns the users results of this lms prefs.
+	*
+	* @return the users results of this lms prefs
+	*/
+	public long getUsersResults() {
+		return _lmsPrefs.getUsersResults();
+	}
+
+	/**
+	* Sets the users results of this lms prefs.
+	*
+	* @param usersResults the users results of this lms prefs
+	*/
+	public void setUsersResults(long usersResults) {
+		_lmsPrefs.setUsersResults(usersResults);
 	}
 
 	public boolean isNew() {

@@ -35,6 +35,7 @@ public class ModuleResultSoap implements Serializable {
 		soapModel.setResult(model.getResult());
 		soapModel.setComments(model.getComments());
 		soapModel.setUserId(model.getUserId());
+		soapModel.setStartDate(model.getStartDate());
 		soapModel.setPassed(model.getPassed());
 		soapModel.setMrId(model.getMrId());
 		soapModel.setPassedDate(model.getPassedDate());
@@ -122,6 +123,14 @@ public class ModuleResultSoap implements Serializable {
 		_userId = userId;
 	}
 
+	public Date getStartDate() {
+		return _startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		_startDate = startDate;
+	}
+
 	public boolean getPassed() {
 		return _passed;
 	}
@@ -154,6 +163,7 @@ public class ModuleResultSoap implements Serializable {
 	private long _result;
 	private String _comments;
 	private long _userId;
+	private Date _startDate;
 	private boolean _passed;
 	private long _mrId;
 	private Date _passedDate;

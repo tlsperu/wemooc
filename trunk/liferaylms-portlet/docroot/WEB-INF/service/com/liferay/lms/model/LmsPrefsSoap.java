@@ -36,6 +36,7 @@ public class LmsPrefsSoap implements Serializable {
 		soapModel.setActivities(model.getActivities());
 		soapModel.setCourseevals(model.getCourseevals());
 		soapModel.setScoretranslators(model.getScoretranslators());
+		soapModel.setUsersResults(model.getUsersResults());
 
 		return soapModel;
 	}
@@ -144,6 +145,14 @@ public class LmsPrefsSoap implements Serializable {
 		_scoretranslators = scoretranslators;
 	}
 
+	public long getUsersResults() {
+		return _usersResults;
+	}
+
+	public void setUsersResults(long usersResults) {
+		_usersResults = usersResults;
+	}
+
 	private long _companyId;
 	private long _teacherRole;
 	private long _editorRole;
@@ -151,4 +160,5 @@ public class LmsPrefsSoap implements Serializable {
 	private String _activities;
 	private String _courseevals;
 	private String _scoretranslators;
+	private long _usersResults;
 }

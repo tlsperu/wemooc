@@ -52,6 +52,7 @@ public class CourseResultWrapper implements CourseResult,
 		attributes.put("comments", getComments());
 		attributes.put("userId", getUserId());
 		attributes.put("passed", getPassed());
+		attributes.put("startDate", getStartDate());
 		attributes.put("passedDate", getPassedDate());
 		attributes.put("allowStartDate", getAllowStartDate());
 		attributes.put("allowFinishDate", getAllowFinishDate());
@@ -94,6 +95,12 @@ public class CourseResultWrapper implements CourseResult,
 
 		if (passed != null) {
 			setPassed(passed);
+		}
+
+		Date startDate = (Date)attributes.get("startDate");
+
+		if (startDate != null) {
+			setStartDate(startDate);
 		}
 
 		Date passedDate = (Date)attributes.get("passedDate");
@@ -268,6 +275,24 @@ public class CourseResultWrapper implements CourseResult,
 	*/
 	public void setPassed(boolean passed) {
 		_courseResult.setPassed(passed);
+	}
+
+	/**
+	* Returns the start date of this course result.
+	*
+	* @return the start date of this course result
+	*/
+	public java.util.Date getStartDate() {
+		return _courseResult.getStartDate();
+	}
+
+	/**
+	* Sets the start date of this course result.
+	*
+	* @param startDate the start date of this course result
+	*/
+	public void setStartDate(java.util.Date startDate) {
+		_courseResult.setStartDate(startDate);
 	}
 
 	/**

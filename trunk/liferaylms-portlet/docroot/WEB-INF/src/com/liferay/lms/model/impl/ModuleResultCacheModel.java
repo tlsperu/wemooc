@@ -35,7 +35,7 @@ public class ModuleResultCacheModel implements CacheModel<ModuleResult>,
 	Serializable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{moduleId=");
 		sb.append(moduleId);
@@ -45,6 +45,8 @@ public class ModuleResultCacheModel implements CacheModel<ModuleResult>,
 		sb.append(comments);
 		sb.append(", userId=");
 		sb.append(userId);
+		sb.append(", startDate=");
+		sb.append(startDate);
 		sb.append(", passed=");
 		sb.append(passed);
 		sb.append(", mrId=");
@@ -70,6 +72,14 @@ public class ModuleResultCacheModel implements CacheModel<ModuleResult>,
 		}
 
 		moduleResultImpl.setUserId(userId);
+
+		if (startDate == Long.MIN_VALUE) {
+			moduleResultImpl.setStartDate(null);
+		}
+		else {
+			moduleResultImpl.setStartDate(new Date(startDate));
+		}
+
 		moduleResultImpl.setPassed(passed);
 		moduleResultImpl.setMrId(mrId);
 
@@ -89,6 +99,7 @@ public class ModuleResultCacheModel implements CacheModel<ModuleResult>,
 	public long result;
 	public String comments;
 	public long userId;
+	public long startDate;
 	public boolean passed;
 	public long mrId;
 	public long passedDate;
