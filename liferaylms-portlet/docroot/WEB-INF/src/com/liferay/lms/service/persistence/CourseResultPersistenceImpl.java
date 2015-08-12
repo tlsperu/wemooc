@@ -408,6 +408,7 @@ public class CourseResultPersistenceImpl extends BasePersistenceImpl<CourseResul
 		courseResultImpl.setComments(courseResult.getComments());
 		courseResultImpl.setUserId(courseResult.getUserId());
 		courseResultImpl.setPassed(courseResult.isPassed());
+		courseResultImpl.setStartDate(courseResult.getStartDate());
 		courseResultImpl.setPassedDate(courseResult.getPassedDate());
 		courseResultImpl.setAllowStartDate(courseResult.getAllowStartDate());
 		courseResultImpl.setAllowFinishDate(courseResult.getAllowFinishDate());

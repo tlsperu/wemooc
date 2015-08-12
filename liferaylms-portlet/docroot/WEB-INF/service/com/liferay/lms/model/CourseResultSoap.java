@@ -37,6 +37,7 @@ public class CourseResultSoap implements Serializable {
 		soapModel.setComments(model.getComments());
 		soapModel.setUserId(model.getUserId());
 		soapModel.setPassed(model.getPassed());
+		soapModel.setStartDate(model.getStartDate());
 		soapModel.setPassedDate(model.getPassedDate());
 		soapModel.setAllowStartDate(model.getAllowStartDate());
 		soapModel.setAllowFinishDate(model.getAllowFinishDate());
@@ -144,6 +145,14 @@ public class CourseResultSoap implements Serializable {
 		_passed = passed;
 	}
 
+	public Date getStartDate() {
+		return _startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		_startDate = startDate;
+	}
+
 	public Date getPassedDate() {
 		return _passedDate;
 	}
@@ -174,6 +183,7 @@ public class CourseResultSoap implements Serializable {
 	private String _comments;
 	private long _userId;
 	private boolean _passed;
+	private Date _startDate;
 	private Date _passedDate;
 	private Date _allowStartDate;
 	private Date _allowFinishDate;

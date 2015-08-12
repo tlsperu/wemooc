@@ -229,6 +229,14 @@ public class CourseLocalServiceClpInvoker {
 		_methodName210 = "findByCompanyId";
 
 		_methodParameterTypes210 = new String[] { "java.lang.Long" };
+
+		_methodName211 = "getStudentsFromCourse";
+
+		_methodParameterTypes211 = new String[] { "com.liferay.lms.model.Course" };
+
+		_methodName212 = "getStudentsFromCourse";
+
+		_methodParameterTypes212 = new String[] { "long", "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -487,6 +495,17 @@ public class CourseLocalServiceClpInvoker {
 			return CourseLocalServiceUtil.findByCompanyId((java.lang.Long)arguments[0]);
 		}
 
+		if (_methodName211.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes211, parameterTypes)) {
+			return CourseLocalServiceUtil.getStudentsFromCourse((com.liferay.lms.model.Course)arguments[0]);
+		}
+
+		if (_methodName212.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes212, parameterTypes)) {
+			return CourseLocalServiceUtil.getStudentsFromCourse(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -572,4 +591,8 @@ public class CourseLocalServiceClpInvoker {
 	private String[] _methodParameterTypes209;
 	private String _methodName210;
 	private String[] _methodParameterTypes210;
+	private String _methodName211;
+	private String[] _methodParameterTypes211;
+	private String _methodName212;
+	private String[] _methodParameterTypes212;
 }

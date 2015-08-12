@@ -118,6 +118,12 @@ public class TestQuestionLocalServiceClpInvoker {
 				"long", "com.liferay.portal.kernel.xml.Document"
 			};
 
+		_methodName141 = "importXMLQuestion";
+
+		_methodParameterTypes141 = new String[] {
+				"long", "com.liferay.portal.kernel.xml.Element"
+			};
+
 		_methodName143 = "addQuestion";
 
 		_methodParameterTypes143 = new String[] {
@@ -282,6 +288,14 @@ public class TestQuestionLocalServiceClpInvoker {
 			return null;
 		}
 
+		if (_methodName141.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes141, parameterTypes)) {
+			TestQuestionLocalServiceUtil.importXMLQuestion(((Long)arguments[0]).longValue(),
+				(com.liferay.portal.kernel.xml.Element)arguments[1]);
+
+			return null;
+		}
+
 		if (_methodName143.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes143, parameterTypes)) {
 			return TestQuestionLocalServiceUtil.addQuestion(((Long)arguments[0]).longValue(),
@@ -394,6 +408,8 @@ public class TestQuestionLocalServiceClpInvoker {
 	private String[] _methodParameterTypes135;
 	private String _methodName140;
 	private String[] _methodParameterTypes140;
+	private String _methodName141;
+	private String[] _methodParameterTypes141;
 	private String _methodName143;
 	private String[] _methodParameterTypes143;
 	private String _methodName144;

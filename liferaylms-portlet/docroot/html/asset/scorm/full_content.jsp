@@ -9,7 +9,7 @@
 <%@ include file="/init.jsp" %>
 
 <% SCORMContent scorm=(SCORMContent)request.getAttribute("scorm");
-System.out.println("HERE");
+
 if (request.getAttribute("learningTry") == null) { %>
 <script type="text/javascript">
 	localStorage.removeItem('scormpool');

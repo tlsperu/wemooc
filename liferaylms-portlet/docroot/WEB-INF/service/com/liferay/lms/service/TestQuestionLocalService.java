@@ -251,6 +251,11 @@ public interface TestQuestionLocalService extends BaseLocalService,
 			com.liferay.portal.kernel.exception.SystemException,
 			com.liferay.portal.kernel.xml.DocumentException;
 
+	public void importXMLQuestion(long actId,
+		com.liferay.portal.kernel.xml.Element question)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
 	public com.liferay.lms.model.TestQuestion addQuestion(long actId,
 		java.lang.String text, long questionType)
 		throws com.liferay.portal.kernel.exception.SystemException;

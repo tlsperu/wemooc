@@ -50,6 +50,7 @@ public class ModuleResultWrapper implements ModuleResult,
 		attributes.put("result", getResult());
 		attributes.put("comments", getComments());
 		attributes.put("userId", getUserId());
+		attributes.put("startDate", getStartDate());
 		attributes.put("passed", getPassed());
 		attributes.put("mrId", getMrId());
 		attributes.put("passedDate", getPassedDate());
@@ -80,6 +81,12 @@ public class ModuleResultWrapper implements ModuleResult,
 
 		if (userId != null) {
 			setUserId(userId);
+		}
+
+		Date startDate = (Date)attributes.get("startDate");
+
+		if (startDate != null) {
+			setStartDate(startDate);
 		}
 
 		Boolean passed = (Boolean)attributes.get("passed");
@@ -209,6 +216,24 @@ public class ModuleResultWrapper implements ModuleResult,
 	*/
 	public void setUserUuid(java.lang.String userUuid) {
 		_moduleResult.setUserUuid(userUuid);
+	}
+
+	/**
+	* Returns the start date of this module result.
+	*
+	* @return the start date of this module result
+	*/
+	public java.util.Date getStartDate() {
+		return _moduleResult.getStartDate();
+	}
+
+	/**
+	* Sets the start date of this module result.
+	*
+	* @param startDate the start date of this module result
+	*/
+	public void setStartDate(java.util.Date startDate) {
+		_moduleResult.setStartDate(startDate);
 	}
 
 	/**

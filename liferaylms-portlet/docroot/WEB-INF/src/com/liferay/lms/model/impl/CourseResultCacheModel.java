@@ -35,7 +35,7 @@ public class CourseResultCacheModel implements CacheModel<CourseResult>,
 	Serializable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(21);
 
 		sb.append("{crId=");
 		sb.append(crId);
@@ -49,6 +49,8 @@ public class CourseResultCacheModel implements CacheModel<CourseResult>,
 		sb.append(userId);
 		sb.append(", passed=");
 		sb.append(passed);
+		sb.append(", startDate=");
+		sb.append(startDate);
 		sb.append(", passedDate=");
 		sb.append(passedDate);
 		sb.append(", allowStartDate=");
@@ -76,6 +78,13 @@ public class CourseResultCacheModel implements CacheModel<CourseResult>,
 
 		courseResultImpl.setUserId(userId);
 		courseResultImpl.setPassed(passed);
+
+		if (startDate == Long.MIN_VALUE) {
+			courseResultImpl.setStartDate(null);
+		}
+		else {
+			courseResultImpl.setStartDate(new Date(startDate));
+		}
 
 		if (passedDate == Long.MIN_VALUE) {
 			courseResultImpl.setPassedDate(null);
@@ -109,6 +118,7 @@ public class CourseResultCacheModel implements CacheModel<CourseResult>,
 	public String comments;
 	public long userId;
 	public boolean passed;
+	public long startDate;
 	public long passedDate;
 	public long allowStartDate;
 	public long allowFinishDate;

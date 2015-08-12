@@ -274,6 +274,13 @@ public class TestQuestionLocalServiceWrapper implements TestQuestionLocalService
 		_testQuestionLocalService.importXML(actId, document);
 	}
 
+	public void importXMLQuestion(long actId,
+		com.liferay.portal.kernel.xml.Element question)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_testQuestionLocalService.importXMLQuestion(actId, question);
+	}
+
 	public com.liferay.lms.model.TestQuestion addQuestion(long actId,
 		java.lang.String text, long questionType)
 		throws com.liferay.portal.kernel.exception.SystemException {

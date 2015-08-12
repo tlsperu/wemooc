@@ -281,6 +281,13 @@ public class TestQuestionLocalServiceUtil {
 		getService().importXML(actId, document);
 	}
 
+	public static void importXMLQuestion(long actId,
+		com.liferay.portal.kernel.xml.Element question)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().importXMLQuestion(actId, question);
+	}
+
 	public static com.liferay.lms.model.TestQuestion addQuestion(long actId,
 		java.lang.String text, long questionType)
 		throws com.liferay.portal.kernel.exception.SystemException {

@@ -32,6 +32,7 @@ import com.liferay.lms.model.ModuleResult;
 import com.liferay.lms.model.UserCompetence;
 import com.liferay.lms.service.ClpSerializer;
 import com.liferay.lms.service.CourseLocalServiceUtil;
+import com.liferay.lms.service.CourseResultLocalServiceUtil;
 import com.liferay.lms.service.base.CourseResultLocalServiceBaseImpl;
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
 import com.liferay.portal.kernel.dao.orm.Criterion;
@@ -257,6 +258,23 @@ public class CourseResultLocalServiceImpl
 			CourseEvalRegistry cer=new CourseEvalRegistry();
 			long courseEvalTypeId=course.getCourseEvalId();
 			CourseEval ceval=cer.getCourseEval(courseEvalTypeId);
+			CourseResult courseResult=CourseResultLocalServiceUtil.getByUserAndCourse(course.getCourseId(), mresult.getUserId());
+			//.fetchByuc(mresult.getUserId(), course.getCourseId());
+			if(courseResult==null)
+			{
+				courseResult=CourseResultLocalServiceUtil.create(course.getCourseId(),  mresult.getUserId());
+				courseResult.setStartDate(mresult.getStartDate());
+				CourseResultLocalServiceUtil.update(courseResult);
+			}
+			else
+			{
+				courseResult=CourseResultLocalServiceUtil.getByUserAndCourse( course.getCourseId(),  mresult.getUserId());
+				if(courseResult.getStartDate()==null)
+				{
+					courseResult.setStartDate(mresult.getStartDate());
+					CourseResultLocalServiceUtil.update(courseResult);
+				}
+			}
 			ceval.updateCourse(course, mresult);
 		}
 	}

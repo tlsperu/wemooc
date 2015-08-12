@@ -125,27 +125,35 @@ public class ModuleResultLocalServiceClp implements ModuleResultLocalService {
 
 		_methodParameterTypes21 = new String[] { "long" };
 
-		_methodName22 = "countByModulePassed";
+		_methodName22 = "countByModuleOnlyStudents";
 
-		_methodParameterTypes22 = new String[] { "long", "boolean" };
+		_methodParameterTypes22 = new String[] { "long", "long", "long" };
 
-		_methodName23 = "update";
+		_methodName23 = "countByModulePassed";
 
-		_methodParameterTypes23 = new String[] {
+		_methodParameterTypes23 = new String[] { "long", "boolean" };
+
+		_methodName24 = "countByModulePassedOnlyStudents";
+
+		_methodParameterTypes24 = new String[] { "long", "long", "long", "boolean" };
+
+		_methodName25 = "update";
+
+		_methodParameterTypes25 = new String[] {
 				"com.liferay.lms.model.LearningActivityResult"
 			};
 
-		_methodName24 = "updateAllUsers";
-
-		_methodParameterTypes24 = new String[] { "long", "long" };
-
-		_methodName25 = "updateAllCoursesAllModulesAllUsers";
-
-		_methodParameterTypes25 = new String[] {  };
-
-		_methodName26 = "update";
+		_methodName26 = "updateAllUsers";
 
 		_methodParameterTypes26 = new String[] { "long", "long" };
+
+		_methodName27 = "updateAllCoursesAllModulesAllUsers";
+
+		_methodParameterTypes27 = new String[] {  };
+
+		_methodName28 = "update";
+
+		_methodParameterTypes28 = new String[] { "long", "long" };
 	}
 
 	public com.liferay.lms.model.ModuleResult addModuleResult(
@@ -757,13 +765,79 @@ public class ModuleResultLocalServiceClp implements ModuleResultLocalService {
 		return ((Long)returnObj).longValue();
 	}
 
-	public long countByModulePassed(long moduleId, boolean passed)
+	public long countByModuleOnlyStudents(long companyId,
+		long courseGropupCreatedId, long moduleId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName22,
-					_methodParameterTypes22, new Object[] { moduleId, passed });
+					_methodParameterTypes22,
+					new Object[] { companyId, courseGropupCreatedId, moduleId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Long)returnObj).longValue();
+	}
+
+	public long countByModulePassed(long moduleId, boolean passed)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName23,
+					_methodParameterTypes23, new Object[] { moduleId, passed });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Long)returnObj).longValue();
+	}
+
+	public long countByModulePassedOnlyStudents(long companyId,
+		long courseGropupCreatedId, long moduleId, boolean passed)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24,
+					new Object[] {
+						companyId,
+						
+					courseGropupCreatedId,
+						
+					moduleId,
+						
+					passed
+					});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -788,8 +862,8 @@ public class ModuleResultLocalServiceClp implements ModuleResultLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName23,
-				_methodParameterTypes23,
+			_invokableLocalService.invokeMethod(_methodName25,
+				_methodParameterTypes25,
 				new Object[] { ClpSerializer.translateInput(lactr) });
 		}
 		catch (Throwable t) {
@@ -819,8 +893,8 @@ public class ModuleResultLocalServiceClp implements ModuleResultLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName24,
-					_methodParameterTypes24, new Object[] { groupId, moduleId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName26,
+					_methodParameterTypes26, new Object[] { groupId, moduleId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -849,8 +923,8 @@ public class ModuleResultLocalServiceClp implements ModuleResultLocalService {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		try {
-			_invokableLocalService.invokeMethod(_methodName25,
-				_methodParameterTypes25, new Object[] {  });
+			_invokableLocalService.invokeMethod(_methodName27,
+				_methodParameterTypes27, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -879,8 +953,8 @@ public class ModuleResultLocalServiceClp implements ModuleResultLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName26,
-					_methodParameterTypes26, new Object[] { moduleId, userId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName28,
+					_methodParameterTypes28, new Object[] { moduleId, userId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -958,4 +1032,8 @@ public class ModuleResultLocalServiceClp implements ModuleResultLocalService {
 	private String[] _methodParameterTypes25;
 	private String _methodName26;
 	private String[] _methodParameterTypes26;
+	private String _methodName27;
+	private String[] _methodParameterTypes27;
+	private String _methodName28;
+	private String[] _methodParameterTypes28;
 }

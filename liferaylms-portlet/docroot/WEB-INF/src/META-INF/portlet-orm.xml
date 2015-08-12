@@ -149,6 +149,9 @@
 			<basic name="comments" />
 			<basic name="userId" />
 			<basic name="passed" />
+			<basic name="startDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
 			<basic name="passedDate">
 				<temporal>TIMESTAMP</temporal>
 			</basic>
@@ -272,6 +275,7 @@
 			<basic name="activities" />
 			<basic name="courseevals" />
 			<basic name="scoretranslators" />
+			<basic name="usersResults" />
 			<transient name="modelAttributes" />
 			<transient name="primaryKey" />
 			<transient name="primaryKeyObj" />
@@ -321,6 +325,9 @@
 			<basic name="result" />
 			<basic name="comments" />
 			<basic name="userId" />
+			<basic name="startDate">
+				<temporal>TIMESTAMP</temporal>
+			</basic>
 			<basic name="passed" />
 			<basic name="passedDate">
 				<temporal>TIMESTAMP</temporal>

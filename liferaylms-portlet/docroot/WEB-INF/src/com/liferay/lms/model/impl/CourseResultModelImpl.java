@@ -70,11 +70,12 @@ public class CourseResultModelImpl extends BaseModelImpl<CourseResult>
 			{ "comments", Types.VARCHAR },
 			{ "userId", Types.BIGINT },
 			{ "passed", Types.BOOLEAN },
+			{ "startDate", Types.TIMESTAMP },
 			{ "passedDate", Types.TIMESTAMP },
 			{ "allowStartDate", Types.TIMESTAMP },
 			{ "allowFinishDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table Lms_CourseResult (crId LONG not null primary key,courseId LONG,result LONG,comments VARCHAR(75) null,userId LONG,passed BOOLEAN,passedDate DATE null,allowStartDate DATE null,allowFinishDate DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table Lms_CourseResult (crId LONG not null primary key,courseId LONG,result LONG,comments VARCHAR(75) null,userId LONG,passed BOOLEAN,startDate DATE null,passedDate DATE null,allowStartDate DATE null,allowFinishDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table Lms_CourseResult";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
@@ -111,6 +112,7 @@ public class CourseResultModelImpl extends BaseModelImpl<CourseResult>
 		model.setComments(soapModel.getComments());
 		model.setUserId(soapModel.getUserId());
 		model.setPassed(soapModel.getPassed());
+		model.setStartDate(soapModel.getStartDate());
 		model.setPassedDate(soapModel.getPassedDate());
 		model.setAllowStartDate(soapModel.getAllowStartDate());
 		model.setAllowFinishDate(soapModel.getAllowFinishDate());
@@ -178,6 +180,7 @@ public class CourseResultModelImpl extends BaseModelImpl<CourseResult>
 		attributes.put("comments", getComments());
 		attributes.put("userId", getUserId());
 		attributes.put("passed", getPassed());
+		attributes.put("startDate", getStartDate());
 		attributes.put("passedDate", getPassedDate());
 		attributes.put("allowStartDate", getAllowStartDate());
 		attributes.put("allowFinishDate", getAllowFinishDate());
@@ -221,6 +224,12 @@ public class CourseResultModelImpl extends BaseModelImpl<CourseResult>
 
 		if (passed != null) {
 			setPassed(passed);
+		}
+
+		Date startDate = (Date)attributes.get("startDate");
+
+		if (startDate != null) {
+			setStartDate(startDate);
 		}
 
 		Date passedDate = (Date)attributes.get("passedDate");
@@ -343,6 +352,14 @@ public class CourseResultModelImpl extends BaseModelImpl<CourseResult>
 		return _originalPassed;
 	}
 
+	public Date getStartDate() {
+		return _startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		_startDate = startDate;
+	}
+
 	public Date getPassedDate() {
 		return _passedDate;
 	}
@@ -405,6 +422,7 @@ public class CourseResultModelImpl extends BaseModelImpl<CourseResult>
 		courseResultImpl.setComments(getComments());
 		courseResultImpl.setUserId(getUserId());
 		courseResultImpl.setPassed(getPassed());
+		courseResultImpl.setStartDate(getStartDate());
 		courseResultImpl.setPassedDate(getPassedDate());
 		courseResultImpl.setAllowStartDate(getAllowStartDate());
 		courseResultImpl.setAllowFinishDate(getAllowFinishDate());
@@ -499,6 +517,15 @@ public class CourseResultModelImpl extends BaseModelImpl<CourseResult>
 
 		courseResultCacheModel.passed = getPassed();
 
+		Date startDate = getStartDate();
+
+		if (startDate != null) {
+			courseResultCacheModel.startDate = startDate.getTime();
+		}
+		else {
+			courseResultCacheModel.startDate = Long.MIN_VALUE;
+		}
+
 		Date passedDate = getPassedDate();
 
 		if (passedDate != null) {
@@ -531,7 +558,7 @@ public class CourseResultModelImpl extends BaseModelImpl<CourseResult>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(21);
 
 		sb.append("{crId=");
 		sb.append(getCrId());
@@ -545,6 +572,8 @@ public class CourseResultModelImpl extends BaseModelImpl<CourseResult>
 		sb.append(getUserId());
 		sb.append(", passed=");
 		sb.append(getPassed());
+		sb.append(", startDate=");
+		sb.append(getStartDate());
 		sb.append(", passedDate=");
 		sb.append(getPassedDate());
 		sb.append(", allowStartDate=");
@@ -557,7 +586,7 @@ public class CourseResultModelImpl extends BaseModelImpl<CourseResult>
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(31);
+		StringBundler sb = new StringBundler(34);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.lms.model.CourseResult");
@@ -586,6 +615,10 @@ public class CourseResultModelImpl extends BaseModelImpl<CourseResult>
 		sb.append(
 			"<column><column-name>passed</column-name><column-value><![CDATA[");
 		sb.append(getPassed());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>startDate</column-name><column-value><![CDATA[");
+		sb.append(getStartDate());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>passedDate</column-name><column-value><![CDATA[");
@@ -622,6 +655,7 @@ public class CourseResultModelImpl extends BaseModelImpl<CourseResult>
 	private boolean _passed;
 	private boolean _originalPassed;
 	private boolean _setOriginalPassed;
+	private Date _startDate;
 	private Date _passedDate;
 	private Date _allowStartDate;
 	private Date _allowFinishDate;

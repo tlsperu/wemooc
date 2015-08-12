@@ -206,6 +206,7 @@ public class ModuleResultLocalServiceImpl extends ModuleResultLocalServiceBaseIm
 			moduleResult.setModuleId(moduleId);
 			moduleResult.setPassed(false);
 			moduleResult.setUserId(userId);
+			moduleResult.setStartDate(lactr.getStartDate());
 			moduleResult.setResult(0);
 			moduleResultPersistence.update(moduleResult, true);
 

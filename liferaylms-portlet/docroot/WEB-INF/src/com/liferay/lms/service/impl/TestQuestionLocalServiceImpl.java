@@ -67,7 +67,7 @@ public class TestQuestionLocalServiceImpl
 		}
 		
 	}
-	private void importXMLQuestion(long actId, Element question) throws SystemException, PortalException {
+	public void importXMLQuestion(long actId, Element question) throws SystemException, PortalException {
 		long type = getQuestionType(question);
 		if(type != -1){
 			QuestionType qt = new QuestionTypeRegistry().getQuestionType(type);

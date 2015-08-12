@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.portlet.PortletException;
@@ -25,7 +26,7 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
  * Portlet implementation class about
  */
 public class About extends MVCPortlet {
-	private static final Log log = LogFactoryUtil.getLog(About.class);
+	private static final Log logger = LogFactoryUtil.getLog(About.class);
 	private static final String WEBAPPS = "webapps";
 	private static final String PORTLET = "portlet";
 	private static final String HOOK = "hook";
@@ -47,8 +48,8 @@ public class About extends MVCPortlet {
 		StringBuffer server = new StringBuffer(PropsUtil.get("catalina.home"));
 		
 		List<String> names = new ArrayList<String>();
-		HashMap<String, HashMap<String, String>> properties = new HashMap<String, HashMap<String,String>>();
-		HashMap<String, HashMap<String, String>> liferay = new HashMap<String, HashMap<String,String>>();
+		Map<String, Map<String, String>> properties = new HashMap<String, Map<String,String>>();
+	    Map<String, Map<String, String>> liferay = new HashMap<String, Map<String,String>>();
 		
 		if(!StringPool.BLANK.equals(server.toString())){
 			server.append(File.separator);
@@ -63,7 +64,7 @@ public class About extends MVCPortlet {
 					if(app.isDirectory()){
 						String[] parts = app.getName().split(StringPool.DASH);
 						if(parts.length>1&&(HOOK.equals(parts[1])||PORTLET.equals(parts[1]))){
-							if(log.isDebugEnabled())log.debug(app.getCanonicalPath());
+							if(logger.isDebugEnabled())logger.debug(app.getCanonicalPath());
 							StringBuffer appBase = new StringBuffer(server.toString());
 
 							appBase.append(File.separator);
@@ -82,7 +83,7 @@ public class About extends MVCPortlet {
 							
 							File service = new File(appService.toString());
 
-							if(log.isDebugEnabled())log.debug(service.getCanonicalPath());
+							if(logger.isDebugEnabled())logger.debug(service.getCanonicalPath());
 							
 							names.add(app.getName());
 							
@@ -97,7 +98,7 @@ public class About extends MVCPortlet {
 								try{
 									buildNumber = Long.valueOf(prop.getProperty("build.date",StringPool.BLANK));
 								}catch(Exception e){
-									if(log.isDebugEnabled())e.printStackTrace();
+									if(logger.isDebugEnabled())e.printStackTrace();
 								}
 								
 								String date = sdf.format(new Date(buildNumber));
@@ -108,10 +109,10 @@ public class About extends MVCPortlet {
 								
 								properties.put(app.getName(), props);
 								
-								if(log.isDebugEnabled()){
-									log.debug(date);
-									log.debug(prop.getProperty("build.number",StringPool.BLANK));
-									log.debug(prop.getProperty("build.auto.upgrade",StringPool.BLANK));
+								if(logger.isDebugEnabled()){
+									logger.debug(date);
+									logger.debug(prop.getProperty("build.number",StringPool.BLANK));
+									logger.debug(prop.getProperty("build.auto.upgrade",StringPool.BLANK));
 								}
 							}
 							

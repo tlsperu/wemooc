@@ -134,7 +134,7 @@ public class TestLearningActivityType extends BaseLearningActivityType
 			throws NumberFormatException, Exception {
 		
 		ThemeDisplay themeDisplay = (ThemeDisplay)uploadRequest.getAttribute(WebKeys.THEME_DISPLAY);	
-		Course course=CourseLocalServiceUtil.fetchByGroupCreatedId(themeDisplay.getScopeGroupId());
+		//Course course=CourseLocalServiceUtil.fetchByGroupCreatedId(themeDisplay.getScopeGroupId());
 				
 			Document document = null;
 			Element rootElement = null;

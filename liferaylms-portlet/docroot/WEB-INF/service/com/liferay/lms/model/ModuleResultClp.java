@@ -71,6 +71,7 @@ public class ModuleResultClp extends BaseModelImpl<ModuleResult>
 		attributes.put("result", getResult());
 		attributes.put("comments", getComments());
 		attributes.put("userId", getUserId());
+		attributes.put("startDate", getStartDate());
 		attributes.put("passed", getPassed());
 		attributes.put("mrId", getMrId());
 		attributes.put("passedDate", getPassedDate());
@@ -102,6 +103,12 @@ public class ModuleResultClp extends BaseModelImpl<ModuleResult>
 
 		if (userId != null) {
 			setUserId(userId);
+		}
+
+		Date startDate = (Date)attributes.get("startDate");
+
+		if (startDate != null) {
+			setStartDate(startDate);
 		}
 
 		Boolean passed = (Boolean)attributes.get("passed");
@@ -163,6 +170,14 @@ public class ModuleResultClp extends BaseModelImpl<ModuleResult>
 		_userUuid = userUuid;
 	}
 
+	public Date getStartDate() {
+		return _startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		_startDate = startDate;
+	}
+
 	public boolean getPassed() {
 		return _passed;
 	}
@@ -222,6 +237,7 @@ public class ModuleResultClp extends BaseModelImpl<ModuleResult>
 		clone.setResult(getResult());
 		clone.setComments(getComments());
 		clone.setUserId(getUserId());
+		clone.setStartDate(getStartDate());
 		clone.setPassed(getPassed());
 		clone.setMrId(getMrId());
 		clone.setPassedDate(getPassedDate());
@@ -281,7 +297,7 @@ public class ModuleResultClp extends BaseModelImpl<ModuleResult>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{moduleId=");
 		sb.append(getModuleId());
@@ -291,6 +307,8 @@ public class ModuleResultClp extends BaseModelImpl<ModuleResult>
 		sb.append(getComments());
 		sb.append(", userId=");
 		sb.append(getUserId());
+		sb.append(", startDate=");
+		sb.append(getStartDate());
 		sb.append(", passed=");
 		sb.append(getPassed());
 		sb.append(", mrId=");
@@ -303,7 +321,7 @@ public class ModuleResultClp extends BaseModelImpl<ModuleResult>
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(28);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.lms.model.ModuleResult");
@@ -324,6 +342,10 @@ public class ModuleResultClp extends BaseModelImpl<ModuleResult>
 		sb.append(
 			"<column><column-name>userId</column-name><column-value><![CDATA[");
 		sb.append(getUserId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>startDate</column-name><column-value><![CDATA[");
+		sb.append(getStartDate());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>passed</column-name><column-value><![CDATA[");
@@ -348,6 +370,7 @@ public class ModuleResultClp extends BaseModelImpl<ModuleResult>
 	private String _comments;
 	private long _userId;
 	private String _userUuid;
+	private Date _startDate;
 	private boolean _passed;
 	private long _mrId;
 	private Date _passedDate;

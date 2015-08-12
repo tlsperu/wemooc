@@ -23,6 +23,11 @@ public abstract class BaseLearningActivityType implements LearningActivityType, 
 	}
 
 	@Override
+	public boolean allowsBank() {
+		return false;
+	}
+
+	@Override
 	public boolean hasEditDetails() {
 		return true;
 	}
@@ -89,6 +94,7 @@ public abstract class BaseLearningActivityType implements LearningActivityType, 
 	public boolean isFeedbackNoCorrectConfigurable() {
 		return false;
 	}
+	
 	
 	@Override
 	public boolean hasMandatoryDates() {

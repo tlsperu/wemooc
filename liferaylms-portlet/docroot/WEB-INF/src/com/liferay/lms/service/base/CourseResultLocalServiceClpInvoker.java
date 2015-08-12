@@ -120,49 +120,65 @@ public class CourseResultLocalServiceClpInvoker {
 
 		_methodParameterTypes141 = new String[] { "long", "boolean" };
 
-		_methodName142 = "avgResult";
+		_methodName142 = "countStudentsByCourseId";
 
-		_methodParameterTypes142 = new String[] { "long", "boolean" };
+		_methodParameterTypes142 = new String[] {
+				"com.liferay.lms.model.Course", "boolean"
+			};
 
-		_methodName143 = "avgResult";
+		_methodName143 = "countStudentsByCourseId";
 
-		_methodParameterTypes143 = new String[] { "long" };
+		_methodParameterTypes143 = new String[] { "com.liferay.lms.model.Course" };
 
-		_methodName144 = "create";
+		_methodName144 = "avgResult";
 
-		_methodParameterTypes144 = new String[] { "long", "long" };
+		_methodParameterTypes144 = new String[] { "long", "boolean" };
 
-		_methodName145 = "create";
+		_methodName145 = "avgResult";
 
-		_methodParameterTypes145 = new String[] {
+		_methodParameterTypes145 = new String[] { "long" };
+
+		_methodName146 = "avgStudentsResult";
+
+		_methodParameterTypes146 = new String[] {
+				"com.liferay.lms.model.Course", "boolean"
+			};
+
+		_methodName147 = "create";
+
+		_methodParameterTypes147 = new String[] { "long", "long" };
+
+		_methodName148 = "create";
+
+		_methodParameterTypes148 = new String[] {
 				"long", "long", "java.util.Date", "java.util.Date"
 			};
 
-		_methodName146 = "update";
+		_methodName149 = "update";
 
-		_methodParameterTypes146 = new String[] {
+		_methodParameterTypes149 = new String[] {
 				"com.liferay.lms.model.CourseResult"
 			};
 
-		_methodName147 = "update";
+		_methodName150 = "update";
 
-		_methodParameterTypes147 = new String[] {
+		_methodParameterTypes150 = new String[] {
 				"com.liferay.lms.model.ModuleResult"
 			};
 
-		_methodName148 = "getCourseResultByCourseAndUser";
+		_methodName151 = "getCourseResultByCourseAndUser";
 
-		_methodParameterTypes148 = new String[] { "long", "long" };
+		_methodParameterTypes151 = new String[] { "long", "long" };
 
-		_methodName149 = "translateResult";
+		_methodName152 = "translateResult";
 
-		_methodParameterTypes149 = new String[] {
+		_methodParameterTypes152 = new String[] {
 				"java.util.Locale", "double", "long"
 			};
 
-		_methodName150 = "softInitializeByGroupIdAndUserId";
+		_methodName153 = "softInitializeByGroupIdAndUserId";
 
-		_methodParameterTypes150 = new String[] { "long", "long" };
+		_methodParameterTypes153 = new String[] { "long", "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -280,57 +296,74 @@ public class CourseResultLocalServiceClpInvoker {
 
 		if (_methodName142.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes142, parameterTypes)) {
-			return CourseResultLocalServiceUtil.avgResult(((Long)arguments[0]).longValue(),
+			return CourseResultLocalServiceUtil.countStudentsByCourseId((com.liferay.lms.model.Course)arguments[0],
 				((Boolean)arguments[1]).booleanValue());
 		}
 
 		if (_methodName143.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes143, parameterTypes)) {
-			return CourseResultLocalServiceUtil.avgResult(((Long)arguments[0]).longValue());
+			return CourseResultLocalServiceUtil.countStudentsByCourseId((com.liferay.lms.model.Course)arguments[0]);
 		}
 
 		if (_methodName144.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes144, parameterTypes)) {
-			return CourseResultLocalServiceUtil.create(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
+			return CourseResultLocalServiceUtil.avgResult(((Long)arguments[0]).longValue(),
+				((Boolean)arguments[1]).booleanValue());
 		}
 
 		if (_methodName145.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes145, parameterTypes)) {
+			return CourseResultLocalServiceUtil.avgResult(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName146.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes146, parameterTypes)) {
+			return CourseResultLocalServiceUtil.avgStudentsResult((com.liferay.lms.model.Course)arguments[0],
+				((Boolean)arguments[1]).booleanValue());
+		}
+
+		if (_methodName147.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes147, parameterTypes)) {
+			return CourseResultLocalServiceUtil.create(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
+		if (_methodName148.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes148, parameterTypes)) {
 			return CourseResultLocalServiceUtil.create(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(), (java.util.Date)arguments[2],
 				(java.util.Date)arguments[3]);
 		}
 
-		if (_methodName146.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes146, parameterTypes)) {
+		if (_methodName149.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes149, parameterTypes)) {
 			CourseResultLocalServiceUtil.update((com.liferay.lms.model.CourseResult)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName147.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes147, parameterTypes)) {
+		if (_methodName150.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes150, parameterTypes)) {
 			CourseResultLocalServiceUtil.update((com.liferay.lms.model.ModuleResult)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName148.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes148, parameterTypes)) {
+		if (_methodName151.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes151, parameterTypes)) {
 			return CourseResultLocalServiceUtil.getCourseResultByCourseAndUser(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue());
 		}
 
-		if (_methodName149.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes149, parameterTypes)) {
+		if (_methodName152.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes152, parameterTypes)) {
 			return CourseResultLocalServiceUtil.translateResult((java.util.Locale)arguments[0],
 				((Double)arguments[1]).doubleValue(),
 				((Long)arguments[2]).longValue());
 		}
 
-		if (_methodName150.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes150, parameterTypes)) {
+		if (_methodName153.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes153, parameterTypes)) {
 			CourseResultLocalServiceUtil.softInitializeByGroupIdAndUserId(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue());
 
@@ -398,4 +431,10 @@ public class CourseResultLocalServiceClpInvoker {
 	private String[] _methodParameterTypes149;
 	private String _methodName150;
 	private String[] _methodParameterTypes150;
+	private String _methodName151;
+	private String[] _methodParameterTypes151;
+	private String _methodName152;
+	private String[] _methodParameterTypes152;
+	private String _methodName153;
+	private String[] _methodParameterTypes153;
 }

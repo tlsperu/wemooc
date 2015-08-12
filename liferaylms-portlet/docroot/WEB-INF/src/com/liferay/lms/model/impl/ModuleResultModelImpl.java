@@ -68,11 +68,12 @@ public class ModuleResultModelImpl extends BaseModelImpl<ModuleResult>
 			{ "result", Types.BIGINT },
 			{ "comments", Types.VARCHAR },
 			{ "userId", Types.BIGINT },
+			{ "startDate", Types.TIMESTAMP },
 			{ "passed", Types.BOOLEAN },
 			{ "mrId", Types.BIGINT },
 			{ "passedDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table Lms_ModuleResult (moduleId LONG,result LONG,comments VARCHAR(75) null,userId LONG,passed BOOLEAN,mrId LONG not null primary key,passedDate DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table Lms_ModuleResult (moduleId LONG,result LONG,comments VARCHAR(75) null,userId LONG,startDate DATE null,passed BOOLEAN,mrId LONG not null primary key,passedDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table Lms_ModuleResult";
 	public static final String ORDER_BY_JPQL = " ORDER BY moduleResult.mrId ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY Lms_ModuleResult.mrId ASC";
@@ -109,6 +110,7 @@ public class ModuleResultModelImpl extends BaseModelImpl<ModuleResult>
 		model.setResult(soapModel.getResult());
 		model.setComments(soapModel.getComments());
 		model.setUserId(soapModel.getUserId());
+		model.setStartDate(soapModel.getStartDate());
 		model.setPassed(soapModel.getPassed());
 		model.setMrId(soapModel.getMrId());
 		model.setPassedDate(soapModel.getPassedDate());
@@ -174,6 +176,7 @@ public class ModuleResultModelImpl extends BaseModelImpl<ModuleResult>
 		attributes.put("result", getResult());
 		attributes.put("comments", getComments());
 		attributes.put("userId", getUserId());
+		attributes.put("startDate", getStartDate());
 		attributes.put("passed", getPassed());
 		attributes.put("mrId", getMrId());
 		attributes.put("passedDate", getPassedDate());
@@ -205,6 +208,12 @@ public class ModuleResultModelImpl extends BaseModelImpl<ModuleResult>
 
 		if (userId != null) {
 			setUserId(userId);
+		}
+
+		Date startDate = (Date)attributes.get("startDate");
+
+		if (startDate != null) {
+			setStartDate(startDate);
 		}
 
 		Boolean passed = (Boolean)attributes.get("passed");
@@ -295,6 +304,14 @@ public class ModuleResultModelImpl extends BaseModelImpl<ModuleResult>
 		return _originalUserId;
 	}
 
+	public Date getStartDate() {
+		return _startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		_startDate = startDate;
+	}
+
 	public boolean getPassed() {
 		return _passed;
 	}
@@ -373,6 +390,7 @@ public class ModuleResultModelImpl extends BaseModelImpl<ModuleResult>
 		moduleResultImpl.setResult(getResult());
 		moduleResultImpl.setComments(getComments());
 		moduleResultImpl.setUserId(getUserId());
+		moduleResultImpl.setStartDate(getStartDate());
 		moduleResultImpl.setPassed(getPassed());
 		moduleResultImpl.setMrId(getMrId());
 		moduleResultImpl.setPassedDate(getPassedDate());
@@ -469,6 +487,15 @@ public class ModuleResultModelImpl extends BaseModelImpl<ModuleResult>
 
 		moduleResultCacheModel.userId = getUserId();
 
+		Date startDate = getStartDate();
+
+		if (startDate != null) {
+			moduleResultCacheModel.startDate = startDate.getTime();
+		}
+		else {
+			moduleResultCacheModel.startDate = Long.MIN_VALUE;
+		}
+
 		moduleResultCacheModel.passed = getPassed();
 
 		moduleResultCacheModel.mrId = getMrId();
@@ -487,7 +514,7 @@ public class ModuleResultModelImpl extends BaseModelImpl<ModuleResult>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{moduleId=");
 		sb.append(getModuleId());
@@ -497,6 +524,8 @@ public class ModuleResultModelImpl extends BaseModelImpl<ModuleResult>
 		sb.append(getComments());
 		sb.append(", userId=");
 		sb.append(getUserId());
+		sb.append(", startDate=");
+		sb.append(getStartDate());
 		sb.append(", passed=");
 		sb.append(getPassed());
 		sb.append(", mrId=");
@@ -509,7 +538,7 @@ public class ModuleResultModelImpl extends BaseModelImpl<ModuleResult>
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(28);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.lms.model.ModuleResult");
@@ -530,6 +559,10 @@ public class ModuleResultModelImpl extends BaseModelImpl<ModuleResult>
 		sb.append(
 			"<column><column-name>userId</column-name><column-value><![CDATA[");
 		sb.append(getUserId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>startDate</column-name><column-value><![CDATA[");
+		sb.append(getStartDate());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>passed</column-name><column-value><![CDATA[");
@@ -562,6 +595,7 @@ public class ModuleResultModelImpl extends BaseModelImpl<ModuleResult>
 	private String _userUuid;
 	private long _originalUserId;
 	private boolean _setOriginalUserId;
+	private Date _startDate;
 	private boolean _passed;
 	private boolean _originalPassed;
 	private boolean _setOriginalPassed;

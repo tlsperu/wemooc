@@ -96,6 +96,7 @@
 		<field name="comments" type="String" />
 		<field name="userId" type="long" />
 		<field name="passed" type="boolean" />
+		<field name="startDate" type="Date" />
 		<field name="passedDate" type="Date" />
 		<field name="allowStartDate" type="Date" />
 		<field name="allowFinishDate" type="Date" />
@@ -181,6 +182,7 @@
 		<field name="activities" type="String" />
 		<field name="courseevals" type="String" />
 		<field name="scoretranslators" type="String" />
+		<field name="usersResults" type="long" />
 	</model>
 	<model name="com.liferay.lms.model.Module">
 		<field name="uuid" type="String" />
@@ -204,6 +206,7 @@
 		<field name="result" type="long" />
 		<field name="comments" type="String" />
 		<field name="userId" type="long" />
+		<field name="startDate" type="Date" />
 		<field name="passed" type="boolean" />
 		<field name="mrId" type="long" />
 		<field name="passedDate" type="Date" />

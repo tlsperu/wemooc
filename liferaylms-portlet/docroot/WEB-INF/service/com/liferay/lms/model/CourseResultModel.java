@@ -168,6 +168,20 @@ public interface CourseResultModel extends BaseModel<CourseResult> {
 	public void setPassed(boolean passed);
 
 	/**
+	 * Returns the start date of this course result.
+	 *
+	 * @return the start date of this course result
+	 */
+	public Date getStartDate();
+
+	/**
+	 * Sets the start date of this course result.
+	 *
+	 * @param startDate the start date of this course result
+	 */
+	public void setStartDate(Date startDate);
+
+	/**
 	 * Returns the passed date of this course result.
 	 *
 	 * @return the passed date of this course result
