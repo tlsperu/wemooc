@@ -7,7 +7,6 @@
 <%@page import="com.liferay.portlet.asset.model.AssetEntry"%>
 <%@page import="com.liferay.lms.service.LearningActivityLocalServiceUtil"%>
 <%@ include file="/init.jsp" %>
-
 <%
 long actId = ParamUtil.getLong(request, "actId", 0L);
 LearningActivityTry learningTry = (LearningActivityTry) request.getAttribute("learningTry");
@@ -81,8 +80,10 @@ if(typeof scormembededmode == 'undefined')
 	var finishedscorm=false;
 	var finish_scorm = function(e) 
 	{
+		
 		if(!finishedscorm)
 	   	{
+			
 			var scormpool = localStorage['scormpool'];
 			var serviceParameterTypes = [
 		     	'long',
@@ -104,11 +105,30 @@ if(typeof scormembededmode == 'undefined')
 			if (!exception) {
 				// Process Success - A LearningActivityResult returned
 				if (message.passed) {
-					if (typeof updateActivityNavigation == 'function') { 
-						updateActivityNavigation(); 
+					if(window.opener)
+					{
+				    	if (typeof window.opener.updateActivityNavigation == 'function') { 
+							window.opener.updateActivityNavigation(); 
+						}
+						if (typeof window.opener.updateActivityList == 'function') { 
+							window.opener.updateActivityList(); 
+						}
+						if (typeof window.opener.updateScormStatus == 'function') { 
+							window.opener.updateScormStatus(message); 
+						}
+					}
+					if (typeof window.updateActivityNavigation == 'function') { 
+						window.updateActivityNavigation(); 
+					}
+					if (typeof window.updateActivityList == 'function') { 
+						window.updateActivityList(); 
+					}
+					if (typeof window.updateScormStatus == 'function') { 
+						window.updateScormStatus(message); 
 					}
 				}
-			} else {
+			} else 
+			{
 				// Process Exception
 			}
 			finishedscorm=true;

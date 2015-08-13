@@ -93,5 +93,8 @@ AUI().ready('event', 'node','aui-base','aui-dialog','aui-dialog-iframe','anim','
 		});
 
 });
-
+function updateActivityList()
+{
+	Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
+}
 </script>
