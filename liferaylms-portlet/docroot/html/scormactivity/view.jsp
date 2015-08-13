@@ -104,14 +104,19 @@
 		|| permissionChecker.hasPermission(themeDisplay.getScopeGroupId(), "com.liferay.lms.model",themeDisplay.getScopeGroupId(),"ACCESSLOCK")
 	    || improving )
 		{
-
-			if(LearningActivityResultLocalServiceUtil.userPassed(actId,themeDisplay.getUserId()))
+			%>
+			<div id="scormstatus">
+			<%
+			Object[] args1 = new Object[] { activity.getPasspuntuation() };
+			boolean userPassedPreviusly=LearningActivityResultLocalServiceUtil.userPassed(actId,themeDisplay.getUserId());
+			if(userPassedPreviusly)
 			{
 				request.setAttribute("learningActivity",activity);
 				request.setAttribute("larntry",LearningActivityTryLocalServiceUtil.getLastLearningActivityTryByActivityAndUser(actId, userId));
 				Object[] arguments = new Object[] { result.getResult() };
-				Object[] arg = new Object[] { activity.getPasspuntuation() };
+				
 				%>
+				
 				<p>
 					<liferay-ui:message key="activity-done" />
 				</p>
@@ -119,11 +124,26 @@
 					<liferay-ui:message key="activity.your-result" arguments="<%=arguments%>" />
 				</p>
 				<p class="color_tercero negrita">
-					<liferay-ui:message key="activity.your-result-pass" arguments="<%=arg%>" />
+					<liferay-ui:message key="activity.your-result-pass" arguments="<%=args1%>" />
 				</p>
 				
 				<% 
+			}	
+			Object[] argumentsfake = new Object[] {" __SCORE__ "};
+			%>
+			
+			</div>
+			<script>
+			function updateScormStatus(lar)
+			{
+				
+				gradetext='<p><liferay-ui:message key="activity.your-result" arguments="<%=argumentsfake%>" /></p>';
+				gradetext=gradetext.replace(" __SCORE__ ",lar.result);
+				document.getElementById("scormstatus").innerHTML='<p><liferay-ui:message key="activity-done" /></p>'+gradetext+
+				'<p class="color_tercero negrita"><liferay-ui:message key="activity.your-result-pass" arguments="<%=args1%>" /></p>';
 			}
+			</script>
+			<%
 	ServiceContext serviceContext = ServiceContextFactory.getInstance(LearningActivityTry.class.getName(), renderRequest);
 	long activityTimestamp=0;
 	long timestamp=0;
