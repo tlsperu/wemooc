@@ -26,10 +26,11 @@
 <liferay-ui:panel-container >
 <%
 	java.util.List<Module> modules = ModuleLocalServiceUtil.findAllInGroup(themeDisplay.getScopeGroupId());
+	int fila = 0;
 	for(Module theModule:modules)
 	{
 %>
-		<liferay-ui:panel id="<%=Long.toString(theModule.getModuleId()) %>" title="<%=theModule.getTitle(themeDisplay.getLocale()) %>" collapsible="true" extended="true" defaultState="collapsed">
+		<liferay-ui:panel id="<%=Long.toString(theModule.getModuleId()) %>" title="<%=theModule.getTitle(themeDisplay.getLocale()) %>" collapsible="true" extended="true" defaultState="<%=(fila==0)?\"open\":\"collapsed\" %>">
 		<liferay-ui:search-container  emptyResultsMessage="there-are-no-results" delta="50" deltaConfigurable="false">
 	<liferay-ui:search-container-results>
 	<% 
@@ -83,6 +84,7 @@
 	
 	</liferay-ui:panel>
 	<%
+	fila++;
 	}%>
 </liferay-ui:panel-container>
 
