@@ -115,9 +115,10 @@ if(theTeam!=null)
 }
 	java.util.List<Module> modules = ModuleLocalServiceUtil.findAllInGroup(themeDisplay.getScopeGroupId());
 	if(modules != null){
+		int fila = 0;
 	for(Module theModule:modules){
 %>
-		<liferay-ui:panel id="<%=Long.toString(theModule.getModuleId()) %>" title="<%=theModule.getTitle(themeDisplay.getLocale()) %>" collapsible="true" extended="true" defaultState="collapsed">
+		<liferay-ui:panel id="<%=Long.toString(theModule.getModuleId()) %>" title="<%=theModule.getTitle(themeDisplay.getLocale()) %>" collapsible="true" extended="true" defaultState="<%=(fila==0)?\"open\":\"collapsed\" %>">
 			<liferay-portlet:resourceURL var="exportURL" >
 				<portlet:param name="action" value="export"/>
 				<portlet:param name="moduleId" value="<%=Long.toString(theModule.getModuleId()) %>"/>
@@ -344,6 +345,7 @@ if(theTeam!=null)
 			</liferay-ui:search-container>
 
 		</liferay-ui:panel>
-	<%}
+	<%fila++;
+	}
 	}%>
 </liferay-ui:panel-container>
