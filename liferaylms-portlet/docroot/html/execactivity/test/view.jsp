@@ -171,92 +171,89 @@
 				   							timestamp=activityTimestamp*1000 - (new Date().getTime() - learningTry.getStartDate().getTime());
 										}
 %>
-
 										AUI().ready('liferay-notice', 'collection', function(A) {
 
-										var TestActivity = function(options) {
-											var instance = this;
-											instance.timeout=options.timeout||false;
-											instance.warningText=options.warningText||'Timeout Warning: <span class="countdown-timer"/>';
-											instance.expiredText=options.expiredText||'Text timeout';
-											instance.onClose=options.onClose;
-						
-											instance.banner=null;
-											if(instance.timeout) {
-												instance.banner=new Liferay.Notice({content:instance.warningText,closeText:false,toggleText:false});
-												instance.countdowntext=instance.banner.one('.countdown-timer');
-												if(instance.countdowntext){
-													instance.countdowntext.text(instance._formatTime(instance.timeout));
+											var TestActivity = function(options) {
+												var instance = this;
+												instance.timeout=options.timeout||false;
+												instance.warningText=options.warningText||'Timeout Warning: <span class="countdown-timer"/>';
+												instance.expiredText=options.expiredText||'Text timeout';
+												instance.onClose=options.onClose;
+							
+												instance.banner=null;
+												if(instance.timeout) {
+													instance.banner=new Liferay.Notice({content:instance.warningText,closeText:false,toggleText:false});
+													instance.countdowntext=instance.banner.one('.countdown-timer');
+													if(instance.countdowntext){
+														instance.countdowntext.text(instance._formatTime(instance.timeout));
+													}
+	
+													var interval=1000;
+													instance.finishtime = new Date().getTime()+instance.timeout;
+	
+													instance._countdownTimer = setInterval(
+														function() {
+					
+															var currentTimeout = instance.finishtime-new Date().getTime();
+					
+															if (currentTimeout > 0) {
+																instance.countdowntext.text(instance._formatTime(currentTimeout));
+															}
+															else {
+																instance.banner.html(instance.expiredText);
+																instance.banner.toggleClass('popup-alert-notice').toggleClass('popup-alert-warning');
+																
+																if (instance._countdownTimer) {
+																	clearInterval(instance._countdownTimer);
+																}
+					
+																if (instance.onClose) {
+																	instance.onClose();
+																}
+															}
+														},
+														interval
+													);
 												}
+											};
 
-												var interval=1000;
-												instance.finishtime = new Date().getTime()+instance.timeout;
-
-												instance._countdownTimer = setInterval(
-									function() {
-
-										var currentTimeout = instance.finishtime-new Date().getTime();
-
-										if (currentTimeout > 0) {
-											instance.countdowntext.text(instance._formatTime(currentTimeout));
-										}
-										else {
-											instance.banner.html(instance.expiredText);
-											instance.banner.toggleClass('popup-alert-notice').toggleClass('popup-alert-warning');
-											
-											if (instance._countdownTimer) {
-												clearInterval(instance._countdownTimer);
-											}
-
-											if (instance.onClose) {
-												instance.onClose();
-											}
-										}
-									},
-									interval
-								);							
-
-						}
-					};
-
-					TestActivity.prototype = {
-						_formatNumber: function(num) {
-							var instance = this;
-					
-							if (num <= 9) {
-								num = '0' + num;
-							}
-
-							return num;
-						},
-						_formatTime: function(time) {
-							var instance = this;
-
-							time = Math.floor(time/1000);
-
-							var hours = Math.floor(time/3600);
-							time = time%3600;
-
-							var minutes = Math.floor(time/60);
-							time = time%60;
-
-							var seconds = Math.floor(time);
+							TestActivity.prototype = {
+								_formatNumber: function(num) {
+									var instance = this;
 							
-							return A.Array.map([hours,minutes,seconds], instance._formatNumber).join(':');
-							
-						}
-
-					};
+									if (num <= 9) {
+										num = '0' + num;
+									}
+		
+									return num;
+								},
+								_formatTime: function(time) {
+									var instance = this;
+		
+									time = Math.floor(time/1000);
+		
+									var hours = Math.floor(time/3600);
+									time = time%3600;
+		
+									var minutes = Math.floor(time/60);
+									time = time%60;
+		
+									var seconds = Math.floor(time);
+									
+									return A.Array.map([hours,minutes,seconds], instance._formatNumber).join(':');
+									
+								}
+		
+							};
 					
-					new TestActivity({timeout:<%=Long.toString(timestamp)%>,
-									  warningText:'<liferay-ui:message key="execActivity.timeout.warning" />',
-									  expiredText:'<liferay-ui:message key="execActivity.timeout" />',
-									  onClose:function(){
-										document.getElementById('<portlet:namespace/>formulario').submit();
-										  }});
-
-				});
-
+							new TestActivity({timeout:<%=Long.toString(timestamp)%>,
+											  warningText:'<liferay-ui:message key="execActivity.timeout.warning" />',
+											  expiredText:'<liferay-ui:message key="execActivity.timeout" />',
+											  onClose:function(){
+												document.getElementById('<portlet:namespace/>formulario').submit();
+											}});
+		
+							});
 
 				<% } %>
 				
@@ -421,8 +418,20 @@
 			</script>			
 
 			<aui:form name="formulario" action="<%=correctURL %>" method="post" onSubmit="javascript:return false;">
-			<%
+			<script type="text/javascript">
+				AUI().ready(function(A) {
+					//Numeramos las preguntas
+					var preguntas = A.all(".questiontext > p");
+					var numPregunta = 1;
+					
+					preguntas.each(function(node){
+						node.html(numPregunta + ') ' + node.html());
+						numPregunta++;
+					});
+				});
+			</script>
 			
+			<%
 			long random = GetterUtil.getLong(LearningActivityLocalServiceUtil.getExtraContentValue(activity.getActId(),"random"));
 			long currentQuestionId = 0;
 			if (learningTry != null && Validator.isXml(learningTry.getTryResultData())) {
@@ -492,7 +501,6 @@
 						document = SAXReaderUtil.read(learningTry.getTryResultData());
 					}
 					sb.append(qt.getHtmlView(question.getQuestionId(), themeDisplay, document));
- 					
 				} 
 				boolean markAsCurrentPage = questionPageCurrent || (currentQuestionId == 0 && index == 0);
 				if (markAsCurrentPage && index != 0) {
