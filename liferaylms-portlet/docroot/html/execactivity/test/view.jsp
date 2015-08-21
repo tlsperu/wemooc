@@ -420,16 +420,16 @@
 			<aui:form name="formulario" action="<%=correctURL %>" method="post" onSubmit="javascript:return false;">
 <!-- De momento se comenta la numeración -->
 <!-- 			<script type="text/javascript"> -->
-// 				AUI().ready(function(A) {
-// 					//Numeramos las preguntas
-// 					var preguntas = A.all(".questiontext > p");
-// 					var numPregunta = 1;
+<!--  				AUI().ready(function(A) { -->
+<!--  					//Numeramos las preguntas -->
+<!--  					var preguntas = A.all(".questiontext > p"); -->
+<!--  					var numPregunta = 1; -->
 					
-// 					preguntas.each(function(node){
-// 						node.html(numPregunta + ') ' + node.html());
-// 						numPregunta++;
-// 					});
-// 				});
+<!--  					preguntas.each(function(node){ -->
+<!--  						node.html(numPregunta + ') ' + node.html()); -->
+<!--  						numPregunta++; -->
+<!--  					}); -->
+<!--  				}); -->
 <!-- 			</script> -->
 			
 			<%
