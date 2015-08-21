@@ -418,18 +418,19 @@
 			</script>			
 
 			<aui:form name="formulario" action="<%=correctURL %>" method="post" onSubmit="javascript:return false;">
-			<script type="text/javascript">
-				AUI().ready(function(A) {
-					//Numeramos las preguntas
-					var preguntas = A.all(".questiontext > p");
-					var numPregunta = 1;
+<!-- De momento se comenta la numeración -->
+<!-- 			<script type="text/javascript"> -->
+// 				AUI().ready(function(A) {
+// 					//Numeramos las preguntas
+// 					var preguntas = A.all(".questiontext > p");
+// 					var numPregunta = 1;
 					
-					preguntas.each(function(node){
-						node.html(numPregunta + ') ' + node.html());
-						numPregunta++;
-					});
-				});
-			</script>
+// 					preguntas.each(function(node){
+// 						node.html(numPregunta + ') ' + node.html());
+// 						numPregunta++;
+// 					});
+// 				});
+<!-- 			</script> -->
 			
 			<%
 			long random = GetterUtil.getLong(LearningActivityLocalServiceUtil.getExtraContentValue(activity.getActId(),"random"));
