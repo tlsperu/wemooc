@@ -18,6 +18,51 @@ public class Context {
 	private static String studentUser2 = "";
 	private static String studentName2 = "";
 	private static String studentPass2 = "";
+	private static String teacherUser = "";
+	private static String teacherName = "";
+	private static String teacherPass = "";
+	private static HashMap<String, String> activities = new HashMap<String, String>();
+	private static String remoteHost = "";
+	
+	public static void getTestContext(){
+		setBaseUrl		(TestProperties.get("server"));
+		setUser	  		(TestProperties.get("user"));
+		setPass	  		(TestProperties.get("user-pass"));
+		setCourseName	(TestProperties.get("course-name"));
+		setStudentUser	(TestProperties.get("student-email"));
+		setStudentName	(TestProperties.get("student-name"));
+		setStudentPass 	(TestProperties.get("student-pass"));
+		setStudentUser2	(TestProperties.get("student2-email"));
+		setStudentName2	(TestProperties.get("student2-name"));
+		setStudentPass2	(TestProperties.get("student2-pass"));
+		setTeacherName	(TestProperties.get("teacher-name"));
+		setTeacherPass	(TestProperties.get("teacher-pass"));
+		setTeacherUser	(TestProperties.get("teacher-email"));
+		setTestPage		(TestProperties.get("test-page"));
+		setTest			(true);
+	}
+	public static void removeContext(){
+		baseUrl = "";
+		user = "";
+		pass = "";
+		page = "";
+		testPage 	= "";
+		test 		= false;
+		courseName 	= "";
+		courseId 	= "";
+		coursePage 	= "";
+		studentUser = "";
+		studentName = "";
+		studentPass = "";
+		studentUser2 = "";
+		studentName2 = "";
+		studentPass2 = "";
+		teacherUser = "";
+		teacherName = "";
+		teacherPass = "";
+		activities 	= new HashMap<String, String>();
+	}
+	
 	public static String getStudentUser2() {
 		return studentUser2;
 	}
@@ -42,11 +87,7 @@ public class Context {
 		Context.studentPass2 = studentPass2;
 	}
 
-	private static String teacherUser = "";
-	private static String teacherName = "";
-	private static String teacherPass = "";
-	private static HashMap<String, String> activities = new HashMap<String, String>();
-		
+	
 	public static String getBaseUrl() {
 		return baseUrl;
 	}
@@ -174,5 +215,16 @@ public class Context {
 	public static void setActivities(HashMap<String, String> activities) {
 		Context.activities = activities;
 	}
-	
+	/**
+	 * @return the remoteHost
+	 */
+	public static String getRemoteHost() {
+		return remoteHost;
+	}
+	/**
+	 * @param remoteHost the remoteHost to set
+	 */
+	public static void setRemoteHost(String remoteHost) {
+		Context.remoteHost = remoteHost;
+	}
 }

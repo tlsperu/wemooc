@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.tls.liferaylms.report.BeanReportContext;
 
 public class Login {
 	private static Log log = LogFactoryUtil.getLog(Login.class);
@@ -32,27 +33,32 @@ public class Login {
 
 	public boolean login(){
 		try{
-			GetPage.getPage(driver,path,"");
-			WebElement singin =getElement(By.id("sign-in"));
-			if(singin!=null) {
-				singin.click();
-			}else{
-				GetPage.getPage(driver,path,"/c/portal/login");
-			}
-			Sleep.sleep(1000);
-			WebElement login = getElement(By.id("_58_login"));
-			if(login==null){
-				return false;
-			}else{
-				/*login.sendKeys(Keys.END);
-				for(int i=0;i<40;i++){
-					login.sendKeys(Keys.BACK_SPACE);
-				}*/
+//			GetPage.getPage(driver,path,"");
+			
+//			WebElement singin =getElement(By.id("sign-in"));
+//			if(singin!=null) {
+//				log.info("singin::"+singin);
+//				singin.click();
+//			}else{
+//				GetPage.getPage(driver,path,"/c/portal/login");
+				GetPage.getPage(driver,path,"/login");
+//			}
+//			Sleep.sleep(1000);
+//			Sleep.waitForLoad(driver);
+			
+			try{
+				WebElement login = getElement(By.id("_58_login"));
+	
 				login.clear();
 				login.sendKeys(user);
 				driver.findElement(By.id("_58_password")).sendKeys(pass);
 				driver.findElement(By.id("_58_fm")).submit();
-				Sleep.sleep(2000);
+//				Sleep.sleep(2000);
+				Sleep.waitForLoad(driver);
+			}catch(NoSuchElementException e){
+				return false;
+			}catch(NullPointerException e){
+				return false;
 			}
 			
 			boolean changePass =false;
@@ -61,10 +67,11 @@ public class Login {
 				WebElement submit = portlet.findElement(By.className("aui-button-input-submit"));
 				submit.click();
 				
-				Sleep.sleep(1000);
+//				Sleep.sleep(1000);
+				Sleep.waitForLoad(driver);
 
 			}catch(NoSuchElementException nsee){
-				nsee.printStackTrace();
+				//nsee.printStackTrace();
 			}
 			
 			try{
@@ -78,13 +85,12 @@ public class Login {
 				if(fm!=null){
 					fm.submit();
 				}
+				Sleep.waitForLoad(driver);
 				changePass=true;
 			}catch(NoSuchElementException nsee){
 				
 			}
-
-			Sleep.sleep(2000);
-			
+//			Sleep.sleep(2000);
 			try{
 				WebElement portletReminder = driver.findElement(By.id("portlet_password-reminder"));
 				if(portletReminder!=null){
@@ -96,6 +102,7 @@ public class Login {
 						}
 						input.click();
 						changePass=true;
+						Sleep.waitForLoad(driver);
 					}
 				}
 				
@@ -105,41 +112,61 @@ public class Login {
 
 			try{
 				if(changePass){
-					WebElement avatar = driver.findElement(By.id("_145_userAvatar"));
+//					WebElement avatar = driver.findElement(By.id("_145_userAvatar"));
+//					
+//					List<WebElement> imgs = avatar.findElements(By.tagName("a"));
+//					if(imgs.size()>1){
+//						imgs.get(0).click();
+//						Sleep.waitForLoad(driver);
+//					}
+////					Sleep.sleep(3000);
+//					Sleep.waitForSwitchFrame(driver, 0);
+//					
+////					Sleep.waitFor(By.id("_2_passwordLink"), driver);
+//					
+//					WebElement passLink = driver.findElement(By.id("_2_passwordLink"));
+//					passLink.click();
 					
-					List<WebElement> imgs = avatar.findElements(By.tagName("a"));
-					if(imgs.size()>1){
-						imgs.get(0).click();
-					}
-					Sleep.sleep(3000);
+					//En vez de hacerlo desde el "Avatar", se hará desde "Mi página"
+					GetPage.getPage(driver, Context.getBaseUrl(), "/mi-pagina");
 					
-					WebElement passLink = driver.findElement(By.id("_2_passwordLink"));
-					passLink.click();
+					WebElement container = getElement(By.id("changebuttons"));
+					List<WebElement> links = container.findElements(By.tagName("a"));
+					
+					links.get(1).click();
+					
+					Sleep.waitForLoad(driver);
 	
-					WebElement pass0 = driver.findElement(By.id("_2_password0"));
+//					WebElement pass0 = driver.findElement(By.id("_2_password0"));
+					WebElement pass0 = driver.findElement(By.id("_miprofile_WAR_socialnetworkingportlet_passwordactual"));
 					pass0.sendKeys(pass+1);
 					
-					WebElement pass1 = driver.findElement(By.id("_2_password1"));
+//					WebElement pass1 = driver.findElement(By.id("_2_password1"));
+					WebElement pass1 = driver.findElement(By.id("_miprofile_WAR_socialnetworkingportlet_password"));
 					pass1.sendKeys(pass);
 	
-					WebElement pass2 = driver.findElement(By.id("_2_password2"));
+//					WebElement pass2 = driver.findElement(By.id("_2_password2"));
+					WebElement pass2 = driver.findElement(By.id("_miprofile_WAR_socialnetworkingportlet_password2"));
 					pass2.sendKeys(pass);
 					
 					WebElement submitPass = driver.findElement(By.className("aui-button-input-submit"));
 					submitPass.click();
+					
+					Sleep.waitForLoad(driver);
 				}
 			}catch(NoSuchElementException nsee){
-				nsee.printStackTrace();
+//				nsee.printStackTrace();
 				return false;
 			}
 			
 		}catch(Exception e){
-			e.printStackTrace();
+//			e.printStackTrace();
 			return false;
 		}
 		WebElement webElement = null;
 		try{
-			webElement = driver.findElement(By.className("sign-out"));
+//			webElement = driver.findElement(By.className("sign-out"));
+			webElement = driver.findElement(By.id("userName"));
 		}catch(Exception e){
 			
 		}
@@ -148,18 +175,23 @@ public class Login {
 			return false;
 		}else{
 			if(log.isInfoEnabled())log.info("login:true");
+			BeanReportContext.setHasLogin(true);
 			return true;
 		}
 	}
 	
 	public boolean isLogin(){
-		WebElement span = getElement(By.id("p_145"));
-		if(span==null){
+		try{
+//			WebElement span = getElement(By.id("p_145"));
+			WebElement span = getElement(By.id("userName"));
+			if(span==null){
+				return false;
+			}else{
+				return true;
+			}
+		}catch(Exception e){
 			return false;
-		}else{
-			return true;
 		}
-			
 	}
 
 	public boolean logout(){
@@ -174,6 +206,7 @@ public class Login {
 		}*/
 		
 		GetPage.getPage(driver, path, "/c/portal/logout");
+		Sleep.waitForLoad(driver);
 		return true;
 	}
 	
@@ -182,6 +215,13 @@ public class Login {
 			return driver.findElement(by);
 		} catch (NoSuchElementException e) {
 			return null;
+		} catch (ElementNotVisibleException e) {
+			return null;
+		} catch (ElementNotFoundException e) {
+			return null;
+		} catch (Exception e) {
+			return null;
 		}
+		
 	}
 }

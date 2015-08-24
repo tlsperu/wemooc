@@ -44,6 +44,7 @@ public class GetPage {
 			Date dateEnd = new Date();
 			if(log.isInfoEnabled())log.info("time::"+(dateEnd.getTime()-date.getTime()));
 		}
+		Sleep.waitForLoad(driver);
 	}
 	
 }

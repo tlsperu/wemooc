@@ -1,7 +1,11 @@
+<%@page import="com.liferay.portal.util.PortalUtil"%>
+<%@page import="com.tls.liferaylms.report.GenerateReport"%>
+<%@page import="java.io.File"%>
+<%@page import="com.tls.liferaylms.report.BeanReportContext"%>
 <%@page import="com.tls.liferaylms.test.util.Context"%>
 <%@page import="com.liferay.portal.kernel.log.Log"%>
 <%@page import="com.liferay.portal.kernel.log.LogFactoryUtil"%>
-<%@page buffer="5kb" autoFlush="false" %>
+<%@page buffer="200000kb" autoFlush="false" %>
 
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 
@@ -19,34 +23,46 @@
 <%@page import="junit.framework.JUnit4TestAdapter"%>
 <%@page import="org.junit.runner.JUnitCore"%>
 <%@page import="org.testng.junit.JUnit4TestRunner"%>
+
 <table>
 <%
+Log 	log 	= LogFactoryUtil.getLog	("com.tls.liferaylms.test.jsp");
+Class[] classes = ClassFinder.getClasses("com.tls.liferaylms.test.unit");
 
-Log log = LogFactoryUtil.getLog("com.tls.liferaylms.test.jsp");
+Context.getTestContext();
+BeanReportContext.getBeanContext();
 
-Context.setBaseUrl("http://localhost:8080/");
-Context.setUser("test@liferay.com");
-Context.setPass("test");
-
-Class[] classes=ClassFinder.getClasses("com.tls.liferaylms.test.unit");
+boolean salir= false;
 for(Class clase:classes)
 	{
-	if(log.isInfoEnabled())log.info("Exec::"+clase.getName());
+    	if (salir) break;
+// 		if (clase.getName().equalsIgnoreCase( "com.tls.liferaylms.test.unit.Aa_LoginTest")) salir = true;
+	 	if (clase.getName().equalsIgnoreCase( "com.tls.liferaylms.test.unit.Ab_CreateUsers")) continue;
+	 	if (clase.getName().equalsIgnoreCase("com.tls.liferaylms.test.unit.Ac_CreateTestPage")) continue;
+// 	  	if (clase.getName().equalsIgnoreCase("com.tls.liferaylms.test.unit.Ba_AdminCourse")) salir=true;
+//     	if (clase.getName().equalsIgnoreCase("com.tls.liferaylms.test.unit.Bb_CheckUsers")) continue;
+// 	  	if (clase.getName().equalsIgnoreCase("com.tls.liferaylms.test.unit.Bc_CreateActivity")) continue;
+// 	    if (clase.getName().equalsIgnoreCase("com.tls.liferaylms.test.unit.Bd_CheckActivity")) continue;
+// 	    if (clase.getName().equalsIgnoreCase("com.tls.liferaylms.test.unit.Be_CheckResults")) continue;//salir = true;
+// 	    if (clase.getName().equalsIgnoreCase("com.tls.liferaylms.test.unit.Bf_CheckActivityRestrictions")) continue;
+	    if (clase.getName().equalsIgnoreCase("com.tls.liferaylms.test.unit.Z_DeleteTestPage")) continue;
+
+	if(log.isInfoEnabled()) log.info("Exec::"+clase.getName());
 	%>
 	<tr><td><%=clase.getName() %></td>
 	<%
 
 try{
 	
-	Result result=JUnitCore.runClasses(clase);
+	Result result = JUnitCore.runClasses(clase);
 
 	if(result.getFailureCount()>0){
 	%>
-	<td style="background-color:red"><%=result.getFailureCount() %></td>
+	<td style="background-color:red; width: 5%;"><%=result.getFailureCount() %></td>
 	<%
 	}else{
 	%>
-	<td style="background-color:green"><%=result.getFailureCount() %></td>
+	<td style="background-color:green; width: 5%;"><%=result.getFailureCount() %></td>
 	<%
 	}
 %>
@@ -63,11 +79,25 @@ try{
 %>
 </td></tr>
 <%
-}
+	}
 catch(Throwable e){
 	e.printStackTrace();
 }
 }
-//SeleniumDriverUtil.closeDriver();
+	GenerateReport gr = new GenerateReport();
+	File archivo = gr.generateFile();
+
+	Context.removeContext();
+  	SeleniumDriverUtil.closeDriver();
 %>
 </table>
+
+<portlet:resourceURL var="reportURL" id="reportURL"/>
+
+<a href="<%=reportURL%>&Report=<%=archivo%>">Informe</a>
+
+
+
+
+
+

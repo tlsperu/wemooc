@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.event.ChangeEvent;
@@ -32,115 +33,169 @@ public class Bf_CheckActivityRestrictions extends SeleniumTestCase {
 
 	@Test
 	public void CheckRestrictions(){
-		Login login = new Login(driver, Context.getTeacherUser(), Context.getTeacherPass(), Context.getBaseUrl());
+		
+		//TODO quitar!!**********************************************************
+//		Context.setCoursePage("http://localhost:8080/es/web//test-1435047943668");
+//		Context.setCourseId("1435047943668");
+//		Context.setTestPage("http://localhost:8080/web/guest/test");
+//		HashMap<String, String> activities = new HashMap<String, String>();
+//		activities.put("Actividad de test 1435047943668","");
+//		activities.put("Actividad r externo 1435047943668","");
+//		activities.put("P2P 1435047943668","");
+//		activities.put("Encuesta 1435047943668","");
+//		activities.put("T Present 1435047943668","");
+//		activities.put("Act desa 1435047943668","");
+//		activities.put("R media 1435047943668","");
+//		activities.put("Eval 1435047943668","");
+//		activities.put("SCORM 1435047943668","");
+//		Context.setActivities(activities);
+		//QUITAR******************************************************************
+		
+		
+//		Login login = new Login(driver, Context.getTeacherUser(), Context.getTeacherPass(), Context.getBaseUrl());
+		Login login = new Login(driver, Context.getTeacherName(), Context.getTeacherPass(), Context.getBaseUrl());
 		
 		if(login.isLogin())
 			login.logout();
 		
 		boolean teacherLogin = login.login();
-		assertTrue("Error login teacher",teacherLogin);
+		assertTrue("Error login teacher"+getLineNumber(),teacherLogin);
+		
+		Sleep.waitForLoad(driver);
 
 		if(teacherLogin){
 			GetPage.getPage(driver, Context.getCoursePage(), "/reto");
 			
+			Sleep.waitForLoad(driver);
+			
 			changeEditMode();
 			
-			Sleep.sleep(2000);
+			Sleep.waitForLoad(driver);//sleep(2000);
 			for(String id : Context.getActivities().keySet()){
 				if(id.length()>test.length()&&id.substring(0, test.length()).equals(test)){
 					  WebElement a = CourseActivityMenu.findElementActivityMenuEdit(driver,id);
-					  assertNotNull("Edit link for Test not found", a);
+					  assertNotNull("Edit link for Test not found"+getLineNumber(), a);
 
 					  a.click();
-					  Sleep.sleep(2000);
+					  Sleep.waitForLoad(driver);//sleep(2000);
 						
-					  driver.switchTo().frame(0);
+//					  driver.switchTo().frame(0);
+					  Sleep.waitForSwitchFrame(driver, 0);
+					  
+					  Sleep.waitForLoad(driver);
 					  
 					  openColapsables();
+					  
+					  Sleep.waitForLoad(driver);
 					  
 					  WebElement checkStart = getElement(By.id("_lmsactivitieslist_WAR_liferaylmsportlet_startdate-enabledCheckbox"));
 					  											
 					  checkStart.click();
 					  
+					  Sleep.waitForLoad(driver);
+					  
 					  WebElement startYear = getElement(By.id("_lmsactivitieslist_WAR_liferaylmsportlet_startYear"));
 					  startYear.sendKeys("2019");
 					  
+					  Sleep.waitForLoad(driver);
 
 					  WebElement bHolder = getElement(By.className("aui-button-holder"));
-					  assertNotNull("Not bHolder found", bHolder);
+					  assertNotNull("Not bHolder found"+getLineNumber(), bHolder);
 					  List<WebElement> inputs = getElements(bHolder,By.tagName("input"));
-					  assertEquals("Menu inputs have size incorrect", inputs.size(),2);
+					  assertEquals("Menu inputs have size incorrect"+getLineNumber(), inputs.size(),2);
 
 					  //Doubleclick
 					  try{
 						  inputs.get(0).click();
 						  inputs.get(0).click();
+						  
+						  Sleep.waitForLoad(driver);
 					  }catch(Exception e){}
 				}
 			}
 			GetPage.getPage(driver, Context.getCoursePage(), "/reto");
 
+			Sleep.waitForLoad(driver);
+
 			changeEditMode();
 
-			Sleep.sleep(2000);
+			Sleep.waitForLoad(driver);//sleep(2000);
 			
 			WebElement newactivity = getElement(By.className("newactivity"));
-			assertNotNull("Not newactivity button", newactivity);
+			assertNotNull("Not newactivity button"+getLineNumber(), newactivity);
 
 			WebElement aNew = getElement(newactivity,By.tagName("a"));
-			assertNotNull("Not aNewnewactivity button", aNew);
+			assertNotNull("Not aNewnewactivity button"+getLineNumber(), aNew);
 			aNew.click();
 
-			Sleep.sleep(2000);
+			Sleep.waitForLoad(driver);//sleep(2000);
 			
-			driver.switchTo().frame(0);
+//			driver.switchTo().frame(0);
+			Sleep.waitForSwitchFrame(driver, 0);
 			
+			Sleep.waitForLoad(driver);
 
 			WebElement activityList = getElement(By.className("activity-list"));
-			assertNotNull("Not Activity list find", activityList);
+			assertNotNull("Not Activity list find"+getLineNumber(), activityList);
 
 			List<WebElement> lis = getElements(activityList, By.tagName("li"));
 			
 			WebElement a = getElement(lis.get(1),By.tagName("a"));
 			a.click();
 
-			Sleep.sleep(2000);
+			Sleep.waitForLoad(driver);//sleep(2000);
 			
 			WebElement titleAct = getElement(By.id("_lmsactivitieslist_WAR_liferaylmsportlet_title_es_ES"));
-			assertNotNull("Title activity not find", titleAct);
+			assertNotNull("Title activity not find"+getLineNumber(), titleAct);
 			
 			titleAct.sendKeys(TestProperties.get("act.test.pre")+" "+Context.getCourseId());
 			sendCkEditorJS(driver,"act.test.pre");
 			
+			Sleep.waitForLoad(driver);
+			
 			WebElement form = getElement(By.id("_lmsactivitieslist_WAR_liferaylmsportlet_fm"));
-			assertNotNull("Not form activity found", form);
+			assertNotNull("Not form activity found"+getLineNumber(), form);
 			form.submit();
+			
+			Sleep.waitForLoad(driver);
 			
 			GetPage.getPage(driver, Context.getCoursePage(), "/reto");
 			
+			Sleep.waitForLoad(driver);
+			
 			changeEditMode();
+			
+			Sleep.waitForLoad(driver);
 
 			for(String id : Context.getActivities().keySet()){
 				if(id.length()>scorm.length()&&id.substring(0, scorm.length()).equals(scorm)){
+					
+					getLog().info("id!!!!!!!!-->"+id);
+					
 					a = CourseActivityMenu.findElementActivityMenuEdit(driver,id);
-					assertNotNull("Edit link for Test not found", a);
+					assertNotNull("Edit link for Test not found"+getLineNumber(), a);
 
 					a.click();
-					Sleep.sleep(2000);
+					Sleep.waitForLoad(driver);//sleep(2000);
 						
-					driver.switchTo().frame(0);
+//					driver.switchTo().frame(0);
+					Sleep.waitForSwitchFrame(driver, 0);
+					
+					Sleep.waitForLoad(driver);
 					  
 					openColapsables();
 					
+					Sleep.waitForLoad(driver);
+					
 					WebElement precedence = getElement(By.id("_lmsactivitieslist_WAR_liferaylmsportlet_precedence"));
-					assertNotNull("Not precedence combo found", precedence);
+					assertNotNull("Not precedence combo found"+getLineNumber(), precedence);
 					
 					precedence.sendKeys(TestProperties.get("act.test.pre"));
 
 					WebElement bHolder = getElement(By.className("aui-button-holder"));
-					  assertNotNull("Not bHolder found", bHolder);
+					  assertNotNull("Not bHolder found"+getLineNumber(), bHolder);
 					  List<WebElement> inputs = getElements(bHolder,By.tagName("input"));
-					  assertEquals("Menu inputs have size incorrect", inputs.size(),2);
+					  assertEquals("Menu inputs have size incorrect"+getLineNumber(), inputs.size(),2);
 					  
 					  //Doubleclick
 					  try{
@@ -148,7 +203,7 @@ public class Bf_CheckActivityRestrictions extends SeleniumTestCase {
 						  inputs.get(0).click();
 					  }catch(Exception e){}
 	
-					  Sleep.sleep(2000);
+					  Sleep.waitForLoad(driver);//sleep(2000);
 					
 					break;
 				}
@@ -157,9 +212,10 @@ public class Bf_CheckActivityRestrictions extends SeleniumTestCase {
 		
 		GetPage.getPage(driver, Context.getCoursePage(), "/reto");
 		
-		Sleep.sleep(2000);
+		Sleep.waitForLoad(driver);//sleep(2000);
 		
-		login = new Login(driver, Context.getStudentUser(), Context.getStudentPass(), Context.getBaseUrl());
+//		login = new Login(driver, Context.getStudentUser(), Context.getStudentPass(), Context.getBaseUrl());
+		login = new Login(driver, Context.getStudentName(), Context.getStudentPass(), Context.getBaseUrl());
 		
 		if(login.isLogin()){
 			System.out.println("logout");
@@ -167,37 +223,43 @@ public class Bf_CheckActivityRestrictions extends SeleniumTestCase {
 		}
 		
 		boolean studentLogin = login.login();
-		assertTrue("Error login student",studentLogin);
+		assertTrue("Error login student"+getLineNumber(),studentLogin);
+		
+		Sleep.waitForLoad(driver);
 
 		if(studentLogin){
 			GetPage.getPage(driver, Context.getCoursePage(), "/reto");
 			
+			Sleep.waitForLoad(driver);
 
 			for(String id : Context.getActivities().keySet()){
 				if(id.length()>scorm.length()&&id.substring(0, scorm.length()).equals(scorm)){
 					WebElement a = CourseActivityMenu.findElementActivityMenuTotal(driver,id);
-					assertNull("SCORM Activity should not be available", a);
+					assertNull("SCORM Activity should not be available"+getLineNumber(), a);
 				}else if(id.length()>test.length()&&id.substring(0, test.length()).equals(test)){
 					WebElement a = CourseActivityMenu.findElementActivityMenuTotal(driver,id);
-					assertNull("Test Activity should not be available", a);
+					assertNull("Test Activity should not be available"+getLineNumber(), a);
 				}
 			}
 			
-			Sleep.sleep(2000);
+			Sleep.waitForLoad(driver);//sleep(2000);
 			
 			WebElement a = CourseActivityMenu.findElementActivityMenuTotal(driver,TestProperties.get("act.test.pre"));
-			assertNotNull("Pre Activity not found", a);
+			assertNotNull("Pre Activity not found"+getLineNumber(), a);
 			a.click();
 
-			Sleep.sleep(2000);
+			Sleep.waitForLoad(driver);//sleep(2000);
 			
 			GetPage.getPage(driver, Context.getCoursePage(), "/reto");
 			
+			Sleep.waitForLoad(driver);
 
 			for(String id : Context.getActivities().keySet()){
 				if(id.length()>scorm.length()&&id.substring(0, scorm.length()).equals(scorm)){
 					a = CourseActivityMenu.findElementActivityMenuTotal(driver,id);
-					assertNotNull("SCORM Activity should be available", a);
+					assertNotNull("SCORM Activity should be available"+getLineNumber(), a);
+					
+//					Sleep.waitForLoad(driver);
 				}
 			}
 		}
@@ -205,16 +267,16 @@ public class Bf_CheckActivityRestrictions extends SeleniumTestCase {
 	
 	private void changeEditMode(){
 		WebElement editPortlet = getElement(By.id("p_p_id_changeEditingMode_WAR_liferaylmsportlet_"));
-		assertNotNull("Not Edit portlet found", editPortlet);
+		assertNotNull("Not Edit portlet found"+getLineNumber(), editPortlet);
 		
 		List<WebElement> inputs = getElements(editPortlet,By.tagName("input"));
-		assertEquals("Not Edit portlet found", 1,inputs.size());
+		assertEquals("Not Edit portlet found"+getLineNumber(), 1,inputs.size());
 		inputs.get(0).click();
 	}
 	
 	private void openColapsables(){
 		List<WebElement> pcontainer = getElements(By.className("lfr-panel-titlebar"));
-		assertNotNull("Not found pcontainer", pcontainer);
+		assertNotNull("Not found pcontainer"+getLineNumber(), pcontainer);
 		
 		for(WebElement we : pcontainer){
 			if(getLog().isInfoEnabled())getLog().info("Click::"+we.getText());
@@ -237,7 +299,7 @@ public class Bf_CheckActivityRestrictions extends SeleniumTestCase {
 					}catch(Exception e){}
 				}
 			}
-			Sleep.sleep(1000);
+			Sleep.waitForLoad(driver);//sleep(1000);
 		}
 	}
 

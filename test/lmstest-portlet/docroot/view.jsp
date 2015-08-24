@@ -15,10 +15,42 @@
 %>
 
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<%
+	try{
+%>
 <portlet:defineObjects />
 
 <portlet:renderURL var="newactivityURL">
-<portlet:param name="jspPage" value="/test.jsp"></portlet:param>
+	<portlet:param name="jspPage" value="/test.jsp"></portlet:param>
 </portlet:renderURL>
+
 <a href="<%=newactivityURL%>">Testear</a>
+<!-- <a  href="javascript:testear();">Testear</a> -->
+
+<script>
+function testear(){
+	
+	// sets timeout to 60 seconds
+	var aMinute = 60000;
+	
+	$.ajax({
+		url: '<%=newactivityURL%>',
+		//timeout: aMinute * 30,					//30 minutes
+		success: function(data) {
+			alert("succes!!");
+			$(window.document.body).html(data);
+		},
+		error: function(req, textStatus, errorThrown) {
+	        //this is going to happen when you send something different from a 200 OK HTTP
+	        alert('Ooops, something happened: ' + textStatus + ' ' +errorThrown + '-->' + req);
+	        //testear();
+	    }
+	});
+	
+}
+</script>
+	<% }catch(Exception e){
+			e.printStackTrace();
+	}%>
+	
