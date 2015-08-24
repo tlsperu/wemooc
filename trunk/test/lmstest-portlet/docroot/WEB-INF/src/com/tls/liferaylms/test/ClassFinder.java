@@ -1,12 +1,16 @@
 package com.tls.liferaylms.test;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.liferay.portal.service.ResourceServiceUtil;
 
 public final class ClassFinder {
 
@@ -27,12 +31,13 @@ public final class ClassFinder {
             throws ClassNotFoundException, IOException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         assert classLoader != null;
-        String path = packageName.replace('.', '/');
+        String path = packageName.replace(DOT, SLASH);
         Enumeration<URL> resources = classLoader.getResources(path);
+        
         List<File> dirs = new ArrayList<File>();
         while (resources.hasMoreElements()) {
-            URL resource = resources.nextElement();
-            dirs.add(new File(resource.getFile()));
+        	URL resource = resources.nextElement();
+        	dirs.add(new File(resource.getFile()));
         }
         ArrayList<Class> classes = new ArrayList<Class>();
         for (File directory : dirs) {
@@ -55,6 +60,7 @@ public final class ClassFinder {
             return classes;
         }
         File[] files = directory.listFiles();
+        Arrays.sort(files);
         for (File file : files) {
             if (file.isDirectory()) {
                 assert !file.getName().contains(".");

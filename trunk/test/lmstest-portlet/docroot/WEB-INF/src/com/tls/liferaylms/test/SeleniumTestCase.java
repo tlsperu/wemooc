@@ -6,14 +6,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.tls.liferaylms.test.util.Context;
+import com.tls.liferaylms.test.util.Sleep;
 
 public class SeleniumTestCase {
 	protected WebDriver driver;
@@ -38,20 +42,44 @@ public class SeleniumTestCase {
 			return true;
 		} catch (NoSuchElementException e) {
 			return false;
+		} catch (ElementNotVisibleException e) {
+			return false;
+		} catch (ElementNotFoundException e) {
+			return false;
+		} catch (Exception e) {
+			return false;
 		}
 	}
 	
 	public WebElement getElement(By by){
 		try {
+//			Sleep.waitFor(by, driver);
+			return driver.findElement(by);
+		} catch(TimeoutException e){
 			return driver.findElement(by);
 		} catch (NoSuchElementException e) {
+			return null;
+		} catch (ElementNotVisibleException e) {
+			return null;
+		} catch (ElementNotFoundException e) {
+			return null;
+		} catch (Exception e) {
 			return null;
 		}
 	}
 	public WebElement getElement(WebElement we,By by){
 		try {
+//			Sleep.waitFor(by, driver);
+			return we.findElement(by);
+		} catch(TimeoutException e){
 			return we.findElement(by);
 		} catch (NoSuchElementException e) {
+			return null;
+		} catch (ElementNotVisibleException e) {
+			return null;
+		} catch (ElementNotFoundException e) {
+			return null;
+		} catch (Exception e) {
 			return null;
 		}
 	}
@@ -61,6 +89,12 @@ public class SeleniumTestCase {
 			return we.findElements(by);
 		} catch (NoSuchElementException e) {
 			return null;
+		} catch (ElementNotVisibleException e) {
+			return null;
+		} catch (ElementNotFoundException e) {
+			return null;
+		} catch (Exception e) {
+			return null;
 		}
 	}
 
@@ -68,6 +102,12 @@ public class SeleniumTestCase {
 		try {
 			return driver.findElements(by);
 		} catch (NoSuchElementException e) {
+			return null;
+		} catch (ElementNotVisibleException e) {
+			return null;
+		} catch (ElementNotFoundException e) {
+			return null;
+		} catch (Exception e) {
 			return null;
 		}
 	}
@@ -101,5 +141,12 @@ public class SeleniumTestCase {
 			log = LogFactoryUtil.getLog(this.getClass());
 		}
 		return log;
+	}
+	
+	/** Get the current line number.
+	 * @return String - Current line number.
+	 */
+	public String getLineNumber() {
+	    return ". At line ".concat(String.valueOf(Thread.currentThread().getStackTrace()[2].getLineNumber()));
 	}
 }

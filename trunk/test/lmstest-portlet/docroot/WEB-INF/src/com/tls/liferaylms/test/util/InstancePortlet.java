@@ -8,7 +8,7 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.seleniumemulation.IsAlertPresent;
+import org.openqa.selenium.interactions.Actions;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -17,73 +17,66 @@ public class InstancePortlet {
 	private static Log log = LogFactoryUtil.getLog(InstancePortlet.class);
 	
 	public static boolean createInstance(WebDriver driver, String text, String identifier){
-		if(isInstance(driver, text, identifier)){
-			if(log.isInfoEnabled())log.info("Instance true");
-			return true;
-		}else{
-			if(log.isInfoEnabled())log.info("Instance portlet::"+identifier);
-			
-			WebElement menu = getElement(driver,By.id("_145_addContent"));
-			if(log.isInfoEnabled())log.info("_145_addContent::"+menu);
-			if(menu==null)
-				return false;
-			
-			menu.click();
-			menu.click();
-			
-			WebElement addApp = getElement(driver,By.id("_145_addApplication"));
-			if(log.isInfoEnabled())log.info("_145_addApplication::"+addApp);
-			if(addApp==null)
-				return false;
-			
-			addApp.click();
-
-			Sleep.sleep(2000);
-			WebElement textContent = getElement(driver,By.id("layout_configuration_content"));
-			if(log.isInfoEnabled())log.info("layout_configuration_content::"+textContent);
-			if(textContent==null)
-				return false;
-			
-			textContent.sendKeys(text);
-			
-			WebElement fm = getElement(driver,By.id("fm"));
-			if(log.isInfoEnabled())log.info("fm::"+fm);
-			if(fm==null)
-				return false;
-			
-			List<WebElement> elements = getElements(fm, By.tagName("div"));
-			if(log.isInfoEnabled())log.info("div::"+elements.size());
-			if(elements==null)
-				return false;
-			
-			for(WebElement ele : elements){
-				if(ele.getAttribute("title").toLowerCase().equals(text.toLowerCase())){
-					WebElement a = getElement(ele,By.tagName("a"));
-					if(log.isInfoEnabled())log.info("a::"+a);
-					if(a==null)
-						return false;
-					
-					a.click();
-					try{
-						a.click();
-					}catch(Exception e){
-						
-					}
-				}
-			}
-			
-
-			Sleep.sleep(2000);
-			WebElement portlet = getElement(driver,By.id(identifier));
-			if(portlet!=null){
+		try{
+			if(isInstance(driver, text, identifier)){
+				if(log.isInfoEnabled())log.info("Instance true");
 				return true;
 			}else{
-				return false;
+				
+				WebElement menu = getElement(driver,By.id("_145_addContent"));
+				if(log.isInfoEnabled())log.info("_145_addContent::"+menu);
+				if(menu==null)
+					return false;
+				
+				Actions actions = new Actions(driver);
+				actions.doubleClick(menu);
+
+				WebElement addApp = getElement(driver,By.id("_145_addApplication"));
+				actions.moveToElement(addApp);
+				actions.click();
+				actions.perform();
+				
+				Sleep.waitFor(By.id("layout_configuration_content"), driver);
+				
+				WebElement textContent = getElement(driver,By.id("layout_configuration_content"));
+				if(log.isInfoEnabled())log.info("layout_configuration_content::"+textContent);
+				if(textContent==null)
+					return false;
+				
+				textContent.sendKeys(text);
+				
+				WebElement fm = getElement(driver,By.id("fm"));
+				if(log.isInfoEnabled())log.info("fm::"+fm);
+				if(fm==null)
+					return false;
+				
+				List<WebElement> elements = getElements(fm, By.tagName("div"));
+				if(log.isInfoEnabled())log.info("div::"+elements.size());
+				if(elements==null)
+					return false;
+				
+				for(WebElement ele : elements){
+					if(ele.getAttribute("title").toLowerCase().equals(text.toLowerCase())){
+						WebElement a = getElement(ele,By.tagName("a"));
+						if(log.isInfoEnabled())log.info("a::"+a);
+						if(a==null)	return false;
+						
+						a.click();
+						try{
+							a.click();
+						}catch(Exception e){
+							
+						}
+					}
+				}
+				
+				return true;
 			}
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
 		}
 	}
-	
-
 	
 	public static boolean destroyInstance(WebDriver driver, String id){
 		WebElement portlet = getElement(driver, By.id(id));
@@ -93,7 +86,9 @@ public class InstancePortlet {
 				WebElement a = getElement(but,By.tagName("a"));
 				if(a!=null){
 					a.click();
-					Sleep.sleep(1000);
+//					Sleep.sleep(1000);
+//					Sleep.waitForLoad(driver);
+					
 					if(isAlertPresent(driver)){
 						try{
 							Alert confirm =driver.switchTo().alert();
@@ -103,6 +98,7 @@ public class InstancePortlet {
 					portlet = getElement(driver, By.id(id));
 					if(portlet!=null){
 						a.click();
+						Sleep.waitForLoad(driver);
 					}
 					return true;
 				}else{
